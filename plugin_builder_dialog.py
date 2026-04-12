@@ -24,7 +24,7 @@
 import os
 from string import capwords
 
-from qgis.PyQt import QtGui, uic
+from qgis.PyQt import uic
 from qgis.PyQt.QtCore import Qt, QFileInfo
 from qgis.PyQt.QtWidgets import QMessageBox, QFrame, QDialog, QFileDialog
 from .plugin_templates import templates
@@ -61,7 +61,6 @@ class PluginBuilderDialog(QDialog, FORM_CLASS):
         self.output_directory.setText(stored_output_path)
         self.last_path = stored_output_path
 
-
     def update_prev_next_buttons(self):
         i = self.stackedWidget.currentIndex()
         self.prev_button.setEnabled(i > 0)
@@ -84,7 +83,10 @@ class PluginBuilderDialog(QDialog, FORM_CLASS):
                     if i == 4:
                         self.next_button.setText('Generate')
                         if self.output_directory.text() != '':
-                            self.show_output_info(os.path.join(self.output_directory.text(), self.module_name.text().lower()))
+                            output_path = os.path.join(
+                                self.output_directory.text(),
+                                self.module_name.text().lower())
+                            self.show_output_info(output_path)
                 else:
                     self.accept()
 
@@ -117,9 +119,9 @@ class PluginBuilderDialog(QDialog, FORM_CLASS):
            self.qgis_minimum_version.text() == '' or \
            self.author.text() == '' or \
            self.email_address.text() == '':
-                message = (
-                    'Some required fields are missing. '
-                    'Please complete the form.\n')
+            message = (
+                'Some required fields are missing. '
+                'Please complete the form.\n')
         try:
             # Assigning to _ is python sugar for a variable that will be unused
             _ = float(str(self.plugin_version.text()))
@@ -201,8 +203,6 @@ class PluginBuilderDialog(QDialog, FORM_CLASS):
         else:
             self.lbl_full_output_path.setStyleSheet("QLabel { color : black; }")
 
-
-
     def validate_output_directory(self):
         good_dir = False
         if len(self.output_directory.text()) > 0:
@@ -223,9 +223,8 @@ class PluginBuilderDialog(QDialog, FORM_CLASS):
 
         return good_dir
 
-
     def keyPressEvent(self, event):
         # prevent escape from closing the dialog
-        if event.key() == Qt.Key_Escape:
-            #QDialog.keyPressEvent(event)
+        if event.key() == Qt.Key.Key_Escape:
+            # QDialog.keyPressEvent(event)
             pass

@@ -12,3 +12,5 @@ resources.py
 
 # ignore the help build dir
 help/build
+.vscode/settings.json
+.gitignore

@@ -3,9 +3,11 @@ import os
 import platform
 
 # Standard deployment locations
-qgis_dir_location = {'Linux': '.local/share/QGIS/QGIS3/profiles/default/python/plugins/',
-                     'Windows': 'AppData/Roaming/QGIS/QGIS3/profiles/default/python/plugins',
-                     'Darwin': 'Library/Application Support/QGIS/QGIS3/profiles/default/python/plugins'}
+qgis_dir_location = {
+    'Linux': '.local/share/QGIS/QGIS4/profiles/default/python/plugins/',
+    'Windows': 'AppData/Roaming/QGIS/QGIS4/profiles/default/python/plugins',
+    'Darwin': 'Library/Application Support/QGIS/QGIS4/profiles/default/python/plugins'
+}
 
 # Deployment directory based on users operating system
 deployment_dir = os.path.join(
