@@ -465,7 +465,7 @@ class PluginBuilder:
         self._prepare_metadata(specification)
         # Attempt to compile the resource file
         try:
-            cmd = ['pyrcc6', '-o',
+            cmd = ['rcc', '-o',
                    os.path.join(self.plugin_path, 'resources.py'),
                    os.path.join(self.plugin_path, 'resources.qrc')]
             subprocess.check_call(cmd)
@@ -473,13 +473,13 @@ class PluginBuilder:
             QMessageBox.warning(
                 None, 'Unable to Compile resources.qrc',
                 'There was an error compiling your resources.qrc file. '
-                'Compile it manually using pyrcc6.')
+                'Compile it manually using rcc.')
         except FileNotFoundError:
             QMessageBox.warning(
                 None, 'Unable to Compile resources.qrc',
-                "The resource compiler pyrcc6 was not found in your path. "
+                "The resource compiler rcc was not found in your path. "
                 "You'll have to manually compile the resources.qrc file "
-                "with pyrcc6 before installing your plugin.")
+                "with rcc before installing your plugin.")
 
         # show the results
         results_dialog = ResultDialog()

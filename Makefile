@@ -43,7 +43,7 @@ default: compile
 compile: $(PY_UI_FILES) $(RESOURCE_FILES)
 
 %.py : %.qrc
-	pyrcc6 -o $@ $<
+	rcc -o $@ $<
 
 %.py : %.ui
 	pyuic6 -o $@ $<
