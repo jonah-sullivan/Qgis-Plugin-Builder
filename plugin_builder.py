@@ -1,4 +1,4 @@
-#coding=utf-8
+# coding=utf-8
 """
 /***************************************************************************
     PluginBuilder
@@ -36,15 +36,14 @@ from qgis.PyQt.QtWidgets import (
     QAction, QFileDialog, QMessageBox)
 
 from qgis.PyQt.QtGui import (QIcon,
-                         QDesktopServices,
-                         QStandardItemModel,
-                         QStandardItem
-                         )
+                             QDesktopServices,
+                             QStandardItemModel,
+                             QStandardItem)
 from qgis.core import QgsApplication
 # Initialize Qt resources from file resources.py
 # Do not remove this import even though your IDE / pylint may report it unused
 # noinspection PyUnresolvedReferences
-from .resources import *  #pylint: disable=W0401,W0614
+from .resources import *  # pylint: disable=W0401,W0614
 
 # Import the code for the dialog
 from .plugin_builder_dialog import PluginBuilderDialog
@@ -191,10 +190,10 @@ class PluginBuilder:
             # noinspection PyCallByClass,PyTypeChecker
             QFile.setPermissions(
                 os.path.join(self.plugin_path, 'plugin_upload.py'),
-                QFile.ReadOwner | QFile.WriteOwner | QFile.ExeOwner |
-                QFile.ReadUser | QFile.WriteUser | QFile.ExeUser |
-                QFile.ReadGroup | QFile.ExeGroup | QFile.ReadOther |
-                QFile.ExeOther)
+                QFile.Permission.ReadOwner | QFile.Permission.WriteOwner | QFile.Permission.ExeOwner |
+                QFile.Permission.ReadUser | QFile.Permission.WriteUser | QFile.Permission.ExeUser |
+                QFile.Permission.ReadGroup | QFile.Permission.ExeGroup | QFile.Permission.ReadOther |
+                QFile.Permission.ExeOther)
 
     def _prepare_specific_files(self, specification):
         """Prepare specific templates and files.
@@ -391,7 +390,7 @@ class PluginBuilder:
 
         tag_dialog.listView.setModel(model)
         tag_dialog.show()
-        ok = tag_dialog.exec_()
+        ok = tag_dialog.exec()
         if ok:
             selected = tag_dialog.listView.selectedIndexes()
             seltags = []
@@ -399,13 +398,11 @@ class PluginBuilder:
                 seltags.append(tag.data())
             taglist = ", ".join(seltags)
             self.dialog.tags.setText(taglist)
-        #QMessageBox.information(None, "Selection", seltags)
 
     def run(self):
         """Run method that performs all the real work"""
         # create and show the dialog
-        self.dialog = PluginBuilderDialog(
-            stored_output_path=self._last_used_path())
+        self.dialog = PluginBuilderDialog(stored_output_path=self._last_used_path())
 
         # get version
         cfg = configparser.ConfigParser()
@@ -420,8 +417,8 @@ class PluginBuilder:
         # show the dialog
         self.dialog.show()
         self.dialog.adjustSize()
-        result = self.dialog.exec_()
-        if result == QFileDialog.Rejected:
+        result = self.dialog.exec()
+        if result == QFileDialog.DialogCode.Rejected:
             return
 
         specification = PluginSpecification(self.dialog)
@@ -459,9 +456,6 @@ class PluginBuilder:
         if specification.gen_i18n:
             self._prepare_i18n()
 
-        #resource = QFile(os.path.join(self.template_dir, 'resources.qrc'))
-        #resource.copy(os.path.join(self.plugin_path, 'resources.qrc'))
-
         self._prepare_specific_files(specification)
 
         results_popped, template_module_name = self._prepare_results_html(
@@ -471,7 +465,7 @@ class PluginBuilder:
         self._prepare_metadata(specification)
         # Attempt to compile the resource file
         try:
-            cmd = ['pyrcc5', '-o',
+            cmd = ['rcc', '-o',
                    os.path.join(self.plugin_path, 'resources.py'),
                    os.path.join(self.plugin_path, 'resources.qrc')]
             subprocess.check_call(cmd)
@@ -479,19 +473,19 @@ class PluginBuilder:
             QMessageBox.warning(
                 None, 'Unable to Compile resources.qrc',
                 'There was an error compiling your resources.qrc file. '
-                'Compile it manually using pyrcc5.')
+                'Compile it manually using rcc.')
         except FileNotFoundError:
             QMessageBox.warning(
                 None, 'Unable to Compile resources.qrc',
-                "The resource compiler pyrcc5 was not found in your path. "
+                "The resource compiler rcc was not found in your path. "
                 "You'll have to manually compile the resources.qrc file "
-                "with pyrcc5 before installing your plugin.")
+                "with rcc before installing your plugin.")
 
         # show the results
         results_dialog = ResultDialog()
         results_dialog.web_view.setHtml(results_popped)
         results_dialog.show()
-        results_dialog.exec_()
+        results_dialog.exec()
 
     def populate_template(self, specification, template_dir,
                           template_name, output_name):
@@ -525,9 +519,6 @@ class PluginBuilder:
     def show_help(self):
         """Display application help to the user."""
         help_file = 'file:///%s/help/index.html' % self.plugin_builder_path
-        # For testing path:
-        #QMessageBox.information(None, 'Help File', help_file)
-        # noinspection PyCallByClass,PyTypeChecker
         QDesktopServices.openUrl(QUrl(help_file))
 
 

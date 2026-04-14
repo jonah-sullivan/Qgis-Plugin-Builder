@@ -53,7 +53,7 @@ your own plugin.</p>
 <li>Open the Plugin Builder from within QGIS</li>
 <li>Fill out the required information for the selected plugin template, working your way through each step</li>
 <li>Designate where to store your new plugin</li>
-<li>If automatic compilation failed during plugin generation, manually compile your resource file using pyrcc5</li>
+<li>If automatic compilation failed during plugin generation, manually compile your resource file using rcc</li>
 <li>Install the plugin</li>
 <li>Test it</li>
 </ol>
@@ -255,8 +255,8 @@ they choose not to live on the bleeding edge.</dd>
 <h1>Generating<a class="headerlink" href="#generating" title="Permalink to this headline">¶</a></h1>
 <img alt="_images/generating.png" src="_images/generating.png" />
 <p>Choose the location for your generated plugin. Once you select the directory, the complete path for your plugin is displayed.</p>
-<p>When you click <strong>Generate</strong>, Plugin Builder will attempt to build your <code class="docutils literal notranslate"><span class="pre">resources.py</span></code> file using <code class="docutils literal notranslate"><span class="pre">pyrcc5</span></code>.</p>
-<p>If <code class="docutils literal notranslate"><span class="pre">pyrcc5</span></code> is not found in your path, you’ll see:</p>
+<p>When you click <strong>Generate</strong>, Plugin Builder will attempt to build your <code class="docutils literal notranslate"><span class="pre">resources.py</span></code> file using <code class="docutils literal notranslate"><span class="pre">rcc</span></code>.</p>
+<p>If <code class="docutils literal notranslate"><span class="pre">rcc</span></code> is not found in your path, you’ll see:</p>
 <blockquote>
 <div><img alt="_images/compile_failed.png" class="align-center" src="_images/compile_failed.png" />
 </div></blockquote>
@@ -276,11 +276,11 @@ directory.</p>
 <p>The resource file contains definitions of media used in your plugin. Upon
 generation, this contains one entry for icon.png, the icon file for the plugin.</p>
 <p>The resource file needs to be compiled before it is functional in QGIS.</p>
-<p>Plugin Builder attempts to compile it for you during generation, but it that fails (i.e. <code class="docutils literal notranslate"><span class="pre">pyrcc5</span></code> isn’t found), you’ll
+<p>Plugin Builder attempts to compile it for you during generation, but it that fails (i.e. <code class="docutils literal notranslate"><span class="pre">rcc</span></code> isn’t found), you’ll
 have to do it manually.</p>
-<p id="index-6">To compile the resource file into Python code, use the <code class="docutils literal notranslate"><span class="pre">pyrcc5</span></code> utility
+<p id="index-6">To compile the resource file into Python code, use the <code class="docutils literal notranslate"><span class="pre">rcc</span></code> utility
 that comes as part of your PyQt installation:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pyrcc5</span> <span class="o">-</span><span class="n">o</span> <span class="n">resources</span><span class="o">.</span><span class="n">py</span> <span class="n">resources</span><span class="o">.</span><span class="n">qrc</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">rcc</span> <span class="o">-</span><span class="n">o</span> <span class="n">resources</span><span class="o">.</span><span class="n">py</span> <span class="n">resources</span><span class="o">.</span><span class="n">qrc</span>
 </pre></div>
 </div>
 <p>Once the resource file is compiled, the generated plugin can be loaded in QGIS.</p>

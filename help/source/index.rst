@@ -22,7 +22,7 @@ The steps to using Plugin Builder are fairly simple:
 #. Open the Plugin Builder from within QGIS
 #. Fill out the required information for the selected plugin template, working your way through each step
 #. Designate where to store your new plugin
-#. If automatic compilation failed during plugin generation, manually compile your resource file using pyrcc5
+#. If automatic compilation failed during plugin generation, manually compile your resource file using rcc
 #. Install the plugin
 #. Test it
 
@@ -247,9 +247,9 @@ Generating
 
 Choose the location for your generated plugin. Once you select the directory, the complete path for your plugin is displayed.
 
-When you click **Generate**, Plugin Builder will attempt to build your ``resources.py`` file using ``pyrcc5``.
+When you click **Generate**, Plugin Builder will attempt to build your ``resources.py`` file using ``rcc``.
 
-If ``pyrcc5`` is not found in your path, you'll see:
+If ``rcc`` is not found in your path, you'll see:
 
   .. image:: images/compile_failed.png
      :align: center
@@ -281,17 +281,17 @@ generation, this contains one entry for icon.png, the icon file for the plugin.
 
 The resource file needs to be compiled before it is functional in QGIS.
 
-Plugin Builder attempts to compile it for you during generation, but it that fails (i.e. ``pyrcc5`` isn't found), you'll
+Plugin Builder attempts to compile it for you during generation, but it that fails (i.e. ``rcc`` isn't found), you'll
 have to do it manually.
 
 .. index:: resource file
    double: compiling; resource file
 
 
-To compile the resource file into Python code, use the ``pyrcc5`` utility
+To compile the resource file into Python code, use the ``rcc`` utility
 that comes as part of your PyQt installation::
 
-  pyrcc5 -o resources.py resources.qrc
+  rcc -o resources.py resources.qrc
 
 
 Once the resource file is compiled, the generated plugin can be loaded in QGIS.
