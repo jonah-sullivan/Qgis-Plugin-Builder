@@ -27,8 +27,12 @@ import os
 from qgis.PyQt import QtGui, QtWidgets, uic
 from qgis.PyQt.QtCore import pyqtSignal
 
-FORM_CLASS, _ = uic.loadUiType(os.path.join(
-    os.path.dirname(__file__), '${TemplateModuleName}_dockwidget_base.ui'))
+FORM_CLASS, _ = uic.loadUiType(
+    os.path.join(
+        os.path.dirname(__file__),
+        '${TemplateModuleName}_dockwidget_base.ui'),
+    from_imports=True,
+    import_from='${TemplateModuleName}')
 
 
 class ${TemplateClass}DockWidget(QtWidgets.QDockWidget, FORM_CLASS):
