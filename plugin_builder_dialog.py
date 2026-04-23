@@ -29,8 +29,9 @@ from qgis.PyQt.QtCore import Qt, QFileInfo
 from qgis.PyQt.QtWidgets import QMessageBox, QFrame, QDialog, QFileDialog
 from .plugin_templates import templates
 
-FORM_CLASS, _ = uic.loadUiType(os.path.join(
-    os.path.dirname(__file__), 'plugin_builder_dialog_base.ui'))
+FORM_CLASS, _ = uic.loadUiType(
+    os.path.join(os.path.dirname(__file__), "plugin_builder_dialog_base.ui")
+)
 
 
 class PluginBuilderDialog(QDialog, FORM_CLASS):
@@ -41,7 +42,8 @@ class PluginBuilderDialog(QDialog, FORM_CLASS):
     so that qt autoconnect slots work.
 
     """
-    def __init__(self, parent=None, stored_output_path=''):
+
+    def __init__(self, parent=None, stored_output_path=""):
         """Constructor."""
         super(PluginBuilderDialog, self).__init__(parent)
         # Set up the user interface from Designer.
@@ -60,7 +62,6 @@ class PluginBuilderDialog(QDialog, FORM_CLASS):
         self.next_button.setFocus()
         self.output_directory.setText(stored_output_path)
         self.last_path = stored_output_path
-
 
     def update_prev_next_buttons(self):
         i = self.stackedWidget.currentIndex()
@@ -82,17 +83,22 @@ class PluginBuilderDialog(QDialog, FORM_CLASS):
                 if i < 5:
                     self.stackedWidget.setCurrentIndex(i + 1)
                     if i == 4:
-                        self.next_button.setText('Generate')
-                        if self.output_directory.text() != '':
-                            self.show_output_info(os.path.join(self.output_directory.text(), self.module_name.text().lower()))
+                        self.next_button.setText("Generate")
+                        if self.output_directory.text() != "":
+                            self.show_output_info(
+                                os.path.join(
+                                    self.output_directory.text(),
+                                    self.module_name.text().lower(),
+                                )
+                            )
                 else:
                     self.accept()
 
     def prev(self):
         i = self.stackedWidget.currentIndex()
         self.stackedWidget.setCurrentIndex(i - 1)
-        if i-1 != 5:
-            self.next_button.setText('Next>')
+        if i - 1 != 5:
+            self.next_button.setText("Next>")
 
     def template(self):
         return self.templates[self.template_cbox.currentIndex()]
@@ -102,53 +108,59 @@ class PluginBuilderDialog(QDialog, FORM_CLASS):
             self.template_subframe.setParent(None)
         subframe = QFrame(self.template_frame)
         self.frame_layout.addWidget(subframe, 1, 0, 1, 2)
-        self.template_subframe = uic.loadUi(os.path.join(
-            self.template().subdir(), 'wizard_form_base.ui'),
-            subframe)
+        self.template_subframe = uic.loadUi(
+            os.path.join(self.template().subdir(), "wizard_form_base.ui"), subframe
+        )
 
     def validate_entries(self):
         """Check to see that all fields have been entered."""
-        message = ''
-        if self.class_name.text() == '' or \
-           self.title.text() == '' or \
-           self.description.text() == '' or \
-           self.module_name.text() == '' or \
-           self.plugin_version.text() == '' or \
-           self.qgis_minimum_version.text() == '' or \
-           self.author.text() == '' or \
-           self.email_address.text() == '':
-                message = (
-                    'Some required fields are missing. '
-                    'Please complete the form.\n')
-        try:
-            # Assigning to _ is python sugar for a variable that will be unused
-            _ = float(str(self.plugin_version.text()))
-            _ = float(str(self.qgis_minimum_version.text()))
-        except ValueError:
-            message += 'Version numbers must be numeric.\n'
+        message = ""
+        if (
+            self.class_name.text() == ""
+            or self.title.text() == ""
+            or self.description.text() == ""
+            or self.module_name.text() == ""
+            or self.plugin_version.text() == ""
+            or self.qgis_minimum_version.text() == ""
+            or self.author.text() == ""
+            or self.email_address.text() == ""
+        ):
+            message = "Some required fields are missing. " "Please complete the form.\n"
+
+        def is_valid_version(v):
+            parts = str(v).split(".")
+            return len(parts) >= 2 and all(p.isdigit() for p in parts)
+
+        if not is_valid_version(self.plugin_version.text()) or not is_valid_version(
+            self.qgis_minimum_version.text()
+        ):
+            message += "Version numbers must be numeric.\n"
         # validate plugin name
         # check that we have only ascii char in class name
         if not all(ord(c) < 128 for c in self.class_name.text()):
             self.class_name.setText(
-                str(
-                    self.class_name.text()).encode('ascii', 'ignore'))
+                str(self.class_name.text()).encode("ascii", "ignore")
+            )
             message += (
-                'The Class name must be ASCII characters only, '
-                'the name has been modified for you. \n')
+                "The Class name must be ASCII characters only, "
+                "the name has been modified for you. \n"
+            )
         # check space and force CamelCase
-        if str(self.class_name.text()).find(' ') > -1:
+        if str(self.class_name.text()).find(" ") > -1:
             class_name = capwords(str(self.class_name.text()))
-            self.class_name.setText(class_name.replace(' ', ''))
+            self.class_name.setText(class_name.replace(" ", ""))
             message += (
-                'The Class name must use CamelCase. '
-                'No spaces are allowed; the name has been modified for you.')
+                "The Class name must use CamelCase. "
+                "No spaces are allowed; the name has been modified for you."
+            )
         # noinspection PyArgumentList
-        if message != '':
-            QMessageBox.warning(
-                self, 'Information missing or invalid', message)
+        if message != "":
+            QMessageBox.warning(self, "Information missing or invalid", message)
         else:
             if self.last_path:
-                self.lbl_full_output_path.setText(os.path.join(self.last_path, self.module_name.text()))
+                self.lbl_full_output_path.setText(
+                    os.path.join(self.last_path, self.module_name.text())
+                )
             return True
 
     def validate_about(self):
@@ -159,7 +171,8 @@ class PluginBuilderDialog(QDialog, FORM_CLASS):
                 "Please enter a bit of detail about your plugin "
                 "(purpose, function, requirements, etc.).\n\n"
                 "You can modify this later by editing the 'about' tag in the "
-                "generated metadata.txt file.")
+                "generated metadata.txt file.",
+            )
             return False
         else:
             return True
@@ -174,34 +187,40 @@ class PluginBuilderDialog(QDialog, FORM_CLASS):
                 "A bug tracker and repository entry are now required. "
                 "You may enter placeholders here, but will need valid "
                 "entries prior to submitting your plugin to the QGIS "
-                "plugin repository.")
+                "plugin repository.",
+            )
             return False
-        elif url_tracker[0:4] != 'http' or url_repo[0:4] != 'http':
+        elif url_tracker[0:4] != "http" or url_repo[0:4] != "http":
             QMessageBox.warning(
                 self,
                 "Malformed URL(s)",
                 "Your tracker and repository URLs must begin with http. "
-                "Use a fully qualified URL.")
+                "Use a fully qualified URL.",
+            )
             return False
         return True
 
     def select_directory(self):
         plugin_path = QFileDialog.getExistingDirectory(
-            self, 'Select the Directory for your Plugin', self.last_path)
+            self, "Select the Directory for your Plugin", self.last_path
+        )
         self.output_directory.setText(plugin_path)
         full_output = os.path.join(plugin_path, self.module_name.text().lower())
-        self.lbl_full_output_path.setText(os.path.join(plugin_path, self.module_name.text().lower()))
+        self.lbl_full_output_path.setText(
+            os.path.join(plugin_path, self.module_name.text().lower())
+        )
         self.show_output_info(full_output)
 
     def show_output_info(self, full_output):
         if QFileInfo(full_output).exists():
-            self.lbl_full_output_path.setText(full_output +
-                                              "\nYour plugin will overwrite the existing contents!")
-            self.lbl_full_output_path.setStyleSheet("QLabel { color : red;  font-weight : bold;}")
+            self.lbl_full_output_path.setText(
+                full_output + "\nYour plugin will overwrite the existing contents!"
+            )
+            self.lbl_full_output_path.setStyleSheet(
+                "QLabel { color : red;  font-weight : bold;}"
+            )
         else:
             self.lbl_full_output_path.setStyleSheet("QLabel { color : black; }")
-
-
 
     def validate_output_directory(self):
         good_dir = False
@@ -219,13 +238,12 @@ class PluginBuilderDialog(QDialog, FORM_CLASS):
             msg = "Please select an output directory."
 
         if not good_dir:
-            QMessageBox.warning(None, 'Error', msg)
+            QMessageBox.warning(None, "Error", msg)
 
         return good_dir
-
 
     def keyPressEvent(self, event):
         # prevent escape from closing the dialog
         if event.key() == Qt.Key_Escape:
-            #QDialog.keyPressEvent(event)
+            # QDialog.keyPressEvent(event)
             pass
