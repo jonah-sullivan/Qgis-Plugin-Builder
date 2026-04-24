@@ -440,6 +440,22 @@ class PluginBuilder:
         template_map = self.template.template_map(specification, self.dialog)
         specification.template_map.update(template_map)
 
+        test_deps = 'compile'
+        deploy_deps = 'compile'
+        if specification.gen_i18n:
+            test_deps += ' transcompile'
+            deploy_deps += ' transcompile'
+        if specification.gen_help:
+            deploy_deps += ' doc'
+        specification.template_map['TemplateTestDeps'] = test_deps
+        specification.template_map['TemplateDeployDeps'] = deploy_deps
+        specification.template_map['TemplateDeployCopyI18n'] = (
+            '\tcp -vfr i18n $$(HOME)/$$(QGISDIR)/python/plugins/$$(PLUGINNAME)'
+            if specification.gen_i18n else '')
+        specification.template_map['TemplateDeployCopyHelp'] = (
+            '\tcp -vfr $$(HELP) $$(HOME)/$$(QGISDIR)/python/plugins/$$(PLUGINNAME)/help'
+            if specification.gen_help else '')
+
         self._prepare_code(specification)
         if specification.gen_help:
             self._prepare_help()
