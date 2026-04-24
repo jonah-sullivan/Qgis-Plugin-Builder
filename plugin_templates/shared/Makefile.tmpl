@@ -54,14 +54,14 @@ EXTRA_DIRS =
 
 PEP8EXCLUDE=pydev,conf.py,third_party,ui
 
-# QGISDIR points to the location where your plugin should be installed.
-# This varies by platform, relative to your HOME directory:
-#	* Linux:
-#	  .local/share/QGIS/QGIS3/profiles/default/python/plugins/
-#	* Mac OS X:
-#	  Library/Application Support/QGIS/QGIS3/profiles/default/python/plugins
-#	* Windows:
-#	  AppData\Roaming\QGIS\QGIS3\profiles\default\python\plugins'
+# QGISDIR is the absolute path to your QGIS Python plugins directory.
+# It is set automatically based on your OS and QGIS version:
+#	* Linux QGIS3:   ~/.local/share/QGIS/QGIS3/profiles/default/python/plugins
+#	* Linux QGIS4:   ~/.local/share/QGIS/QGIS4/profiles/default/python/plugins
+#	* Mac OS X QGIS3: ~/Library/Application Support/QGIS/QGIS3/profiles/default/python/plugins
+#	* Mac OS X QGIS4: ~/Library/Application Support/QGIS/QGIS4/profiles/default/python/plugins
+#	* Windows QGIS3: %APPDATA%\QGIS\QGIS3\profiles\default\python\plugins
+#	* Windows QGIS4: %APPDATA%\QGIS\QGIS4\profiles\default\python\plugins
 
 QGISDIR=${TemplateQGISDir}
 
@@ -106,19 +106,16 @@ test: ${TemplateTestDeps}
 deploy: ${TemplateDeployDeps}
 	@echo
 	@echo "------------------------------------------"
-	@echo "Deploying plugin to your .qgis2 directory."
+	@echo "Deploying plugin to your QGIS plugins directory."
 	@echo "------------------------------------------"
-	# The deploy  target only works on unix like operating system where
-	# the Python plugin directory is located at:
-	# $$HOME/$$(QGISDIR)/python/plugins
-	mkdir -p $$(HOME)/$$(QGISDIR)/python/plugins/$$(PLUGINNAME)
-	cp -vf $$(PY_FILES) $$(HOME)/$$(QGISDIR)/python/plugins/$$(PLUGINNAME)
-	$$(if $$(UI_FILES), cp -vf $$(UI_FILES) $$(HOME)/$$(QGISDIR)/python/plugins/$$(PLUGINNAME))
-	cp -vf $$(EXTRAS) $$(HOME)/$$(QGISDIR)/python/plugins/$$(PLUGINNAME)
+	mkdir -p $$(QGISDIR)/$$(PLUGINNAME)
+	cp -vf $$(PY_FILES) $$(QGISDIR)/$$(PLUGINNAME)
+	$$(if $$(UI_FILES), cp -vf $$(UI_FILES) $$(QGISDIR)/$$(PLUGINNAME))
+	cp -vf $$(EXTRAS) $$(QGISDIR)/$$(PLUGINNAME)
 ${TemplateDeployCopyI18n}
 ${TemplateDeployCopyHelp}
 	# Copy extra directories if any
-	$$(if $$(EXTRA_DIRS), $$(foreach EXTRA_DIR,$$(EXTRA_DIRS), cp -R $$(EXTRA_DIR) $$(HOME)/$$(QGISDIR)/python/plugins/$$(PLUGINNAME)/;))
+	$$(if $$(EXTRA_DIRS), $$(foreach EXTRA_DIR,$$(EXTRA_DIRS), cp -R $$(EXTRA_DIR) $$(QGISDIR)/$$(PLUGINNAME)/;))
 
 
 # The dclean target removes compiled python files from plugin directory
@@ -128,8 +125,8 @@ dclean:
 	@echo "-----------------------------------"
 	@echo "Removing any compiled python files."
 	@echo "-----------------------------------"
-	find $$(HOME)/$$(QGISDIR)/python/plugins/$$(PLUGINNAME) -iname "*.pyc" -delete
-	find $$(HOME)/$$(QGISDIR)/python/plugins/$$(PLUGINNAME) -iname ".git" -prune -exec rm -Rf {} \;
+	find $$(QGISDIR)/$$(PLUGINNAME) -iname "*.pyc" -delete
+	find $$(QGISDIR)/$$(PLUGINNAME) -iname ".git" -prune -exec rm -Rf {} \;
 
 
 derase:
@@ -137,7 +134,7 @@ derase:
 	@echo "-------------------------"
 	@echo "Removing deployed plugin."
 	@echo "-------------------------"
-	rm -Rf $$(HOME)/$$(QGISDIR)/python/plugins/$$(PLUGINNAME)
+	rm -Rf $$(QGISDIR)/$$(PLUGINNAME)
 
 zip: deploy dclean
 	@echo
@@ -147,7 +144,7 @@ zip: deploy dclean
 	# The zip target deploys the plugin and creates a zip file with the deployed
 	# content. You can then upload the zip file on http://plugins.qgis.org
 	rm -f $$(PLUGINNAME).zip
-	cd $$(HOME)/$$(QGISDIR)/python/plugins; zip -9r $$(CURDIR)/$$(PLUGINNAME).zip $$(PLUGINNAME)
+	cd $$(QGISDIR); zip -9r $$(CURDIR)/$$(PLUGINNAME).zip $$(PLUGINNAME)
 
 package:
 	# Create a zip package of the plugin named $$(PLUGINNAME).zip.

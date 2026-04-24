@@ -2,13 +2,26 @@
 import os
 import platform
 
-# Standard deployment locations
-qgis_dir_location = {'Linux': '.local/share/QGIS/QGIS3/profiles/default/python/plugins/',
-                     'Windows': 'AppData/Roaming/QGIS/QGIS3/profiles/default/python/plugins',
-                     'Darwin': 'Library/Application Support/QGIS/QGIS3/profiles/default/python/plugins'}
+try:
+    from qgis.core import Qgis
+    _qgis_version = 'QGIS4' if Qgis.QGIS_VERSION_INT >= 40000 else 'QGIS3'
+except ImportError:
+    _qgis_version = 'QGIS3'
 
-# Deployment directory based on users operating system
+_qgis_dir_location = {
+    'QGIS3': {
+        'Linux': '.local/share/QGIS/QGIS3/profiles/default/python/plugins',
+        'Windows': 'AppData/Roaming/QGIS/QGIS3/profiles/default/python/plugins',
+        'Darwin': 'Library/Application Support/QGIS/QGIS3/profiles/default/python/plugins',
+    },
+    'QGIS4': {
+        'Linux': '.local/share/QGIS/QGIS4/profiles/default/python/plugins',
+        'Windows': 'AppData/Roaming/QGIS/QGIS4/profiles/default/python/plugins',
+        'Darwin': 'Library/Application Support/QGIS/QGIS4/profiles/default/python/plugins',
+    },
+}
+
 deployment_dir = os.path.join(
     os.environ['HOME'],
-    qgis_dir_location[platform.system()]
-    )
+    _qgis_dir_location[_qgis_version][platform.system()]
+)
