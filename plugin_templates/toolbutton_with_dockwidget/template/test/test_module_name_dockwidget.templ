@@ -35,11 +35,12 @@ class ${TemplateClass}DockWidgetTest(unittest.TestCase):
         self.dockwidget = None
 
     def test_dockwidget_ok(self):
-        """Test we can click OK."""
-        pass
+        """Test the dockwidget is a QDockWidget and exposes its closing signal."""
+        self.assertIsInstance(self.dockwidget, QDockWidget)
+        self.assertTrue(hasattr(self.dockwidget, 'closingPlugin'))
 
 if __name__ == "__main__":
-    suite = unittest.makeSuite(${TemplateClass}DialogTest)
+    suite = unittest.makeSuite(${TemplateClass}DockWidgetTest)
     runner = unittest.TextTestRunner(verbosity=2)
     runner.run(suite)
 

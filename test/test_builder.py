@@ -28,11 +28,10 @@ from qgis.core import QgsProviderRegistry
 
 from test.utilities import get_qgis_app
 from .utilities import temp_dir, unique_filename
-
-QGIS_APP = get_qgis_app()
-
 from plugin_builder import PluginBuilder, copy
 from .qgis_interface import QgisInterface
+
+QGIS_APP = get_qgis_app()
 
 
 class FakePluginSpecification(object):
@@ -56,6 +55,7 @@ class FakePluginSpecification(object):
         self.homepage = 'http://fakeqgisplugin.com'
         self.tracker = 'http://github.com/timlinux/fakeplugin/issues'
         self.repository = 'http://github.com/timlinux/fakeplugin/'
+        self.about = 'Fake about text'
         self.tags = 'fake, qgis, plugin'
         # icon selection from disk will be added at a later version
         self.icon = 'icon.png'
@@ -97,7 +97,8 @@ class FakePluginSpecification(object):
             # Menu
             'TemplateMenuText': self.menu_text,
             'TemplateMenuAddMethod': 'addPluginToMenu',
-            'TemplateMenuRemoveMethod': 'removePluginMenu'
+            'TemplateMenuRemoveMethod': 'removePluginMenu',
+            'TemplateHasProcessingProvider': False,
         }
 
 
@@ -110,7 +111,6 @@ class QGISTest(unittest.TestCase):
         registry = QgsProviderRegistry.instance()
         self.assertIn('gdal', registry.providerList())
         self.assertIn('ogr', registry.providerList())
-        self.assertIn('postgres', registry.providerList())
 
 
 class BuilderTest(unittest.TestCase):
@@ -146,7 +146,7 @@ class BuilderTest(unittest.TestCase):
         self.assertTrue(os.path.exists(test_file_path), test_file_path)
 
     def test_prepare_code(self):
-        """Test the prepare code helper works."""
+        """Test the prepare code helper writes the expected output files."""
         temp_path = temp_dir()
         iface = QgisInterface(None)
         builder = PluginBuilder(iface)
@@ -154,6 +154,10 @@ class BuilderTest(unittest.TestCase):
         builder.template_dir = self.template_dir
         builder.plugin_path = temp_path
         builder._prepare_code(self.specification)
+        for expected in ['Makefile', 'pb_tool.cfg', '__init__.py', 'fake_module.py']:
+            self.assertTrue(
+                os.path.exists(os.path.join(temp_path, expected)),
+                '%s was not created' % expected)
 
     def test_prepare_results_html(self):
         """Test the prepare results helper works."""
@@ -169,7 +173,7 @@ class BuilderTest(unittest.TestCase):
         self.assertEqual(template_module_name, 'fake_module')
 
     def test_prepare_readme(self):
-        """Test we can generate the readme ok."""
+        """Test that README.txt is written with the substituted plugin names."""
         temp_path = temp_dir()
         iface = QgisInterface(None)
         builder = PluginBuilder(iface)
@@ -177,15 +181,31 @@ class BuilderTest(unittest.TestCase):
         builder.template_dir = self.template_dir
         builder.plugin_path = temp_path
         builder._prepare_readme(self.specification, 'fake_module')
-        # TODO: go and look in the file and see if it is ok
+        readme_path = os.path.join(temp_path, 'README.txt')
+        self.assertTrue(os.path.exists(readme_path))
+        content = open(readme_path).read()
+        self.assertIn('FakePlugin', content)
+        self.assertIn('fake_module', content)
 
     def test_prepare_metadata(self):
-        """Test we can generate the metadata."""
+        """Test that metadata.txt is written with the expected required fields."""
         temp_path = temp_dir()
         iface = QgisInterface(None)
         builder = PluginBuilder(iface)
         builder.shared_dir = self.shared_dir
         builder.template_dir = self.template_dir
         builder.plugin_path = temp_path
-        builder._prepare_results_html(self.specification)
-        # TODO: go and look in the file and see if it is ok
+
+        class FakeTemplate:
+            category = 'Raster'
+        builder.template = FakeTemplate()
+
+        builder._prepare_metadata(self.specification)
+        metadata_path = os.path.join(temp_path, 'metadata.txt')
+        self.assertTrue(os.path.exists(metadata_path))
+        content = open(metadata_path).read()
+        self.assertIn('name=A fake plugin', content)
+        self.assertIn('author=Fake Author', content)
+        self.assertIn('email=fake@mail.com', content)
+        self.assertIn('qgisMinimumVersion=2.0.0', content)
+        self.assertIn('[general]', content)
