@@ -14,12 +14,24 @@ __copyright__ = 'Copyright $TemplateYear, $TemplateAuthor'
 
 import unittest
 
+from qgis.core import Qgis
 from qgis.PyQt.QtWidgets import QDialogButtonBox, QDialog
 
 from ${TemplateModuleName}_dialog import ${TemplateClass}Dialog
 
 from utilities import get_qgis_app
 QGIS_APP = get_qgis_app()
+
+if Qgis.QGIS_VERSION_INT >= 40000:
+    OK_BUTTON = QDialogButtonBox.StandardButton.Ok
+    CANCEL_BUTTON = QDialogButtonBox.StandardButton.Cancel
+    ACCEPTED = QDialog.DialogCode.Accepted
+    REJECTED = QDialog.DialogCode.Rejected
+else:
+    OK_BUTTON = QDialogButtonBox.Ok
+    CANCEL_BUTTON = QDialogButtonBox.Cancel
+    ACCEPTED = QDialog.Accepted
+    REJECTED = QDialog.Rejected
 
 
 class ${TemplateClass}DialogTest(unittest.TestCase):
@@ -35,18 +47,17 @@ class ${TemplateClass}DialogTest(unittest.TestCase):
 
     def test_dialog_ok(self):
         """Test we can click OK."""
-
-        button = self.dialog.button_box.button(QDialogButtonBox.Ok)
+        button = self.dialog.button_box.button(OK_BUTTON)
         button.click()
         result = self.dialog.result()
-        self.assertEqual(result, QDialog.Accepted)
+        self.assertEqual(result, ACCEPTED)
 
     def test_dialog_cancel(self):
         """Test we can click cancel."""
-        button = self.dialog.button_box.button(QDialogButtonBox.Cancel)
+        button = self.dialog.button_box.button(CANCEL_BUTTON)
         button.click()
         result = self.dialog.result()
-        self.assertEqual(result, QDialog.Rejected)
+        self.assertEqual(result, REJECTED)
 
 if __name__ == "__main__":
     suite = unittest.makeSuite(${TemplateClass}DialogTest)
