@@ -21,7 +21,8 @@
  *                                                                         *
  ***************************************************************************/
 """
-from qgis.PyQt.QtCore import QLocale, QSettings, QTranslator, QCoreApplication, Qt
+from qgis.PyQt.QtCore import QLocale, QTranslator, QCoreApplication, Qt
+from qgis.core import QgsSettings
 from qgis.PyQt.QtGui import QIcon
 from qgis.PyQt.QtWidgets import QAction
 # Initialize Qt resources from file resources.py
@@ -50,7 +51,7 @@ class ${TemplateClass}:
         self.plugin_dir = os.path.dirname(__file__)
 
         # initialize locale
-        locale = QSettings().value('locale/userLocale', QLocale().name())[0:2]
+        locale = QgsSettings().value('locale/userLocale', QLocale().name())[0:2]
         locale_path = os.path.join(
             self.plugin_dir,
             'i18n',
