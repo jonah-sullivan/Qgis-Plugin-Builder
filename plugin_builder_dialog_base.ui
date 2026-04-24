@@ -767,9 +767,6 @@ It should be in CamelCase e.g. PhotoLinker.</string>
          <property name="toolTip">
           <string>Url of your plugin's bug tracker</string>
          </property>
-         <property name="text">
-          <string>http://bugs</string>
-         </property>
          <property name="placeholderText">
           <string>Consider using github.com for tracking</string>
          </property>
@@ -813,9 +810,6 @@ It should be in CamelCase e.g. PhotoLinker.</string>
          </property>
          <property name="toolTip">
           <string>Url of your plugin repository (if you have one)</string>
-         </property>
-         <property name="text">
-          <string>http://repo</string>
          </property>
          <property name="placeholderText">
           <string>Consider using github.com to store your code</string>
@@ -876,9 +870,6 @@ It should be in CamelCase e.g. PhotoLinker.</string>
          </property>
          <property name="toolTip">
           <string>Url of your plugin's home page</string>
-         </property>
-         <property name="text">
-          <string>http://homepage</string>
          </property>
          <property name="placeholderText">
           <string>Your GitHub repository can be the home page</string>
