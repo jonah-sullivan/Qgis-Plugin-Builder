@@ -1,6 +1,7 @@
 # coding=utf-8
 """Common functionality used by regression tests."""
 
+import os
 import sys
 import logging
 
@@ -23,7 +24,7 @@ def get_qgis_app():
     """
 
     try:
-        from qgis.PyQt import QtGui, QtCore
+        from qgis.PyQt import QtWidgets, QtCore
         from qgis.core import QgsApplication
         from qgis.gui import QgsMapCanvas
         from .qgis_interface import QgisInterface
@@ -36,7 +37,8 @@ def get_qgis_app():
         gui_flag = True  # All test will run qgis in gui mode
         #noinspection PyPep8Naming
         QGIS_APP = QgsApplication(sys.argv, gui_flag)
-        # Make sure QGIS_PREFIX_PATH is set in your env if needed!
+        prefix_path = os.environ.get('QGIS_PREFIX_PATH', '/usr')
+        QgsApplication.setPrefixPath(prefix_path, True)
         QGIS_APP.initQgis()
         s = QGIS_APP.showSettings()
         LOGGER.debug(s)
@@ -44,13 +46,13 @@ def get_qgis_app():
     global PARENT  # pylint: disable=W0603
     if PARENT is None:
         #noinspection PyPep8Naming
-        PARENT = QtGui.QWidget()
+        PARENT = QtWidgets.QWidget()
 
     global CANVAS  # pylint: disable=W0603
     if CANVAS is None:
         #noinspection PyPep8Naming
         CANVAS = QgsMapCanvas(PARENT)
-        CANVAS.resize(QtCore.QSize(400, 400))
+        CANVAS.resize(QtCore.QSize(400, 400))  # noqa: PyUnresolvedReferences
 
     global IFACE  # pylint: disable=W0603
     if IFACE is None:

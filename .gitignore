@@ -12,3 +12,6 @@ resources.py
 
 # ignore the help build dir
 help/build
+.flake8
+.gitignore
+.venv

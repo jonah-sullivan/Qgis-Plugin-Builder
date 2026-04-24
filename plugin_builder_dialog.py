@@ -24,7 +24,7 @@
 import os
 from string import capwords
 
-from qgis.PyQt import QtGui, uic
+from qgis.PyQt import uic
 from qgis.PyQt.QtCore import Qt, QFileInfo
 from qgis.PyQt.QtWidgets import QMessageBox, QFrame, QDialog, QFileDialog
 from .plugin_templates import templates

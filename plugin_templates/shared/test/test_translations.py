@@ -40,8 +40,10 @@ class SafeTranslationsTest(unittest.TestCase):
         dir_path = os.path.abspath(parent_path)
         file_path = os.path.join(
             dir_path, 'i18n', 'af.qm')
+        if not os.path.isfile(file_path):
+            self.skipTest('af.qm not found — run "make" to compile translations first')
         translator = QTranslator()
-        translator.load(file_path)
+        self.assertTrue(translator.load(file_path), 'Failed to load af.qm')
         QCoreApplication.installTranslator(translator)
 
         expected_message = 'Goeie more'
