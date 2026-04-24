@@ -73,7 +73,7 @@ QGISDIR=${TemplateQGISDir}
 
 HELP = help/build/html
 
-PLUGIN_UPLOAD = $$(c)/plugin_upload.py
+PLUGIN_UPLOAD = $$(c)/scripts/plugin_upload.py
 
 RESOURCE_SRC=$$(shell grep '^ *<file' ${TemplateQrcFiles} | sed 's@</file>@@g;s/.*>//g' | tr '\n' ' ')
 

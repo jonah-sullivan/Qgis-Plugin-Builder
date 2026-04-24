@@ -187,10 +187,10 @@ class PluginBuilder:
             plugin_upload = QFile(
                 os.path.join(self.shared_dir, 'plugin_upload.py'))
             plugin_upload.copy(
-                os.path.join(self.plugin_path, 'plugin_upload.py'))
+                os.path.join(self.plugin_path, 'scripts', 'plugin_upload.py'))
             # noinspection PyCallByClass,PyTypeChecker
             QFile.setPermissions(
-                os.path.join(self.plugin_path, 'plugin_upload.py'),
+                os.path.join(self.plugin_path, 'scripts', 'plugin_upload.py'),
                 QFile.ReadOwner | QFile.WriteOwner | QFile.ExeOwner |
                 QFile.ReadUser | QFile.WriteUser | QFile.ExeUser |
                 QFile.ReadGroup | QFile.ExeGroup | QFile.ReadOther |
