@@ -152,6 +152,9 @@ package:
 	# git repository).
 	# To use, pass a valid commit or tag as follows:
 	#   make package VERSION=Version_0.3.2
+ifeq ($$(VERSION),)
+	@echo "ERROR: No VERSION specified. Usage: make package VERSION=Version_0.3.2"
+else
 	@echo
 	@echo "------------------------------------"
 	@echo "Exporting plugin to zip package.	"
@@ -159,6 +162,7 @@ package:
 	rm -f $$(PLUGINNAME).zip
 	git archive --prefix=$$(PLUGINNAME)/ -o $$(PLUGINNAME).zip $$(VERSION)
 	echo "Created package: $$(PLUGINNAME).zip"
+endif
 
 upload: zip
 	@echo
