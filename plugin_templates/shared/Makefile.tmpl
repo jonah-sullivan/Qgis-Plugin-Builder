@@ -52,9 +52,7 @@ EXTRAS = metadata.txt ${TemplateExtraFiles}
 
 EXTRA_DIRS =
 
-COMPILED_RESOURCE_FILES = ${TemplateRcFiles}
-
-PEP8EXCLUDE=pydev,resources.py,conf.py,third_party,ui
+PEP8EXCLUDE=pydev,conf.py,third_party,ui
 
 # QGISDIR points to the location where your plugin should be installed.
 # This varies by platform, relative to your HOME directory:
@@ -75,10 +73,6 @@ HELP = help/build/html
 
 PLUGIN_UPLOAD = $$(c)/scripts/plugin_upload.py
 
-RESOURCE_SRC=$$(shell grep '^ *<file' ${TemplateQrcFiles} | sed 's@</file>@@g;s/.*>//g' | tr '\n' ' ')
-
-QT_VERSION := $$(shell python3 -c "from qgis.PyQt import QtCore; print(QtCore.QT_VERSION_STR.split('.')[0])")
-
 .PHONY: default
 default:
 	@echo While you can use make to build and deploy your plugin, pb_tool
@@ -87,15 +81,6 @@ default:
 	@echo your plugins and runs anywhere.
 	@echo You can install pb_tool using: pip install pb_tool
 	@echo See https://g-sherman.github.io/plugin_build_tool/ for info. 
-
-compile: $$(COMPILED_RESOURCE_FILES)
-
-%.py : %.qrc $$(RESOURCE_SRC)
-ifeq ($$(QT_VERSION),6)
-	rcc -g python $$< -o $$*.py
-else
-	pyrcc5 -o $$*.py $$<
-endif
 
 %.qm : %.ts
 	$$(LRELEASE) $$<
@@ -129,7 +114,6 @@ deploy: ${TemplateDeployDeps}
 	mkdir -p $$(HOME)/$$(QGISDIR)/python/plugins/$$(PLUGINNAME)
 	cp -vf $$(PY_FILES) $$(HOME)/$$(QGISDIR)/python/plugins/$$(PLUGINNAME)
 	cp -vf $$(UI_FILES) $$(HOME)/$$(QGISDIR)/python/plugins/$$(PLUGINNAME)
-	cp -vf $$(COMPILED_RESOURCE_FILES) $$(HOME)/$$(QGISDIR)/python/plugins/$$(PLUGINNAME)
 	cp -vf $$(EXTRAS) $$(HOME)/$$(QGISDIR)/python/plugins/$$(PLUGINNAME)
 ${TemplateDeployCopyI18n}
 ${TemplateDeployCopyHelp}
@@ -165,7 +149,7 @@ zip: deploy dclean
 	rm -f $$(PLUGINNAME).zip
 	cd $$(HOME)/$$(QGISDIR)/python/plugins; zip -9r $$(CURDIR)/$$(PLUGINNAME).zip $$(PLUGINNAME)
 
-package: compile
+package:
 	# Create a zip package of the plugin named $$(PLUGINNAME).zip.
 	# This requires use of git (your plugin development directory must be a
 	# git repository).
@@ -211,10 +195,10 @@ transclean:
 
 clean:
 	@echo
-	@echo "------------------------------------"
-	@echo "Removing uic and rcc generated files"
-	@echo "------------------------------------"
-	rm $$(COMPILED_UI_FILES) $$(COMPILED_RESOURCE_FILES)
+	@echo "----------------------------------"
+	@echo "Removing uic generated files"
+	@echo "----------------------------------"
+	rm $$(COMPILED_UI_FILES)
 
 doc:
 	@echo

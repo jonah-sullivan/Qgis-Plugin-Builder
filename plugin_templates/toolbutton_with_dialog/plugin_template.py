@@ -49,8 +49,6 @@ class ToolbuttonWithDialogPluginTemplate(PluginTemplate):
             'TemplatePyFiles': '%s_dialog.py' % specification.module_name,
             'TemplateUiFiles': '%s_dialog_base.ui' % specification.module_name,
             'TemplateExtraFiles': 'icon.png',
-            'TemplateQrcFiles': 'resources.qrc',
-            'TemplateRcFiles': "resources.py",
             'TemplateQGISDir': deployment_dir,
             # Metadata
             'TemplateHasProcessingProvider': False,
@@ -66,7 +64,6 @@ class ToolbuttonWithDialogPluginTemplate(PluginTemplate):
             '%s_dialog.py' % specification.module_name,
             'module_name_dialog_base.ui.tmpl':
             '%s_dialog_base.ui' % specification.module_name,
-            'resources.tmpl': 'resources.qrc',
         }
         if specification.gen_tests:
             result.update({

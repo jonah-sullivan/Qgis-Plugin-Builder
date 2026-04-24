@@ -1,4 +1,4 @@
-#coding=utf-8
+# coding=utf-8
 """
 /***************************************************************************
     PluginBuilder
@@ -28,24 +28,19 @@ import shutil
 from string import Template
 import codecs
 import configparser
-import subprocess
 
 # Import the PyQt and QGIS libraries
 from qgis.PyQt.QtCore import QFileInfo, QUrl, QFile, QDir, QSettings
 from qgis.PyQt.QtWidgets import (
     QAction, QFileDialog, QMessageBox)
 
-from qgis.PyQt.QtGui import (QIcon,
-                         QDesktopServices,
-                         QStandardItemModel,
-                         QStandardItem
-                         )
+from qgis.PyQt.QtGui import (
+    QIcon,
+    QDesktopServices,
+    QStandardItemModel,
+    QStandardItem,
+)
 from qgis.core import QgsApplication
-# Initialize Qt resources from file resources.py
-# Do not remove this import even though your IDE / pylint may report it unused
-# noinspection PyUnresolvedReferences
-from .resources import *  #pylint: disable=W0401,W0614
-
 # Import the code for the dialog
 from .plugin_builder_dialog import PluginBuilderDialog
 from .result_dialog import ResultDialog
@@ -86,7 +81,7 @@ class PluginBuilder:
         """Create the menu entries and toolbar icons inside the QGIS GUI."""
         # Create action that will start plugin configuration
         self.action = QAction(
-            QIcon(':/plugins/plugin_builder/icon.png'),
+            QIcon(os.path.join(self.plugin_builder_path, 'icon.png')),
             'Plugin Builder', self.iface.mainWindow())
         # connect the action to the run method
         self.action.triggered.connect(self.run)
@@ -399,7 +394,7 @@ class PluginBuilder:
                 seltags.append(tag.data())
             taglist = ", ".join(seltags)
             self.dialog.tags.setText(taglist)
-        #QMessageBox.information(None, "Selection", seltags)
+        # QMessageBox.information(None, "Selection", seltags)
 
     def run(self):
         """Run method that performs all the real work"""
@@ -440,13 +435,13 @@ class PluginBuilder:
         template_map = self.template.template_map(specification, self.dialog)
         specification.template_map.update(template_map)
 
-        test_deps = 'compile'
-        deploy_deps = 'compile'
+        deps = []
         if specification.gen_i18n:
-            test_deps += ' transcompile'
-            deploy_deps += ' transcompile'
+            deps.append('transcompile')
+        test_deps = ' '.join(deps)
         if specification.gen_help:
-            deploy_deps += ' doc'
+            deps.append('doc')
+        deploy_deps = ' '.join(deps)
         specification.template_map['TemplateTestDeps'] = test_deps
         specification.template_map['TemplateDeployDeps'] = deploy_deps
         specification.template_map['TemplateDeployCopyI18n'] = (
@@ -475,9 +470,6 @@ class PluginBuilder:
         if specification.gen_i18n:
             self._prepare_i18n()
 
-        #resource = QFile(os.path.join(self.template_dir, 'resources.qrc'))
-        #resource.copy(os.path.join(self.plugin_path, 'resources.qrc'))
-
         self._prepare_specific_files(specification)
 
         results_popped, template_module_name = self._prepare_results_html(
@@ -485,29 +477,6 @@ class PluginBuilder:
 
         self._prepare_readme(specification, template_module_name)
         self._prepare_metadata(specification)
-        # Attempt to compile the resource file
-        from qgis.PyQt import QtCore
-        resources_py = os.path.join(self.plugin_path, 'resources.py')
-        resources_qrc = os.path.join(self.plugin_path, 'resources.qrc')
-        if QtCore.QT_VERSION_STR.startswith('6'):
-            cmd = ['rcc', '-g', 'python', resources_qrc, '-o', resources_py]
-            compiler = 'rcc'
-        else:
-            cmd = ['pyrcc5', '-o', resources_py, resources_qrc]
-            compiler = 'pyrcc5'
-        try:
-            subprocess.check_call(cmd)
-        except subprocess.CalledProcessError:
-            QMessageBox.warning(
-                None, 'Unable to Compile resources.qrc',
-                'There was an error compiling your resources.qrc file. '
-                'Compile it manually using %s.' % compiler)
-        except FileNotFoundError:
-            QMessageBox.warning(
-                None, 'Unable to Compile resources.qrc',
-                "The resource compiler %s was not found in your path. "
-                "You'll have to manually compile the resources.qrc file "
-                "with %s before installing your plugin." % (compiler, compiler))
 
         # show the results
         results_dialog = ResultDialog()
@@ -548,7 +517,7 @@ class PluginBuilder:
         """Display application help to the user."""
         help_file = 'file:///%s/help/index.html' % self.plugin_builder_path
         # For testing path:
-        #QMessageBox.information(None, 'Help File', help_file)
+        # QMessageBox.information(None, 'Help File', help_file)
         # noinspection PyCallByClass,PyTypeChecker
         QDesktopServices.openUrl(QUrl(help_file))
 

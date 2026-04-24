@@ -8,7 +8,6 @@ plugin_template/*pyc
 .coverage
 .noseids
 nohup.out
-resources.py
 
 # ignore the help build dir
 help/build

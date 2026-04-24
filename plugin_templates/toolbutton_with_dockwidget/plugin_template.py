@@ -53,8 +53,6 @@ class ToolbuttonWithDockWidgetPluginTemplate(PluginTemplate):
             'TemplatePyFiles': '%s_dockwidget.py' % specification.module_name,
             'TemplateUiFiles': '%s_dockwidget_base.ui' % specification.module_name,
             'TemplateExtraFiles': 'icon.png',
-            'TemplateQrcFiles': 'resources.qrc',
-            'TemplateRcFiles': "resources.py",
             'TemplateQGISDir': deployment_dir,
             # Metadata
             'TemplateHasProcessingProvider': False,
@@ -72,7 +70,6 @@ class ToolbuttonWithDockWidgetPluginTemplate(PluginTemplate):
             '%s_dockwidget.py' % specification.module_name,
             'module_name_dockwidget_base.ui.tmpl':
             '%s_dockwidget_base.ui' % specification.module_name,
-            'resources.tmpl': 'resources.qrc',
         }
         if specification.gen_tests:
             result.update({
