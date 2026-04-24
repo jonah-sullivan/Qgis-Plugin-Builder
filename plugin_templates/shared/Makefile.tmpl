@@ -77,6 +77,8 @@ PLUGIN_UPLOAD = $$(c)/scripts/plugin_upload.py
 
 RESOURCE_SRC=$$(shell grep '^ *<file' ${TemplateQrcFiles} | sed 's@</file>@@g;s/.*>//g' | tr '\n' ' ')
 
+QT_VERSION := $$(shell python3 -c "from qgis.PyQt import QtCore; print(QtCore.QT_VERSION_STR.split('.')[0])")
+
 .PHONY: default
 default:
 	@echo While you can use make to build and deploy your plugin, pb_tool
@@ -89,7 +91,11 @@ default:
 compile: $$(COMPILED_RESOURCE_FILES)
 
 %.py : %.qrc $$(RESOURCE_SRC)
-	pyrcc5 -o $$*.py  $$<
+ifeq ($$(QT_VERSION),6)
+	rcc -g python $$< -o $$*.py
+else
+	pyrcc5 -o $$*.py $$<
+endif
 
 %.qm : %.ts
 	$$(LRELEASE) $$<

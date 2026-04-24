@@ -470,22 +470,28 @@ class PluginBuilder:
         self._prepare_readme(specification, template_module_name)
         self._prepare_metadata(specification)
         # Attempt to compile the resource file
+        from qgis.PyQt import QtCore
+        resources_py = os.path.join(self.plugin_path, 'resources.py')
+        resources_qrc = os.path.join(self.plugin_path, 'resources.qrc')
+        if QtCore.QT_VERSION_STR.startswith('6'):
+            cmd = ['rcc', '-g', 'python', resources_qrc, '-o', resources_py]
+            compiler = 'rcc'
+        else:
+            cmd = ['pyrcc5', '-o', resources_py, resources_qrc]
+            compiler = 'pyrcc5'
         try:
-            cmd = ['pyrcc5', '-o',
-                   os.path.join(self.plugin_path, 'resources.py'),
-                   os.path.join(self.plugin_path, 'resources.qrc')]
             subprocess.check_call(cmd)
         except subprocess.CalledProcessError:
             QMessageBox.warning(
                 None, 'Unable to Compile resources.qrc',
                 'There was an error compiling your resources.qrc file. '
-                'Compile it manually using pyrcc5.')
+                'Compile it manually using %s.' % compiler)
         except FileNotFoundError:
             QMessageBox.warning(
                 None, 'Unable to Compile resources.qrc',
-                "The resource compiler pyrcc5 was not found in your path. "
+                "The resource compiler %s was not found in your path. "
                 "You'll have to manually compile the resources.qrc file "
-                "with pyrcc5 before installing your plugin.")
+                "with %s before installing your plugin." % (compiler, compiler))
 
         # show the results
         results_dialog = ResultDialog()

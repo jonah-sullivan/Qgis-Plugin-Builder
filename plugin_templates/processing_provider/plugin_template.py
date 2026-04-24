@@ -40,6 +40,8 @@ class ProcessingProviderPluginTemplate(PluginTemplate):
         return {
             # Makefile
             'TemplateQGISDir': deployment_dir,
+            'TemplateQrcFiles': 'resources.qrc',
+            'TemplateRcFiles': 'resources.py',
             # Metadata
             'TemplateHasProcessingProvider': True,
             # Processing
@@ -55,4 +57,5 @@ class ProcessingProviderPluginTemplate(PluginTemplate):
             '%s_algorithm.py' % specification.module_name,
             'module_name_provider.tmpl':
             '%s_provider.py' % specification.module_name,
+            'resources.tmpl': 'resources.qrc',
         }
