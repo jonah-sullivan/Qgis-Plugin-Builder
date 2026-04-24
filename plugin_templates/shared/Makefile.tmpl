@@ -113,7 +113,7 @@ deploy: ${TemplateDeployDeps}
 	# $$HOME/$$(QGISDIR)/python/plugins
 	mkdir -p $$(HOME)/$$(QGISDIR)/python/plugins/$$(PLUGINNAME)
 	cp -vf $$(PY_FILES) $$(HOME)/$$(QGISDIR)/python/plugins/$$(PLUGINNAME)
-	cp -vf $$(UI_FILES) $$(HOME)/$$(QGISDIR)/python/plugins/$$(PLUGINNAME)
+	$$(if $$(UI_FILES), cp -vf $$(UI_FILES) $$(HOME)/$$(QGISDIR)/python/plugins/$$(PLUGINNAME))
 	cp -vf $$(EXTRAS) $$(HOME)/$$(QGISDIR)/python/plugins/$$(PLUGINNAME)
 ${TemplateDeployCopyI18n}
 ${TemplateDeployCopyHelp}
