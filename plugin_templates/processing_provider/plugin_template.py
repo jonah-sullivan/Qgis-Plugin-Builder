@@ -40,6 +40,8 @@ class ProcessingProviderPluginTemplate(PluginTemplate):
         return {
             # Makefile
             'TemplateQGISDir': deployment_dir,
+            'TemplatePyFiles': '%s_algorithm.py %s_provider.py' % (
+                specification.module_name, specification.module_name),
             # Metadata
             'TemplateHasProcessingProvider': True,
             # Processing
