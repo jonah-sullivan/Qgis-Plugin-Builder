@@ -133,7 +133,7 @@ class PluginBuilderDialog(QDialog, FORM_CLASS):
             message = "Some required fields are missing. " "Please complete the form.\n"
 
         def is_valid_version(v):
-            parts = str(v).split(".")
+            parts = str(v).strip().split(".")
             return len(parts) >= 2 and all(p.isdigit() for p in parts)
 
         if not is_valid_version(self.plugin_version.text()) or not is_valid_version(
