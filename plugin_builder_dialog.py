@@ -250,8 +250,11 @@ class PluginBuilderDialog(QDialog, FORM_CLASS):
         return good_dir
 
     def show_help(self):
-        help_file = 'file:///%s/help/index.html' % os.path.dirname(__file__)
-        QDesktopServices.openUrl(QUrl(help_file))
+        help_file = os.path.join(os.path.dirname(__file__), 'help', 'index.html')
+        if os.path.exists(help_file):
+            QDesktopServices.openUrl(QUrl('file:///' + help_file))
+        else:
+            QDesktopServices.openUrl(QUrl('https://jonah-sullivan.github.io/Qgis-Plugin-Builder/'))
 
     def keyPressEvent(self, event):
         # prevent escape from closing the dialog

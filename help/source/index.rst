@@ -432,7 +432,7 @@ To display the available commands, just enter `pb_tool` on the command line::
       the files and resources used in your plugin. Plugin Builder 2.6.0 creates
       a config file when you generate a new plugin template.
 
-      See http://g-sherman.github.io/plugin_build_tool for for an example config
+      See http://jonah-sullivan.github.io/plugin_build_tool for for an example config
       file. You can also use the create command to generate a best-guess config
       file for an existing project, then tweak as needed.
 
@@ -454,7 +454,7 @@ To display the available commands, just enter `pb_tool` on the command line::
       zip         Package the plugin into a zip file suitable...
 
 For more information on using *pb_tool*, see:
-http://g-sherman.github.io/plugin_build_tool
+http://jonah-sullivan.github.io/plugin_build_tool
 
 For help on getting started using *pb_tool* with Plugin Builder, see:
 http://spatialgalaxy.com/2014/10/09/qgis-plugin-development-with-pb-tool

@@ -1,15 +1,10 @@
 NOTE
 ====
 
-**QGIS 3 development now takes place in master branch.**
-**QGIS 2 version of the plugin is in the LTR_2.x branch**
+**QGIS 4 development now takes place in master branch.**
 
 QGIS Plugin Builder
 ===================
-
-.. image:: https://badges.gitter.im/Join%20Chat.svg
-   :alt: Join the chat at https://gitter.im/g-sherman/Qgis-Plugin-Builder
-   :target: https://gitter.im/g-sherman/Qgis-Plugin-Builder?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge
 
 .. figure:: help/source/images/wizard_required_info.png
 

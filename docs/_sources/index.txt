@@ -294,23 +294,23 @@ The Copy Method
 To deploy in this fashion, simply copy your plugin directory to the location
 of your QGIS plugins. By platform, this location is:
 
-* Linux: ``.qgis2/python/plugins`` in your home directory, typically found at
-    ``/home/gsherman/.qgis2/python/plugins``
+* Linux: ``.qgis4/python/plugins`` in your home directory, typically found at
+    ``/home/username/.qgis4/python/plugins``
 
-* Mac OS X: ``.qgis2/python/plugins`` in your home directory, typically
-      ``/Users/gsherman/.qgis2/python/plugins``
+* Mac OS X: ``.qgis4/python/plugins`` in your home directory, typically
+      ``/Users/username/.qgis4/python/plugins``
 
-* Windows: ``%HOMEPATH%\.qgis2\python\plugins``, by default,
-       * ``C:\Users\gsherman\.qgis2\python\plugins`` on versions later than XP,
-       * ``C:\Documents and Settings\gsherman\.qgis2\python\plugins`` on XP
+* Windows: ``%HOMEPATH%\.qgis4\python\plugins``, by default,
+       * ``C:\Users\username\.qgis4\python\plugins`` on versions later than XP,
+       * ``C:\Documents and Settings\username\.qgis4\python\plugins`` on XP
 
 Since each plugin must be contained in its own subdirectory in
-``.qgis2/python/plugins``, make sure you copy the directory, not the files in
+``.qgis4/python/plugins``, make sure you copy the directory, not the files in
 the directory.
 
 If your operating system supports gmake (GNU make), you can use the deploy
 target of the Makefile in your plugin directory to deploy directly to
-``.qgis2/python/plugins``::
+``.qgis4/python/plugins``::
 
   make deploy
 
@@ -436,7 +436,7 @@ To display the available commands, just enter `pb_tool` on the command line::
       the files and resources used in your plugin. Plugin Builder 2.6.0 creates
       a config file when you generate a new plugin template.
 
-      See http://g-sherman.github.io/plugin_build_tool for for an example config
+      See http://jonah-sullivan.github.io/plugin_build_tool for for an example config
       file. You can also use the create command to generate a best-guess config
       file for an existing project, then tweak as needed.
 
@@ -458,7 +458,7 @@ To display the available commands, just enter `pb_tool` on the command line::
       zip         Package the plugin into a zip file suitable...
 
 For more information on using *pb_tool*, see:
-http://g-sherman.github.io/plugin_build_tool
+http://jonah-sullivan.github.io/plugin_build_tool
 
 For help on getting started using *pb_tool* with Plugin Builder, see:
 http://spatialgalaxy.com/2014/10/09/qgis-plugin-development-with-pb-tool

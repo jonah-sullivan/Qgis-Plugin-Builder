@@ -511,11 +511,11 @@ class PluginBuilder:
 
     def show_help(self):
         """Display application help to the user."""
-        help_file = 'file:///%s/help/index.html' % self.plugin_builder_path
-        # For testing path:
-        # QMessageBox.information(None, 'Help File', help_file)
-        # noinspection PyCallByClass,PyTypeChecker
-        QDesktopServices.openUrl(QUrl(help_file))
+        help_file = os.path.join(self.plugin_builder_path, 'help', 'index.html')
+        if os.path.exists(help_file):
+            QDesktopServices.openUrl(QUrl('file:///' + help_file))
+        else:
+            QDesktopServices.openUrl(QUrl('https://jonah-sullivan.github.io/Qgis-Plugin-Builder/'))
 
 
 def copy(source, destination):
