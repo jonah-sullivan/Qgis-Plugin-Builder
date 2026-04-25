@@ -206,7 +206,11 @@ doc:
 	@echo "------------------------------------"
 	@echo "Building documentation using sphinx."
 	@echo "------------------------------------"
-	cd help; make html
+	@if command -v sphinx-build >/dev/null 2>&1; then \
+		cd help && make html; \
+	else \
+		echo "sphinx-build not found - skipping documentation build. Install sphinx to enable: pip install sphinx"; \
+	fi
 
 pylint:
 	@echo
