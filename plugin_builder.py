@@ -532,7 +532,7 @@ def copy(source, destination):
 
     """
     try:
-        shutil.copytree(source, destination)
+        shutil.copytree(source, destination, dirs_exist_ok=True)
     except OSError as e:
         # If the error was caused because the source wasn't a directory
         if e.errno == errno.ENOTDIR:
