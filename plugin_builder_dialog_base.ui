@@ -580,8 +580,8 @@ It should be in CamelCase e.g. PhotoLinker.</string>
             <property name="plainText">
              <string>Provide a brief description of the plugin and its purpose.</string>
             </property>
-            <property name="tabStopWidth">
-             <number>80</number>
+            <property name="tabStopDistance">
+             <double>80.000000</double>
             </property>
            </widget>
           </item>
