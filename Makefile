@@ -25,7 +25,7 @@ QGISDIR=$(shell python3 -c "import sys; sys.path.insert(0, '.'); import qgis_dir
 
 PLUGINNAME=pluginbuilder4
 
-PY_FILES = plugin_builder.py plugin_builder_dialog.py result_dialog.py __init__.py plugin_specification.py select_tags_dialog.py
+PY_FILES = plugin_builder.py plugin_builder_dialog.py result_dialog.py __init__.py plugin_specification.py select_tags_dialog.py qgis_dirs.py
 
 UI_FILES = plugin_builder_dialog_base.ui results_dialog_base.ui select_tags_dialog_base.ui
 

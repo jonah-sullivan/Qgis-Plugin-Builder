@@ -386,7 +386,7 @@ class PluginBuilder:
 
         tag_dialog.listView.setModel(model)
         tag_dialog.show()
-        ok = tag_dialog.exec_()
+        ok = tag_dialog.exec()
         if ok:
             selected = tag_dialog.listView.selectedIndexes()
             seltags = []
@@ -415,7 +415,7 @@ class PluginBuilder:
         # show the dialog
         self.dialog.show()
         self.dialog.adjustSize()
-        result = self.dialog.exec_()
+        result = self.dialog.exec()
         if result == QFileDialog.Rejected:
             return
 
@@ -482,7 +482,7 @@ class PluginBuilder:
         results_dialog = ResultDialog()
         results_dialog.web_view.setHtml(results_popped)
         results_dialog.show()
-        results_dialog.exec_()
+        results_dialog.exec()
 
     def populate_template(self, specification, template_dir,
                           template_name, output_name):

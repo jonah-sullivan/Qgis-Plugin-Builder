@@ -26,6 +26,11 @@ from string import capwords
 
 from qgis.PyQt import uic
 from qgis.PyQt.QtCore import Qt, QFileInfo
+
+try:
+    Key_Escape = Qt.Key.Key_Escape
+except AttributeError:
+    Key_Escape = Qt.Key_Escape
 from qgis.PyQt.QtWidgets import QMessageBox, QFrame, QDialog, QFileDialog
 from .plugin_templates import templates
 
@@ -244,6 +249,6 @@ class PluginBuilderDialog(QDialog, FORM_CLASS):
 
     def keyPressEvent(self, event):
         # prevent escape from closing the dialog
-        if event.key() == Qt.Key_Escape:
+        if event.key() == Key_Escape:
             # QDialog.keyPressEvent(event)
             pass
