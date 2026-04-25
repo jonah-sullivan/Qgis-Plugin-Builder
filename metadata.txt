@@ -9,11 +9,18 @@
 name=Plugin Builder 3
 about=Create a template for a QGIS plugin
 description=Creates a QGIS plugin template for use as a starting point in plugin development
-version=3.2.1
-qgisMinimumVersion=2.99
-qgisMaximumVersion=3.99
+version=3.3.0
+qgisMinimumVersion=3.0
+qgisMaximumVersion=4.99
 
-changelog=3.2.1 2019-06-28
+changelog=3.3.0 2026-04-25
+      * Add QGIS 4 compatibility
+      * Add Qt6 compatibility
+      * Remove Qt resource compilation in favour of filesystem paths for icons
+      * Fix QGISDIR path detection
+      * Make Makefile test, deploy help, and translation steps conditional
+      * Various bug fixes and test improvements
+    3.2.1 2019-06-28
       * Bug fixes
     3.1 2018-12-31
       * Fix issue with reload on generated plugins
@@ -28,14 +35,14 @@ changelog=3.2.1 2019-06-28
       * Check for valid URL format for tracker and repository
     3.0.3 2018-02-23: Redesign of UI to allow better editing prior to generation.
 
-homepage=http://g-sherman.github.io/Qgis-Plugin-Builder
-tracker=https://github.com/g-sherman/Qgis-Plugin-Builder/issues
-repository=https://github.com/g-sherman/Qgis-Plugin-Builder
+homepage=http://jonah-sullivan.github.io/Qgis-Plugin-Builder
+tracker=https://github.com/jonah-sullivan/Qgis-Plugin-Builder/issues
+repository=https://github.com/jonah-sullivan/Qgis-Plugin-Builder
 tags=development
 icon=icon.png
 
 experimental=False
 deprecated=False
 
-author=GeoApt LLC
-email=gsherman@geoapt.com
+author=jonah-sullivan
+email=geosull@pm.me

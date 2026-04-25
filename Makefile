@@ -74,7 +74,7 @@ zip: dclean deploy
 #   make package VERSION=Version_0.3.2
 # Get the last commit hash
 COMMITHASH=$(shell git rev-parse HEAD)
-package: compile
+package:
 		rm -f $(PLUGINNAME).zip
 		git archive --prefix=$(PLUGINNAME)/ -o $(PLUGINNAME).zip $(COMMITHASH)
 		@echo "Created package: $(PLUGINNAME).zip"
