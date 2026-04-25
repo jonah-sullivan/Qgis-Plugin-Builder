@@ -25,8 +25,7 @@ import os
 from string import capwords
 
 from qgis.PyQt import uic
-from qgis.PyQt.QtCore import Qt, QFileInfo, QUrl
-from qgis.PyQt.QtGui import QDesktopServices
+from qgis.PyQt.QtCore import Qt, QFileInfo
 
 try:
     Key_Escape = Qt.Key.Key_Escape
@@ -63,7 +62,6 @@ class PluginBuilderDialog(QDialog, FORM_CLASS):
         self.stackedWidget.currentChanged.connect(self.update_prev_next_buttons)
         self.next_button.clicked.connect(self.__next__)
         self.prev_button.clicked.connect(self.prev)
-        self.button_box.helpRequested.connect(self.show_help)
         self.template_cbox.currentIndexChanged.connect(self.update_template)
         self.btn_select_output.clicked.connect(self.select_directory)
         self.next_button.setFocus()
@@ -248,13 +246,6 @@ class PluginBuilderDialog(QDialog, FORM_CLASS):
             QMessageBox.warning(None, "Error", msg)
 
         return good_dir
-
-    def show_help(self):
-        help_file = os.path.join(os.path.dirname(__file__), 'help', 'index.html')
-        if os.path.exists(help_file):
-            QDesktopServices.openUrl(QUrl('file:///' + help_file))
-        else:
-            QDesktopServices.openUrl(QUrl('https://jonah-sullivan.github.io/Qgis-Plugin-Builder/'))
 
     def keyPressEvent(self, event):
         # prevent escape from closing the dialog
