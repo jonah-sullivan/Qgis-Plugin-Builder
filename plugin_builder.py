@@ -441,10 +441,10 @@ class PluginBuilder:
         specification.template_map['TemplateTestDeps'] = test_deps
         specification.template_map['TemplateDeployDeps'] = deploy_deps
         specification.template_map['TemplateDeployCopyI18n'] = (
-            '\tcp -vfr i18n $$(HOME)/$$(QGISDIR)/python/plugins/$$(PLUGINNAME)'
+            '\tcp -vfr i18n $$(QGISDIR)/$$(PLUGINNAME)'
             if specification.gen_i18n else '')
         specification.template_map['TemplateDeployCopyHelp'] = (
-            '\tcp -vfr $$(HELP) $$(HOME)/$$(QGISDIR)/python/plugins/$$(PLUGINNAME)/help'
+            '\tcp -vfr $$(HELP) $$(QGISDIR)/$$(PLUGINNAME)/help'
             if specification.gen_help else '')
 
         self._prepare_code(specification)
@@ -515,7 +515,8 @@ class PluginBuilder:
         if os.path.exists(help_file):
             QDesktopServices.openUrl(QUrl('file:///' + help_file))
         else:
-            QDesktopServices.openUrl(QUrl('https://jonah-sullivan.github.io/Qgis-Plugin-Builder/'))
+            QDesktopServices.openUrl(QUrl(
+                'https://jonah-sullivan.github.io/Qgis-Plugin-Builder/'))
 
 
 def copy(source, destination):
