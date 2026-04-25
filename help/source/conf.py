@@ -41,7 +41,7 @@ master_doc = 'index'
 
 # General information about the project.
 project = u'QGIS Plugin Builder'
-copyright = u'Copyright 2011-2026, Gary Sherman, 2026 Jonah Sullivan'
+copyright = u'2011-2026, Gary Sherman, 2026 Jonah Sullivan'
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
