@@ -179,17 +179,13 @@ class PluginBuilder:
         if specification.gen_scripts:
             release_script = QFile(os.path.join(self.shared_dir, 'release.sh'))
             release_script.copy(os.path.join(self.plugin_path, 'release.sh'))
+            scripts_dir = os.path.join(self.plugin_path, 'scripts')
+            os.makedirs(scripts_dir, exist_ok=True)
             plugin_upload = QFile(
                 os.path.join(self.shared_dir, 'plugin_upload.py'))
             plugin_upload.copy(
-                os.path.join(self.plugin_path, 'scripts', 'plugin_upload.py'))
-            # noinspection PyCallByClass,PyTypeChecker
-            QFile.setPermissions(
-                os.path.join(self.plugin_path, 'scripts', 'plugin_upload.py'),
-                QFile.ReadOwner | QFile.WriteOwner | QFile.ExeOwner |
-                QFile.ReadUser | QFile.WriteUser | QFile.ExeUser |
-                QFile.ReadGroup | QFile.ExeGroup | QFile.ReadOther |
-                QFile.ExeOther)
+                os.path.join(scripts_dir, 'plugin_upload.py'))
+            os.chmod(os.path.join(scripts_dir, 'plugin_upload.py'), 0o755)
 
     def _prepare_specific_files(self, specification):
         """Prepare specific templates and files.
@@ -416,7 +412,7 @@ class PluginBuilder:
         self.dialog.show()
         self.dialog.adjustSize()
         result = self.dialog.exec()
-        if result == QFileDialog.Rejected:
+        if not result:
             return
 
         specification = PluginSpecification(self.dialog)
