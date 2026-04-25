@@ -6,7 +6,7 @@
 # This file should be included when you package your plugin.
 
 [general]
-name=Plugin Builder 3
+name=Plugin Builder 4
 about=Create a template for a QGIS plugin
 description=Creates a QGIS plugin template for use as a starting point in plugin development
 version=3.3.0

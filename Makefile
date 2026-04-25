@@ -23,7 +23,7 @@
 
 DOTQGIS=.qgis3
 
-PLUGINNAME=pluginbuilder3
+PLUGINNAME=pluginbuilder4
 
 PY_FILES = plugin_builder.py plugin_builder_dialog.py result_dialog.py __init__.py plugin_specification.py select_tags_dialog.py
 
