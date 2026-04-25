@@ -21,7 +21,7 @@
 # Makefile for a PyQGIS plugin
 #
 
-DOTQGIS=.qgis3
+QGISDIR=$(shell python3 -c "import sys; sys.path.insert(0, '.'); import qgis_dirs; print(qgis_dirs.deployment_dir)")
 
 PLUGINNAME=pluginbuilder4
 
@@ -35,39 +35,21 @@ EXTRAS = icon.png plugin_builder.png metadata.txt taglist.txt
 
 HELP_BUILD = help/build/html/*
 
-RESOURCE_FILES = resources.py
-PY_UI_FILES = $(UI_FILES:.ui=.py)
-
-default: compile
-
-compile: $(PY_UI_FILES) $(RESOURCE_FILES)
-
-%.py : %.qrc
-	pyrcc5 -o $@ $<
-
-%.py : %.ui
-	pyuic5 -o $@ $<
-
-# The deploy  target only works on unix like operating system where
-# the Python plugin directory is located at:
-# $HOME/$(DOTQGIS)/python/plugins
-deploy: compile
-	mkdir -p $(HOME)/$(DOTQGIS)/python/plugins/$(PLUGINNAME)
-	mkdir -p $(HOME)/$(DOTQGIS)/python/plugins/$(PLUGINNAME)/help
-	cp -vf $(PY_FILES) $(HOME)/$(DOTQGIS)/python/plugins/$(PLUGINNAME)
-	cp -vf $(UI_FILES) $(HOME)/$(DOTQGIS)/python/plugins/$(PLUGINNAME)
-	cp -vf $(RESOURCE_FILES) $(HOME)/$(DOTQGIS)/python/plugins/$(PLUGINNAME)
-	cp -vf $(EXTRAS) $(HOME)/$(DOTQGIS)/python/plugins/$(PLUGINNAME)
-	cp -rvf $(TEMPLATE_DIR) $(HOME)/$(DOTQGIS)/python/plugins/$(PLUGINNAME)
-	cp -rvf $(HELP_BUILD) $(HOME)/$(DOTQGIS)/python/plugins/$(PLUGINNAME)/help
+# The deploy target copies plugin files to the QGIS plugins directory
+deploy:
+	mkdir -p $(QGISDIR)/$(PLUGINNAME)
+	cp -vf $(PY_FILES) $(QGISDIR)/$(PLUGINNAME)
+	cp -vf $(UI_FILES) $(QGISDIR)/$(PLUGINNAME)
+	cp -vf $(EXTRAS) $(QGISDIR)/$(PLUGINNAME)
+	cp -rvf $(TEMPLATE_DIR) $(QGISDIR)/$(PLUGINNAME)
 
 # remove the deployed plugin
 dclean:
-	rm -rf $(HOME)/$(DOTQGIS)/python/plugins/$(PLUGINNAME)
+	rm -rf $(QGISDIR)/$(PLUGINNAME)
 
 zip: dclean deploy
 	rm -f $(PLUGINNAME).zip
-	cd $(HOME)/$(DOTQGIS)/python/plugins; zip -9vr $(CURDIR)/$(PLUGINNAME).zip $(PLUGINNAME)
+	cd $(QGISDIR); zip -9vr $(CURDIR)/$(PLUGINNAME).zip $(PLUGINNAME)
 
 
 # Create a zip package. Requires passing a valid commit or tag as follows:
@@ -80,7 +62,7 @@ package:
 		@echo "Created package: $(PLUGINNAME).zip"
 
 clean:
-	rm $(RESOURCE_FILES)
+	rm -f $(PLUGINNAME).zip
 
 test: compile
 	@echo

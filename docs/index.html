@@ -1,19 +1,16 @@
+<!DOCTYPE html>
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html lang="en" data-content_root="./">
   <head>
-    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
     <title>QGIS Plugin Builder &#8212; QGIS Plugin Builder 3.0.x documentation</title>
-    <link rel="stylesheet" href="_static/pyramid.css" type="text/css" />
-    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
-    <script type="text/javascript" src="_static/jquery.js"></script>
-    <script type="text/javascript" src="_static/underscore.js"></script>
-    <script type="text/javascript" src="_static/doctools.js"></script>
-    <script type="text/javascript" src="_static/language_data.js"></script>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="_static/pyramid.css?v=424f8d56" />
+    <script src="_static/documentation_options.js?v=48bce2c3"></script>
+    <script src="_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Neuton&amp;subset=latin" type="text/css" media="screen" charset="utf-8" />
@@ -24,13 +21,14 @@
 
   </head><body>
 
-    <div class="related" role="navigation" aria-label="related navigation">
+    <div class="related" role="navigation" aria-label="Related">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
           <a href="genindex.html" title="General Index"
              accesskey="I">index</a></li>
-        <li class="nav-item nav-item-0"><a href="#">QGIS Plugin Builder 3.0.x documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="#">QGIS Plugin Builder 3.0.x documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">QGIS Plugin Builder</a></li> 
       </ul>
     </div>  
 
@@ -39,27 +37,27 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <div class="section" id="qgis-plugin-builder">
-<h1>QGIS Plugin Builder<a class="headerlink" href="#qgis-plugin-builder" title="Permalink to this headline">¶</a></h1>
+  <section id="qgis-plugin-builder">
+<h1>QGIS Plugin Builder<a class="headerlink" href="#qgis-plugin-builder" title="Link to this heading">¶</a></h1>
 <div class="toctree-wrapper compound">
 </div>
-</div>
-<div class="section" id="concepts">
-<span id="index-0"></span><h1>Concepts<a class="headerlink" href="#concepts" title="Permalink to this headline">¶</a></h1>
+</section>
+<section id="concepts">
+<span id="index-0"></span><h1>Concepts<a class="headerlink" href="#concepts" title="Link to this heading">¶</a></h1>
 <p>Plugin Builder provides you a working template from which you can create
 your own plugin.</p>
 <p>The steps to using Plugin Builder are fairly simple:</p>
 <ol class="arabic simple">
-<li>Open the Plugin Builder from within QGIS</li>
-<li>Fill out the required information for the selected plugin template, working your way through each step</li>
-<li>Designate where to store your new plugin</li>
-<li>If automatic compilation failed during plugin generation, manually compile your resource file using pyrcc5</li>
-<li>Install the plugin</li>
-<li>Test it</li>
+<li><p>Open the Plugin Builder from within QGIS</p></li>
+<li><p>Fill out the required information for the selected plugin template, working your way through each step</p></li>
+<li><p>Designate where to store your new plugin</p></li>
+<li><p>If automatic compilation failed during plugin generation, manually compile your resource file using pyrcc5</p></li>
+<li><p>Install the plugin</p></li>
+<li><p>Test it</p></li>
 </ol>
-</div>
-<div class="section" id="running-plugin-builder">
-<span id="index-1"></span><h1>Running Plugin Builder<a class="headerlink" href="#running-plugin-builder" title="Permalink to this headline">¶</a></h1>
+</section>
+<section id="running-plugin-builder">
+<span id="index-1"></span><h1>Running Plugin Builder<a class="headerlink" href="#running-plugin-builder" title="Link to this heading">¶</a></h1>
 <p>When you run Plugin Builder you will see a dialog with text fields. Each text
 field contains a hint inside it in greyed out text that will disappear when
 you start typing text into it. There is also a tooltip containing help
@@ -68,191 +66,182 @@ information that will appear when you hover over each text field:</p>
 <p>The descriptions give you a hint about what is required for each field. The
 following sections describe the required and optional parameters in greater
 detail.</p>
-<div class="section" id="plugin-name-and-required-information">
-<span id="index-2"></span><h2>Plugin name and required information<a class="headerlink" href="#plugin-name-and-required-information" title="Permalink to this headline">¶</a></h2>
-<dl class="docutils">
-<dt><strong>Class name</strong></dt>
-<dd><p class="first">This is the name that will be used to create the Python class for
+<section id="plugin-name-and-required-information">
+<span id="index-2"></span><h2>Plugin name and required information<a class="headerlink" href="#plugin-name-and-required-information" title="Link to this heading">¶</a></h2>
+<dl class="simple">
+<dt><strong>Class name</strong></dt><dd><p>This is the name that will be used to create the Python class for
 your plugin. The name should be in CamelCase with no spaces. Plugin Builder
 will accept an all lower case class name but this should be avoided since it
 isn’t in line with Python coding style. Examples of valid class names are:</p>
-<ul class="last simple">
-<li>MyPlugin</li>
-<li>PluginBuilder</li>
-<li>ScriptRunner</li>
+<ul class="simple">
+<li><p>MyPlugin</p></li>
+<li><p>PluginBuilder</p></li>
+<li><p>ScriptRunner</p></li>
 </ul>
 </dd>
-<dt><strong>Module name</strong></dt>
-<dd><p class="first">This is the name that will be used to create the Python module (
+<dt><strong>Module name</strong></dt><dd><p>This is the name that will be used to create the Python module (
 file) for your plugin. The name should be in lowercase with words separated
 using underscores. Plugin Builder will accept any case module name but
 this should be avoided since it isn’t in line with Python coding style.
 Examples of valid module names are:</p>
-<ul class="last simple">
-<li>detect_features</li>
-<li>detector</li>
+<ul class="simple">
+<li><p>detect_features</p></li>
+<li><p>detector</p></li>
 </ul>
 </dd>
-<dt><strong>Plugin name</strong></dt>
-<dd><p class="first">This is a title for your plugin and will be displayed in the
+<dt><strong>Plugin name</strong></dt><dd><p>This is a title for your plugin and will be displayed in the
 QGIS plugin manager and the plugin installer. It will also be used as the
 menu name that appears in the QGIS Plugin menu. You can use the Class name,
 or make it more readable. Some examples:</p>
-<ul class="last simple">
-<li>My Plugin</li>
-<li>Plugin Builder</li>
-<li>ScriptRunner</li>
+<ul class="simple">
+<li><p>My Plugin</p></li>
+<li><p>Plugin Builder</p></li>
+<li><p>ScriptRunner</p></li>
 </ul>
 </dd>
-<dt><strong>Description</strong></dt>
-<dd>This is a one line description of the plugin’s function and is
+<dt><strong>Description</strong></dt><dd><p>This is a one line description of the plugin’s function and is
 displayed in both the Plugin Manager and Plugin Installer. Keep it short
-yet descriptive so the purpose of the plugin can be easily determined.</dd>
-<dt><strong>Version number</strong></dt>
-<dd>This is the version number of your plugin. Plugin Builder
+yet descriptive so the purpose of the plugin can be easily determined.</p>
+</dd>
+<dt><strong>Version number</strong></dt><dd><p>This is the version number of your plugin. Plugin Builder
 suggests 0.1, but you can start with any number. The Plugin Installer uses the
 version number to identify which plugins you have installed are upgradeable so
-it is important to increment it as you release new versions.</dd>
-<dt><strong>Minimum QGIS version</strong></dt>
-<dd>This is the minimum version of QGIS required for your
+it is important to increment it as you release new versions.</p>
+</dd>
+<dt><strong>Minimum QGIS version</strong></dt><dd><p>This is the minimum version of QGIS required for your
 plugin to work. If your plugin uses features only present in a newer version,
 be sure to set this field accordingly to prevent problems for those running
-older versions. Version 3.x of Plugin Builder defaults this field to 3.0.</dd>
-<dt><strong>Author/Company</strong></dt>
-<dd>Put your name or company name here—this information is used
+older versions. Version 3.x of Plugin Builder defaults this field to 3.0.</p>
+</dd>
+<dt><strong>Author/Company</strong></dt><dd><p>Put your name or company name here—this information is used
 in writing the copyright statement in the source files of your plugin, as well
 as being displayed in the Plugin Installer and on the
-<a class="reference external" href="http://plugins.qgis.org/plugins">QGIS plugin repository</a>.</dd>
-<dt><strong>Email address</strong></dt>
-<dd>Put an address where users of your plugin can contact you.
+<a class="reference external" href="http://plugins.qgis.org/plugins">QGIS plugin repository</a>.</p>
+</dd>
+<dt><strong>Email address</strong></dt><dd><p>Put an address where users of your plugin can contact you.
 This information is written to the copyright header of your source files and
-also displayed on the QGIS plugin repository listing for your plugin.</dd>
-</dl>
-</div>
-<div class="section" id="about">
-<span id="index-3"></span><h2>About<a class="headerlink" href="#about" title="Permalink to this headline">¶</a></h2>
-<img alt="_images/wizard_about.png" src="_images/wizard_about.png" />
-<dl class="docutils">
-<dt><strong>About</strong></dt>
-<dd><p class="first">This is a long line description of the plugin’s function (purpose, function,
-requirements, etc.).</p>
-<p class="last">This field is required.</p>
+also displayed on the QGIS plugin repository listing for your plugin.</p>
 </dd>
 </dl>
-</div>
-<div class="section" id="template-specific-parameters">
-<h2>Template specific parameters<a class="headerlink" href="#template-specific-parameters" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="about">
+<span id="index-3"></span><h2>About<a class="headerlink" href="#about" title="Link to this heading">¶</a></h2>
+<img alt="_images/wizard_about.png" src="_images/wizard_about.png" />
+<dl>
+<dt><strong>About</strong></dt><dd><p>This is a long line description of the plugin’s function (purpose, function,
+requirements, etc.).</p>
+<p>This field is required.</p>
+</dd>
+</dl>
+</section>
+<section id="template-specific-parameters">
+<h2>Template specific parameters<a class="headerlink" href="#template-specific-parameters" title="Link to this heading">¶</a></h2>
 <img alt="_images/wizard_template.png" src="_images/wizard_template.png" />
-<dl class="docutils">
-<dt><strong>Template</strong></dt>
-<dd><p class="first">Choose which type of plugin you want to create.</p>
+<dl>
+<dt><strong>Template</strong></dt><dd><p>Choose which type of plugin you want to create.</p>
 <p>There are currently three templates available:</p>
-<ul class="last simple">
-<li>Tool button with dialog</li>
-<li>Tool button with dock widget</li>
-<li>Processing provider</li>
+<ul class="simple">
+<li><p>Tool button with dialog</p></li>
+<li><p>Tool button with dock widget</p></li>
+<li><p>Processing provider</p></li>
 </ul>
 </dd>
 </dl>
 <p>For the default template “Tool button with dialog” you get the following
 parameter fields:</p>
-<dl class="docutils">
-<dt><strong>Text for the menu item</strong></dt>
-<dd><p class="first">This is the text that will appear in the menu.
+<dl>
+<dt><strong>Text for the menu item</strong></dt><dd><p>This is the text that will appear in the menu.
 In the example below, the plugin name is Frog Pond and the text for the menu
 item is displayed to the right of it:</p>
 <img alt="_images/plugin_menu.png" class="align-center" src="_images/plugin_menu.png" />
 <p>In general you shouldn’t use the same text for the plugin name and the menu
 item; if you do your menu will look like this:</p>
-<img alt="_images/redundant_menu.png" class="last align-center" src="_images/redundant_menu.png" />
+<img alt="_images/redundant_menu.png" class="align-center" src="_images/redundant_menu.png" />
 </dd>
-<dt><strong>Menu</strong></dt>
-<dd><p class="first">Choose an appropriate location for your plugin’s menu based on its main
+<dt><strong>Menu</strong></dt><dd><p>Choose an appropriate location for your plugin’s menu based on its main
 functionality. This will place your menu under one of the following main
 menus:</p>
 <blockquote>
 <div><ul class="simple">
-<li>Plugins</li>
-<li>Database</li>
-<li>Raster</li>
-<li>Vector</li>
-<li>Web</li>
+<li><p>Plugins</p></li>
+<li><p>Database</p></li>
+<li><p>Raster</p></li>
+<li><p>Vector</p></li>
+<li><p>Web</p></li>
 </ul>
 </div></blockquote>
-<p class="last">If none of the specific categories apply (Database, Raster, Vector, Web), choose <em>Plugins</em>.
+<p>If none of the specific categories apply (Database, Raster, Vector, Web), choose <em>Plugins</em>.
 Your choice is also written to the <em>category</em> field in metadata.txt.</p>
 </dd>
 </dl>
-</div>
-<div class="section" id="additional-components">
-<h2>Additional components<a class="headerlink" href="#additional-components" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="additional-components">
+<h2>Additional components<a class="headerlink" href="#additional-components" title="Link to this heading">¶</a></h2>
 <p>The Plugin Builder addes several additional components to your plugin, which are
 recommended, but not strictly required.</p>
 <img alt="_images/wizard_helpers.png" src="_images/wizard_helpers.png" />
-<dl class="docutils">
-<dt><strong>Internationalization</strong></dt>
-<dd>A stub for adding translated texts to your plugin.</dd>
-<dt><strong>Help</strong></dt>
-<dd>Creates a <a class="reference external" href="http://sphinx-doc.org">Sphinx</a> template for generating a HTML help.
-See <a class="reference internal" href="#documenting-your-plugin">Documenting your Plugin</a> for more information.</dd>
-<dt><strong>Unit tests</strong></dt>
-<dd>Creates a basic set of unit tests for your plugin.</dd>
-<dt><strong>Helper scripts</strong></dt>
-<dd>Adds a helper script for publishing your plugin on <a class="reference external" href="http://plugins.qgis.org/">http://plugins.qgis.org/</a> and
-additional scripts for internationalization and testing.</dd>
-<dt><strong>Makefile</strong></dt>
-<dd>Adds a Makefile for building your plugin with GNU make.
-See <a class="reference internal" href="#using-the-makefile">Using the Makefile</a> for more information.</dd>
-<dt><strong>pb_tool</strong></dt>
-<dd><p class="first">Genrates a configuration for <em>pb_tool</em>, a Python command line tool for compiling
+<dl>
+<dt><strong>Internationalization</strong></dt><dd><p>A stub for adding translated texts to your plugin.</p>
+</dd>
+<dt><strong>Help</strong></dt><dd><p>Creates a <a class="reference external" href="http://sphinx-doc.org">Sphinx</a> template for generating a HTML help.
+See <a class="reference internal" href="#documenting-your-plugin">Documenting your Plugin</a> for more information.</p>
+</dd>
+<dt><strong>Unit tests</strong></dt><dd><p>Creates a basic set of unit tests for your plugin.</p>
+</dd>
+<dt><strong>Helper scripts</strong></dt><dd><p>Adds a helper script for publishing your plugin on <a class="reference external" href="http://plugins.qgis.org/">http://plugins.qgis.org/</a> and
+additional scripts for internationalization and testing.</p>
+</dd>
+<dt><strong>Makefile</strong></dt><dd><p>Adds a Makefile for building your plugin with GNU make.
+See <a class="reference internal" href="#using-the-makefile">Using the Makefile</a> for more information.</p>
+</dd>
+<dt><strong>pb_tool</strong></dt><dd><p>Genrates a configuration for <em>pb_tool</em>, a Python command line tool for compiling
 and deploying QGIS plugins on Linux, Mac OS X, and Windows.</p>
 <p>It is <strong>strongly recommended</strong> that you use <code class="docutils literal notranslate"><span class="pre">pb_tool</span></code> rather than <code class="docutils literal notranslate"><span class="pre">make</span></code> for building and deploying your plugins.</p>
-<p class="last">See <a class="reference internal" href="#using-pb-tool">Using pb_tool</a> for more information.</p>
+<p>See <a class="reference internal" href="#using-pb-tool">Using pb_tool</a> for more information.</p>
 </dd>
 </dl>
-</div>
-<div class="section" id="publication-information">
-<h2>Publication information<a class="headerlink" href="#publication-information" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="publication-information">
+<h2>Publication information<a class="headerlink" href="#publication-information" title="Link to this heading">¶</a></h2>
 <p>There are several fields that you should seriously
 consider completing when publishing a new plugin. This will help ensure your
 plugin is accepted and users can be successful using it.</p>
 <img alt="_images/wizard_publication_info.png" src="_images/wizard_publication_info.png" />
-<dl class="docutils">
-<dt><strong>Bug tracker</strong></dt>
-<dd>A URL pointing to the bug/issue tracker for your plugin. You can
+<dl>
+<dt><strong>Bug tracker</strong></dt><dd><p>A URL pointing to the bug/issue tracker for your plugin. You can
 create a project with tracking for your plugin(s) at
-<a class="reference external" href="http://github.com">http://github.com</a> or you can use <a class="reference external" href="http://hub.qgis.org/projects/new">http://hub.qgis.org/projects/new</a>.</dd>
-<dt><strong>Home page</strong></dt>
-<dd>The URL of the home page for your plugin. This can be the same as
-the project page you create on github.com, hub.qgis.org, or a site of your own.</dd>
-<dt><strong>Repository</strong></dt>
-<dd>The URL of the source code repository for your plugin. This allows others
+<a class="reference external" href="http://github.com">http://github.com</a> or you can use <a class="reference external" href="http://hub.qgis.org/projects/new">http://hub.qgis.org/projects/new</a>.</p>
+</dd>
+<dt><strong>Home page</strong></dt><dd><p>The URL of the home page for your plugin. This can be the same as
+the project page you create on github.com, hub.qgis.org, or a site of your own.</p>
+</dd>
+<dt><strong>Repository</strong></dt><dd><p>The URL of the source code repository for your plugin. This allows others
 submit patches and improvements for your approval, as well as providing you
 with the benefit of source code control. Consider using <a class="reference external" href="http://github.com">http://github.com</a> to
-store your code.</dd>
-<dt><strong>Tags</strong></dt>
-<dd><p class="first">Tags are a comma separated list of keywords describing the function(s)
+store your code.</p>
+</dd>
+<dt><strong>Tags</strong></dt><dd><p>Tags are a comma separated list of keywords describing the function(s)
 of your plugin. You can enter your own or select from a list of tags by
 clicking the button to the right of the “Tags” field.</p>
 <p>You can create a <strong>customized list of tags</strong> to use instead of the standard
 set by creating a plain text file named <em>.plugin_tags.txt</em> in your home
 directory. The file should contain a single tag per line. For example:</p>
-<div class="last highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">composer</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">composer</span>
 <span class="n">csv</span>
 <span class="n">database</span>
 </pre></div>
 </div>
 </dd>
-<dt><strong>Experimental</strong></dt>
-<dd>Check this box if your plugin is considered experimental,
+<dt><strong>Experimental</strong></dt><dd><p>Check this box if your plugin is considered experimental,
 meaning it is either incomplete or may cause unintended consequences. This
 allows users to filter out experimental plugins in the Plugin Installer if
-they choose not to live on the bleeding edge.</dd>
+they choose not to live on the bleeding edge.</p>
+</dd>
 </dl>
-</div>
-</div>
-<div class="section" id="generating">
-<h1>Generating<a class="headerlink" href="#generating" title="Permalink to this headline">¶</a></h1>
+</section>
+</section>
+<section id="generating">
+<h1>Generating<a class="headerlink" href="#generating" title="Link to this heading">¶</a></h1>
 <img alt="_images/generating.png" src="_images/generating.png" />
 <p>Choose the location for your generated plugin. Once you select the directory, the complete path for your plugin is displayed.</p>
 <p>When you click <strong>Generate</strong>, Plugin Builder will attempt to build your <code class="docutils literal notranslate"><span class="pre">resources.py</span></code> file using <code class="docutils literal notranslate"><span class="pre">pyrcc5</span></code>.</p>
@@ -261,18 +250,18 @@ they choose not to live on the bleeding edge.</dd>
 <div><img alt="_images/compile_failed.png" class="align-center" src="_images/compile_failed.png" />
 </div></blockquote>
 <p>If the compilation fails, you’ll have to compile it manually as shown in the results dialog.</p>
-</div>
-<div class="section" id="results">
-<h1>Results<a class="headerlink" href="#results" title="Permalink to this headline">¶</a></h1>
+</section>
+<section id="results">
+<h1>Results<a class="headerlink" href="#results" title="Link to this heading">¶</a></h1>
 <p>Once generated, Plugin Builder displays the results:</p>
 <img alt="_images/plugin_results.png" src="_images/plugin_results.png" />
 <p>The results dialog tells you where your plugin was saved, the location of your
 QGIS plugin directory, and what to do next. This same information is contained
 in the <code class="docutils literal notranslate"><span class="pre">README.html</span></code> and <code class="docutils literal notranslate"><span class="pre">README.txt</span></code> files in your generated plugin
 directory.</p>
-<span class="target" id="index-4"></span></div>
-<div class="section" id="compiling-the-resource-file">
-<span id="index-5"></span><h1>Compiling the resource file<a class="headerlink" href="#compiling-the-resource-file" title="Permalink to this headline">¶</a></h1>
+</section>
+<section id="compiling-the-resource-file">
+<span id="index-5"></span><span id="index-4"></span><h1>Compiling the resource file<a class="headerlink" href="#compiling-the-resource-file" title="Link to this heading">¶</a></h1>
 <p>The resource file contains definitions of media used in your plugin. Upon
 generation, this contains one entry for icon.png, the icon file for the plugin.</p>
 <p>The resource file needs to be compiled before it is functional in QGIS.</p>
@@ -284,33 +273,33 @@ that comes as part of your PyQt installation:</p>
 </pre></div>
 </div>
 <p>Once the resource file is compiled, the generated plugin can be loaded in QGIS.</p>
-<span class="target" id="index-7"></span></div>
-<div class="section" id="deploying">
-<span id="index-8"></span><h1>Deploying<a class="headerlink" href="#deploying" title="Permalink to this headline">¶</a></h1>
+</section>
+<section id="deploying">
+<span id="index-8"></span><span id="index-7"></span><h1>Deploying<a class="headerlink" href="#deploying" title="Link to this heading">¶</a></h1>
 <p>To deploy your new plugin during development, you have two choices:</p>
 <ol class="arabic simple">
-<li>Copy the entire plugin directory to your QGIS plugins directory</li>
-<li>Use the <code class="docutils literal notranslate"><span class="pre">QGIS_PLUGINPATH</span></code> environment variable to point to the directory
-where your development plugin(s) are located</li>
+<li><p>Copy the entire plugin directory to your QGIS plugins directory</p></li>
+<li><p>Use the <code class="docutils literal notranslate"><span class="pre">QGIS_PLUGINPATH</span></code> environment variable to point to the directory
+where your development plugin(s) are located</p></li>
 </ol>
-<div class="section" id="the-copy-method">
-<span id="index-9"></span><h2>The Copy Method<a class="headerlink" href="#the-copy-method" title="Permalink to this headline">¶</a></h2>
+<section id="the-copy-method">
+<span id="index-9"></span><h2>The Copy Method<a class="headerlink" href="#the-copy-method" title="Link to this heading">¶</a></h2>
 <p>To deploy in this fashion, simply copy your plugin directory to the location
 of your QGIS plugins. By platform, this location is found in your home directory under:</p>
 <ul class="simple">
-<li><dl class="first docutils">
-<dt>Linux:</dt>
-<dd><code class="docutils literal notranslate"><span class="pre">.local/share/QGIS/QGIS3/profiles/default/python/plugins</span></code></dd>
+<li><dl class="simple">
+<dt>Linux:</dt><dd><p><code class="docutils literal notranslate"><span class="pre">.local/share/QGIS/QGIS3/profiles/default/python/plugins</span></code></p>
+</dd>
 </dl>
 </li>
-<li><dl class="first docutils">
-<dt>Mac OS X:</dt>
-<dd><code class="docutils literal notranslate"><span class="pre">Library/Application</span> <span class="pre">Support/QGIS/QGIS3/profiles/default/python/plugins</span></code></dd>
+<li><dl class="simple">
+<dt>Mac OS X:</dt><dd><p><code class="docutils literal notranslate"><span class="pre">Library/Application</span> <span class="pre">Support/QGIS/QGIS3/profiles/default/python/plugins</span></code></p>
+</dd>
 </dl>
 </li>
-<li><dl class="first docutils">
-<dt>Windows:</dt>
-<dd><code class="docutils literal notranslate"><span class="pre">AppData\Roaming\QGIS\QGIS3\profiles\default\python\plugins</span></code></dd>
+<li><dl class="simple">
+<dt>Windows:</dt><dd><p><code class="docutils literal notranslate"><span class="pre">AppData\Roaming\QGIS\QGIS3\profiles\default\python\plugins</span></code></p>
+</dd>
 </dl>
 </li>
 </ul>
@@ -327,9 +316,9 @@ your plugin directory for your operating system, then you can use:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">make</span> <span class="n">deploy</span>
 </pre></div>
 </div>
-<span class="target" id="index-10"></span></div>
-<div class="section" id="the-environment-variable-method">
-<span id="index-11"></span><h2>The Environment Variable Method<a class="headerlink" href="#the-environment-variable-method" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="the-environment-variable-method">
+<span id="index-11"></span><span id="index-10"></span><h2>The Environment Variable Method<a class="headerlink" href="#the-environment-variable-method" title="Link to this heading">¶</a></h2>
 <p>Using the <code class="docutils literal notranslate"><span class="pre">QGIS_PLUGINPATH</span></code> environment variable you can tell QGIS to look
 in an additional location for plugins. This can be handy for development,
 allowing you to test your plugin without copying it to
@@ -338,10 +327,10 @@ allowing you to test your plugin without copying it to
 to your development directory before starting QGIS. When QGIS starts up, all
 the directories in <code class="docutils literal notranslate"><span class="pre">QGIS_PLUGINPATH</span></code> will be searched and those
 containing valid plugins will be added to the Plugin Manager.</p>
-<span class="target" id="index-12"></span></div>
-</div>
-<div class="section" id="testing">
-<span id="index-13"></span><h1>Testing<a class="headerlink" href="#testing" title="Permalink to this headline">¶</a></h1>
+</section>
+</section>
+<section id="testing">
+<span id="index-13"></span><span id="index-12"></span><h1>Testing<a class="headerlink" href="#testing" title="Link to this heading">¶</a></h1>
 <p>With your new plugin deployed, start up QGIS, open the Plugin Manager, and
 enable it. Then click on the tool or the menu item for the plugin to run it.
 If all is well, you should see something similar to this:</p>
@@ -350,38 +339,41 @@ If all is well, you should see something similar to this:</p>
 before deploying and testing.</p>
 <p>Once the generated plugin is working it’s your turn to customize the user
 interface and add the needed code to make it do something useful.</p>
-</div>
-<div class="section" id="using-pb-tool">
-<span id="index-14"></span><h1>Using pb_tool<a class="headerlink" href="#using-pb-tool" title="Permalink to this headline">¶</a></h1>
+</section>
+<section id="using-pb-tool">
+<span id="index-14"></span><h1>Using pb_tool<a class="headerlink" href="#using-pb-tool" title="Link to this heading">¶</a></h1>
 <p><em>pb_tool</em> is a Python command line tool for compiling and deploying QGIS plugins on Linux, Mac OS X, and Windows.</p>
-<div class="section" id="features">
-<h2>Features<a class="headerlink" href="#features" title="Permalink to this headline">¶</a></h2>
+<section id="features">
+<h2>Features<a class="headerlink" href="#features" title="Link to this heading">¶</a></h2>
 <p><em>pb_tool</em> provides commands to aid in developing, testing, and deploying
 a QGIS Python Plugin:</p>
 <ul class="simple">
-<li>Compile resource and UI files</li>
-<li>Deploy to your plugins directory for testing in QGIS</li>
-<li>Create a zip file for upload to a repository</li>
-<li>Clean both compiled and deployed files</li>
-<li>Build and clean documentation</li>
-<li>Build translation files</li>
-<li>Works on Windows, OS X, and Linux</li>
+<li><p>Compile resource and UI files</p></li>
+<li><p>Deploy to your plugins directory for testing in QGIS</p></li>
+<li><p>Create a zip file for upload to a repository</p></li>
+<li><p>Clean both compiled and deployed files</p></li>
+<li><p>Build and clean documentation</p></li>
+<li><p>Build translation files</p></li>
+<li><p>Works on Windows, OS X, and Linux</p></li>
 </ul>
-</div>
-<div class="section" id="installation">
-<h2>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="installation">
+<h2>Installation<a class="headerlink" href="#installation" title="Link to this heading">¶</a></h2>
 <p>You can install the tool using pip:</p>
 <blockquote>
-<div>pip install pb_tool</div></blockquote>
+<div><p>pip install pb_tool</p>
+</div></blockquote>
 <p>To upgrade to the latest version, use:</p>
 <blockquote>
-<div>pip install –upgrade pb_tool</div></blockquote>
+<div><p>pip install –upgrade pb_tool</p>
+</div></blockquote>
 <p>You can also install using easy_install:</p>
 <blockquote>
-<div>easy_install pb_tool</div></blockquote>
-</div>
-<div class="section" id="usage">
-<h2>Usage<a class="headerlink" href="#usage" title="Permalink to this headline">¶</a></h2>
+<div><p>easy_install pb_tool</p>
+</div></blockquote>
+</section>
+<section id="usage">
+<h2>Usage<a class="headerlink" href="#usage" title="Link to this heading">¶</a></h2>
 <p><em>pb_tool</em> requires a configuration file in order to do anything. Plugin Builder creates a working configuration file for you. By default,
 <em>pb_tool</em> assumes a file name of pb_tool.cfg, although you can specify a
 different one using the <code class="docutils literal notranslate"><span class="pre">--config</span></code> options in most commands.</p>
@@ -422,56 +414,67 @@ Commands:
 <a class="reference external" href="http://g-sherman.github.io/plugin_build_tool">http://g-sherman.github.io/plugin_build_tool</a></p>
 <p>For help on getting started using <em>pb_tool</em> with Plugin Builder, see:
 <a class="reference external" href="http://spatialgalaxy.com/2014/10/09/qgis-plugin-development-with-pb-tool">http://spatialgalaxy.com/2014/10/09/qgis-plugin-development-with-pb-tool</a></p>
-</div>
-</div>
-<div class="section" id="using-the-makefile">
-<h1>Using the Makefile<a class="headerlink" href="#using-the-makefile" title="Permalink to this headline">¶</a></h1>
+</section>
+</section>
+<section id="using-the-makefile">
+<h1>Using the Makefile<a class="headerlink" href="#using-the-makefile" title="Link to this heading">¶</a></h1>
 <p>The make file can be used to compile and deploy your plugin, assuming you are
 using an operating environment that supports
 <a class="reference external" href="http://gnu.org/software/make">GNU make</a>. It also provides a number of other
 actions to aid in plugin development.</p>
 <p id="index-15">The following targets are supported</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">clean:</th><td class="field-body">Delete the compiled UI and resource files</td>
-</tr>
-<tr class="field-even field"><th class="field-name">compile:</th><td class="field-body">Compile the resource and UI files. This is the default target.</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">dclean:</th><td class="field-body">Same as <code class="docutils literal notranslate"><span class="pre">derase</span></code> but also removes any .svn entries</td>
-</tr>
-<tr class="field-even field"><th class="field-name">deploy:</th><td class="field-body">Deploy the plugin</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">derase:</th><td class="field-body">Remove the deployed plugin</td>
-</tr>
-<tr class="field-even field"><th class="field-name">doc:</th><td class="field-body">Build the documentation using Sphinx</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">package:</th><td class="field-body">Package the plugin using git archive</td>
-</tr>
-<tr class="field-even field"><th class="field-name">transclean:</th><td class="field-body">Delete all .qm (translation) files</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">transcompile:</th><td class="field-body">Compile translation files into .qm format</td>
-</tr>
-<tr class="field-even field"><th class="field-name">transup:</th><td class="field-body">Update the .ts (translation) files</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">upload:</th><td class="field-body">Upload the plugin to the QGIS repository</td>
-</tr>
-<tr class="field-even field"><th class="field-name">zip:</th><td class="field-body">Deploy the plugin and create a zip file suitable for uploading to the
-QGIS repository</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">test:</th><td class="field-body">Run unit tests and produce a coverage report.</td>
-</tr>
-<tr class="field-even field"><th class="field-name">pep8:</th><td class="field-body">Run python PEP8 check and produce a report.</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">pylint:</th><td class="field-body">Run python pylint check and produce a report listing any violations.</td>
-</tr>
-</tbody>
-</table>
-</div>
-<div class="section" id="documenting-your-plugin">
-<h1>Documenting your Plugin<a class="headerlink" href="#documenting-your-plugin" title="Permalink to this headline">¶</a></h1>
-<span class="target" id="index-16"></span><span class="target" id="index-17"></span><p>Plugin Builder optionally creates a <a class="reference external" href="http://sphinx-doc.org">Sphinx</a> project for you in
+<dl class="field-list simple">
+<dt class="field-odd">clean<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Delete the compiled UI and resource files</p>
+</dd>
+<dt class="field-even">compile<span class="colon">:</span></dt>
+<dd class="field-even"><p>Compile the resource and UI files. This is the default target.</p>
+</dd>
+<dt class="field-odd">dclean<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Same as <code class="docutils literal notranslate"><span class="pre">derase</span></code> but also removes any .svn entries</p>
+</dd>
+<dt class="field-even">deploy<span class="colon">:</span></dt>
+<dd class="field-even"><p>Deploy the plugin</p>
+</dd>
+<dt class="field-odd">derase<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Remove the deployed plugin</p>
+</dd>
+<dt class="field-even">doc<span class="colon">:</span></dt>
+<dd class="field-even"><p>Build the documentation using Sphinx</p>
+</dd>
+<dt class="field-odd">package<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Package the plugin using git archive</p>
+</dd>
+<dt class="field-even">transclean<span class="colon">:</span></dt>
+<dd class="field-even"><p>Delete all .qm (translation) files</p>
+</dd>
+<dt class="field-odd">transcompile<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Compile translation files into .qm format</p>
+</dd>
+<dt class="field-even">transup<span class="colon">:</span></dt>
+<dd class="field-even"><p>Update the .ts (translation) files</p>
+</dd>
+<dt class="field-odd">upload<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Upload the plugin to the QGIS repository</p>
+</dd>
+<dt class="field-even">zip<span class="colon">:</span></dt>
+<dd class="field-even"><p>Deploy the plugin and create a zip file suitable for uploading to the
+QGIS repository</p>
+</dd>
+<dt class="field-odd">test<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Run unit tests and produce a coverage report.</p>
+</dd>
+<dt class="field-even">pep8<span class="colon">:</span></dt>
+<dd class="field-even"><p>Run python PEP8 check and produce a report.</p>
+</dd>
+<dt class="field-odd">pylint<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Run python pylint check and produce a report listing any violations.</p>
+</dd>
+</dl>
+</section>
+<section id="documenting-your-plugin">
+<h1>Documenting your Plugin<a class="headerlink" href="#documenting-your-plugin" title="Link to this heading">¶</a></h1>
+<p id="index-18"><span id="index-17"></span><span id="index-16"></span>Plugin Builder optionally creates a <a class="reference external" href="http://sphinx-doc.org">Sphinx</a> project for you in
 the <code class="docutils literal notranslate"><span class="pre">help</span></code> subdirectory of your plugin. To build the documentation you will
 need to install Sphinx using <a class="reference external" href="http://pypi.python.org/pypi/pip">pip</a>
 or <a class="reference external" href="http://peak.telecommunity.com/DevCenter/EasyInstall">easy_install</a>.
@@ -488,9 +491,9 @@ file in the user’s default web browser. See the code in <code class="docutils 
 for an example.</p>
 <p>For an example of writing your documentation using Sphinx, you can
 <a class="reference external" href="_sources/index.txt">view</a> the source of this document.</p>
-<span class="target" id="index-19"></span></div>
-<div class="section" id="the-repository">
-<span id="index-20"></span><h1>The Repository<a class="headerlink" href="#the-repository" title="Permalink to this headline">¶</a></h1>
+</section>
+<section id="the-repository">
+<span id="index-20"></span><span id="index-19"></span><h1>The Repository<a class="headerlink" href="#the-repository" title="Link to this heading">¶</a></h1>
 <p>When your plugin is ready to be shared with the QGIS community, upload it to
 the QGIS plugin repository at <a class="reference external" href="http://plugins.qgis.org/plugins">http://plugins.qgis.org/plugins</a>. Make sure to
 package it properly in zip format and test the zip before adding it to the
@@ -498,16 +501,18 @@ repository.</p>
 <p>When you add it to the repository, your plugin will show up in the Plugin
 Installer in QGIS, making it available for download and install by the
 community.</p>
-</div>
+</section>
 
 
+            <div class="clearer"></div>
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
         <div class="sphinxsidebarwrapper">
-  <h3><a href="#">Table of Contents</a></h3>
-  <ul>
+  <div>
+    <h3><a href="#">Table of Contents</a></h3>
+    <ul>
 <li><a class="reference internal" href="#">QGIS Plugin Builder</a></li>
 <li><a class="reference internal" href="#concepts">Concepts</a></li>
 <li><a class="reference internal" href="#running-plugin-builder">Running Plugin Builder</a><ul>
@@ -538,6 +543,7 @@ community.</p>
 <li><a class="reference internal" href="#the-repository">The Repository</a></li>
 </ul>
 
+  </div>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
@@ -545,34 +551,33 @@ community.</p>
             rel="nofollow">Show Source</a></li>
     </ul>
    </div>
-<div id="searchbox" style="display: none" role="search">
-  <h3>Quick search</h3>
+<search id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="search.html" method="get">
-      <input type="text" name="q" />
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
       <input type="submit" value="Go" />
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
     </form>
     </div>
-</div>
-<script type="text/javascript">$('#searchbox').show(0);</script>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
         </div>
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related" role="navigation" aria-label="related navigation">
+    <div class="related" role="navigation" aria-label="Related">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
           <a href="genindex.html" title="General Index"
              >index</a></li>
-        <li class="nav-item nav-item-0"><a href="#">QGIS Plugin Builder 3.0.x documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="#">QGIS Plugin Builder 3.0.x documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">QGIS Plugin Builder</a></li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &#169; Copyright 2011-2019, Gary Sherman.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.3.
+    &#169; Copyright 2011-2019, Gary Sherman.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 9.1.0.
     </div>
   </body>
 </html>

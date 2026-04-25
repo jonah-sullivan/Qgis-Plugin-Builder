@@ -6,7 +6,8 @@ try:
     from qgis.core import Qgis
     _qgis_version = 'QGIS4' if Qgis.QGIS_VERSION_INT >= 40000 else 'QGIS3'
 except ImportError:
-    _qgis_version = 'QGIS3'
+    _qgis4_dir = os.path.join(os.environ['HOME'], '.local', 'share', 'QGIS', 'QGIS4')
+    _qgis_version = 'QGIS4' if os.path.isdir(_qgis4_dir) else 'QGIS3'
 
 _qgis_dir_location = {
     'QGIS3': {
