@@ -309,7 +309,7 @@ class PluginBuilder:
         metadata_file.write("# (or upgraded) can be specified.\n")
         metadata_file.write("# Check the documentation for more information.\n")
         metadata_file.write("# plugin_dependencies=\n\n")
-        metadata_file.write("Category of the plugin: Raster, Vector, Database or Web\n")
+        metadata_file.write("# Category of the plugin: Raster, Vector, Database or Web\n")
         metadata_file.write("# category=\n\n")
         metadata_file.write("# If the plugin can run on QGIS Server.\n")
         metadata_file.write("server=False\n\n")
