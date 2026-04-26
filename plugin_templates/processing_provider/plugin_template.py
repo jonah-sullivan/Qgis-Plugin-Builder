@@ -35,26 +35,24 @@ class ProcessingProviderPluginTemplate(PluginTemplate):
         return os.path.dirname(__file__)
 
     def template_map(self, specification, dialog):
-        self.category = 'Analysis'
+        self.category = "Analysis"
         frame = dialog.template_subframe
         return {
             # Makefile
-            'TemplateQGISDir': deployment_dir,
-            'TemplatePyFiles': '%s_algorithm.py %s_provider.py' % (
-                specification.module_name, specification.module_name),
+            "TemplateQGISDir": deployment_dir,
+            "TemplatePyFiles": "%s_algorithm.py %s_provider.py"
+            % (specification.module_name, specification.module_name),
             # Metadata
-            'TemplateHasProcessingProvider': True,
+            "TemplateHasProcessingProvider": True,
             # Processing
-            'TemplateAlgoName': frame.algo_name_text.text(),
-            'TemplateAlgoGroup': frame.algo_group_text.text(),
-            'TemplateProviderName': frame.provider_name_text.text(),
-            'TemplateProviderDescr': frame.provider_descr_text.text()
+            "TemplateAlgoName": frame.algo_name_text.text(),
+            "TemplateAlgoGroup": frame.algo_group_text.text(),
+            "TemplateProviderName": frame.provider_name_text.text(),
+            "TemplateProviderDescr": frame.provider_descr_text.text(),
         }
 
     def template_files(self, specification):
         return {
-            'module_name_algorithm.tmpl':
-            '%s_algorithm.py' % specification.module_name,
-            'module_name_provider.tmpl':
-            '%s_provider.py' % specification.module_name,
+            "module_name_algorithm.tmpl": "%s_algorithm.py" % specification.module_name,
+            "module_name_provider.tmpl": "%s_provider.py" % specification.module_name,
         }

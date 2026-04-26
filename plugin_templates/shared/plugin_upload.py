@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 """This script uploads a plugin package to the plugin repository.
-        Authors: A. Pasotti, V. Picavet
-        git sha              : $TemplateVCSFormat
+Authors: A. Pasotti, V. Picavet
+git sha              : $TemplateVCSFormat
 """
 
 import os
@@ -11,10 +11,10 @@ import xmlrpc.client
 from optparse import OptionParser
 
 # Configuration
-PROTOCOL = 'https'
-SERVER = 'plugins.qgis.org'
-PORT = '443'
-ENDPOINT = '/plugins/RPC2/'
+PROTOCOL = "https"
+SERVER = "plugins.qgis.org"
+PORT = "443"
+ENDPOINT = "/plugins/RPC2/"
 VERBOSE = False
 
 
@@ -30,15 +30,17 @@ def main(parameters, arguments):
         password=parameters.password,
         server=parameters.server,
         port=parameters.port,
-        endpoint=ENDPOINT)
+        endpoint=ENDPOINT,
+    )
     print("Connecting to: %s" % hide_password(address))
 
     server = xmlrpc.client.ServerProxy(address, verbose=VERBOSE)
 
     try:
-        with open(arguments[0], 'rb') as handle:
+        with open(arguments[0], "rb") as handle:
             plugin_id, version_id = server.plugin.upload(
-                xmlrpc.client.Binary(handle.read()))
+                xmlrpc.client.Binary(handle.read())
+            )
         print("Plugin ID: %s" % plugin_id)
         print("Version ID: %s" % version_id)
     except xmlrpc.client.ProtocolError as err:
@@ -62,32 +64,45 @@ def hide_password(url, start=6):
     :param start: Position of start of password.
     :type start: int
     """
-    start_position = url.find(':', start) + 1
-    end_position = url.find('@')
+    start_position = url.find(":", start) + 1
+    end_position = url.find("@")
     return "%s%s%s" % (
         url[:start_position],
-        '*' * (end_position - start_position),
-        url[end_position:])
+        "*" * (end_position - start_position),
+        url[end_position:],
+    )
 
 
 if __name__ == "__main__":
     parser = OptionParser(usage="%prog [options] plugin.zip")
     parser.add_option(
-        "-w", "--password", dest="password",
+        "-w",
+        "--password",
+        dest="password",
         help="Password for plugin site. "
-             "You can use environment variable 'PLUGIN_UPLOAD_PASSWORD', "
-             "or the password will be prompted on runtime.", metavar="******")
+        "You can use environment variable 'PLUGIN_UPLOAD_PASSWORD', "
+        "or the password will be prompted on runtime.",
+        metavar="******",
+    )
     parser.add_option(
-        "-u", "--username", dest="username",
+        "-u",
+        "--username",
+        dest="username",
         help="Username of plugin site. "
-             "You can use environment variable 'PLUGIN_UPLOAD_USERNAME', "
-             "or the username will be prompted on runtime.", metavar="user")
+        "You can use environment variable 'PLUGIN_UPLOAD_USERNAME', "
+        "or the username will be prompted on runtime.",
+        metavar="user",
+    )
     parser.add_option(
-        "-p", "--port", dest="port",
-        help="Server port to connect to", metavar="80")
+        "-p", "--port", dest="port", help="Server port to connect to", metavar="80"
+    )
     parser.add_option(
-        "-s", "--server", dest="server",
-        help="Specify server name", metavar="plugins.qgis.org")
+        "-s",
+        "--server",
+        dest="server",
+        help="Specify server name",
+        metavar="plugins.qgis.org",
+    )
     options, args = parser.parse_args()
     if len(args) != 1:
         print("Please specify zip file.\n")
@@ -98,14 +113,14 @@ if __name__ == "__main__":
     if not options.port:
         options.port = PORT
     if not options.username:
-        username = os.environ.get('PLUGIN_UPLOAD_USERNAME')
+        username = os.environ.get("PLUGIN_UPLOAD_USERNAME")
         if username:
             # environment variable
             options.username = username
         else:
             # interactive mode
             username = getpass.getuser()
-            print("Please enter user name [%s] :" % username, end=' ')
+            print("Please enter user name [%s] :" % username, end=" ")
 
             res = input()
             if res != "":
@@ -113,7 +128,7 @@ if __name__ == "__main__":
             else:
                 options.username = username
     if not options.password:
-        password = os.environ.get('PLUGIN_UPLOAD_PASSWORD')
+        password = os.environ.get("PLUGIN_UPLOAD_PASSWORD")
         if password:
             # environment variable
             options.password = password

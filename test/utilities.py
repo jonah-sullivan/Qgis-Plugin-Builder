@@ -14,7 +14,7 @@ import logging
 from datetime import date
 from tempfile import mkstemp
 
-LOGGER = logging.getLogger('QGIS')
+LOGGER = logging.getLogger("QGIS")
 QGIS_APP = None  # Static variable used to hold hand to running QGIS app
 CANVAS = None
 PARENT = None
@@ -22,7 +22,7 @@ IFACE = None
 
 
 def get_qgis_app():
-    """ Start one QGIS application to test against.
+    """Start one QGIS application to test against.
 
     :returns: Handle to QGIS app, canvas, iface and parent. If there are any
         errors the tuple members will be returned as None.
@@ -43,7 +43,7 @@ def get_qgis_app():
 
     if QGIS_APP is None:
         gui_flag = True  # All test will run qgis in gui mode
-        #noinspection PyPep8Naming
+        # noinspection PyPep8Naming
         QGIS_APP = QgsApplication(sys.argv, gui_flag)
         # Make sure QGIS_PREFIX_PATH is set in your env if needed!
         QGIS_APP.initQgis()
@@ -52,25 +52,25 @@ def get_qgis_app():
 
     global PARENT  # pylint: disable=W0603
     if PARENT is None:
-        #noinspection PyPep8Naming
+        # noinspection PyPep8Naming
         PARENT = QtGui.QWidget()
 
     global CANVAS  # pylint: disable=W0603
     if CANVAS is None:
-        #noinspection PyPep8Naming
+        # noinspection PyPep8Naming
         CANVAS = QgsMapCanvas(PARENT)
         CANVAS.resize(QtCore.QSize(400, 400))
 
     global IFACE  # pylint: disable=W0603
     if IFACE is None:
         # QgisInterface is a stub implementation of the QGIS plugin interface
-        #noinspection PyPep8Naming
+        # noinspection PyPep8Naming
         IFACE = QgisInterface(CANVAS)
 
     return QGIS_APP, CANVAS, IFACE, PARENT
 
 
-def temp_dir(sub_dir='work'):
+def temp_dir(sub_dir="work"):
     """Obtain the temporary working directory for the operating system.
 
     .. note:: Taken from InaSAFE:
@@ -99,7 +99,7 @@ def temp_dir(sub_dir='work'):
 
     :raises: Any errors from the underlying system calls.
     """
-    user = getpass.getuser().replace(' ', '_')
+    user = getpass.getuser().replace(" ", "_")
     current_date = date.today()
     date_string = current_date.isoformat()
 
@@ -109,8 +109,7 @@ def temp_dir(sub_dir='work'):
     new_directory = os.path.dirname(filename)
     os.remove(filename)
 
-    path = os.path.join(
-        new_directory, 'pluginbuilder', date_string, user, sub_dir)
+    path = os.path.join(new_directory, "pluginbuilder", date_string, user, sub_dir)
 
     if not os.path.exists(path):
         # Ensure that the dir is world writable
@@ -152,18 +151,18 @@ def unique_filename(**kwargs):
 
     """
 
-    if 'dir' not in kwargs:
-        path = temp_dir('impacts')
-        kwargs['dir'] = path
+    if "dir" not in kwargs:
+        path = temp_dir("impacts")
+        kwargs["dir"] = path
     else:
-        path = temp_dir(kwargs['dir'])
-        kwargs['dir'] = path
-    if not os.path.exists(kwargs['dir']):
+        path = temp_dir(kwargs["dir"])
+        kwargs["dir"] = path
+    if not os.path.exists(kwargs["dir"]):
         # Ensure that the dir mask won't conflict with the mode
         # Umask sets the new mask and returns the old
         umask = os.umask(0000)
         # Ensure that the dir is world writable by explicitly setting mode
-        os.makedirs(kwargs['dir'], 0o777)
+        os.makedirs(kwargs["dir"], 0o777)
         # Reinstate the old mask for tmp dir
         os.umask(umask)
     # Now we have the working dir set up go on and return the filename

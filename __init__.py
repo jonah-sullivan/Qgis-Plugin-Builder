@@ -32,5 +32,8 @@ def classFactory(iface):
     :type iface: QgsInterface
     """
     from .plugin_builder import PluginBuilder
+
     return PluginBuilder(iface)
+
+
 # pylint: enable=C0103

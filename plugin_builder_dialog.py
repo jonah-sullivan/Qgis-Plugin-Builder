@@ -127,6 +127,7 @@ class PluginBuilderDialog(QDialog, FORM_CLASS):
             or self.module_name.text() == ""
             or self.plugin_version.text() == ""
             or self.qgis_minimum_version.text() == ""
+            or self.qgis_maximum_version.text() == ""
             or self.author.text() == ""
             or self.email_address.text() == ""
         ):
@@ -136,10 +137,24 @@ class PluginBuilderDialog(QDialog, FORM_CLASS):
             parts = str(v).strip().split(".")
             return len(parts) >= 2 and all(p.isdigit() for p in parts)
 
-        if not is_valid_version(self.plugin_version.text()) or not is_valid_version(
-            self.qgis_minimum_version.text()
+        def version_tuple(v):
+            return tuple(int(p) for p in str(v).strip().split("."))
+
+        min_ver = self.qgis_minimum_version.text()
+        max_ver = self.qgis_maximum_version.text()
+        if (
+            not is_valid_version(self.plugin_version.text())
+            or not is_valid_version(min_ver)
+            or (max_ver and not is_valid_version(max_ver))
         ):
             message += "Version numbers must be numeric.\n"
+
+        elif max_ver and is_valid_version(max_ver) and is_valid_version(min_ver):
+            if version_tuple(min_ver) >= version_tuple(max_ver):
+                message += (
+                    "Minimum QGIS version must be less than the maximum version.\n"
+                )
+
         # validate plugin name
         # check that we have only ascii char in class name
         if not all(ord(c) < 128 for c in self.class_name.text()):

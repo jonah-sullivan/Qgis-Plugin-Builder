@@ -20,11 +20,13 @@
  *                                                                         *
  ***************************************************************************/
 """
+
 import datetime
 
 
 class PluginSpecification:
     """A convenience store with information needed to create the plugin."""
+
     def __init__(self, dialog):
         """Constructor.
 
@@ -41,19 +43,20 @@ class PluginSpecification:
         self.module_name = dialog.module_name.text()
         self.email_address = dialog.email_address.text()
         self.qgis_minimum_version = dialog.qgis_minimum_version.text()
+        self.qgis_maximum_version = dialog.qgis_maximum_version.text()
         self.title = dialog.title.text()
         self.plugin_version = dialog.plugin_version.text()
 
         # remove multiple newlines/spaces from about text
-        about = dialog.about.toPlainText().replace('\n', ' ')
-        self.about = ' '.join(about.split())
+        about = dialog.about.toPlainText().replace("\n", " ")
+        self.about = " ".join(about.split())
 
         self.homepage = dialog.homepage.text()
         self.tracker = dialog.tracker.text()
         self.repository = dialog.repository.text()
         self.tags = dialog.tags.text()
         # icon selection from disk will be added at a later version
-        self.icon = 'icon.png'
+        self.icon = "icon.png"
         self.experimental = dialog.experimental.isChecked()
         # deprecated is always false for a new plugin
         self.deprecated = False
@@ -67,27 +70,28 @@ class PluginSpecification:
         # Add the date stuff to the template map
         now = datetime.date.today()
         self.build_year = now.year
-        self.build_date = '%i-%02i-%02i' % (now.year, now.month, now.day)
+        self.build_date = "%i-%02i-%02i" % (now.year, now.month, now.day)
         # Git will replace this with the sha - I do it a funny way below so
         # that this line below does not itself get substituted by git!
-        self.vcs_format = '$Format:' + '%H$'
+        self.vcs_format = "$Format:" + "%H$"
         self.template_map = {
-            'TemplateClass': self.class_name,
-            'TemplateTitle': self.title,
-            'TemplateDescription': self.description,
-            'TemplateModuleName': self.module_name,
-            'TemplateVersion': self.plugin_version,
-            'TemplateQgisVersion': self.qgis_minimum_version,
-            'TemplateAuthor': self.author,
-            'TemplateEmail': self.email_address,
-            'PluginDirectoryName': self.class_name.lower(),
-            'TemplateBuildDate': self.build_date,
-            'TemplateYear': self.build_year,
-            'TemplateVCSFormat': self.vcs_format,
+            "TemplateClass": self.class_name,
+            "TemplateTitle": self.title,
+            "TemplateDescription": self.description,
+            "TemplateModuleName": self.module_name,
+            "TemplateVersion": self.plugin_version,
+            "TemplateQgisMinVersion": self.qgis_minimum_version,
+            "TemplateQgisMaxVersion": self.qgis_maximum_version,
+            "TemplateAuthor": self.author,
+            "TemplateEmail": self.email_address,
+            "PluginDirectoryName": self.class_name.lower(),
+            "TemplateBuildDate": self.build_date,
+            "TemplateYear": self.build_year,
+            "TemplateVCSFormat": self.vcs_format,
             # Makefile defaults
-            'TemplatePyFiles': '',
-            'TemplateUiFiles': '',
-            'TemplateExtraFiles': '',
-            'TemplateQrcFiles': '',
-            'TemplateRcFiles': ''
+            "TemplatePyFiles": "",
+            "TemplateUiFiles": "",
+            "TemplateExtraFiles": "",
+            "TemplateQrcFiles": "",
+            "TemplateRcFiles": "",
         }

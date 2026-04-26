@@ -25,12 +25,14 @@ import os
 
 from qgis.PyQt import QtGui, QtWidgets, uic
 
-FORM_CLASS, _ = uic.loadUiType(os.path.join(
-    os.path.dirname(__file__), 'results_dialog_base.ui'))
+FORM_CLASS, _ = uic.loadUiType(
+    os.path.join(os.path.dirname(__file__), "results_dialog_base.ui")
+)
 
 
 class ResultDialog(QtWidgets.QDialog, FORM_CLASS):
     """Dialog for showing the results of the plugin creation process."""
+
     def __init__(self, parent=None):
         super(ResultDialog, self).__init__(parent)
         # Set up the user interface from Designer.

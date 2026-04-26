@@ -25,6 +25,7 @@ import os
 from ..plugin_template import PluginTemplate
 from ...qgis_dirs import deployment_dir
 
+
 class ToolbuttonWithDialogPluginTemplate(PluginTemplate):
 
     def descr(self):
@@ -37,43 +38,42 @@ class ToolbuttonWithDialogPluginTemplate(PluginTemplate):
         menu_text = dialog.template_subframe.menu_text.text()
         menu = dialog.template_subframe.menu_location.currentText()
         # Munge the plugin menu function based on user choice
-        if menu == 'Plugins':
-            add_method = 'addPluginToMenu'
-            remove_method = 'removePluginMenu'
+        if menu == "Plugins":
+            add_method = "addPluginToMenu"
+            remove_method = "removePluginMenu"
         else:
-            add_method = 'addPluginTo{}Menu'.format(menu)
-            remove_method = 'removePlugin{}Menu'.format(menu)
+            add_method = "addPluginTo{}Menu".format(menu)
+            remove_method = "removePlugin{}Menu".format(menu)
         self.category = menu
         return {
             # Makefile
-            'TemplatePyFiles': '%s_dialog.py' % specification.module_name,
-            'TemplateUiFiles': '%s_dialog_base.ui' % specification.module_name,
-            'TemplateExtraFiles': 'icon.png',
-            'TemplateQGISDir': deployment_dir,
+            "TemplatePyFiles": "%s_dialog.py" % specification.module_name,
+            "TemplateUiFiles": "%s_dialog_base.ui" % specification.module_name,
+            "TemplateExtraFiles": "icon.png",
+            "TemplateQGISDir": deployment_dir,
             # Metadata
-            'TemplateHasProcessingProvider': False,
+            "TemplateHasProcessingProvider": False,
             # Menu
-            'TemplateMenuText': menu_text,
-            'TemplateMenuAddMethod': add_method,
-            'TemplateMenuRemoveMethod': remove_method,
+            "TemplateMenuText": menu_text,
+            "TemplateMenuAddMethod": add_method,
+            "TemplateMenuRemoveMethod": remove_method,
         }
 
     def template_files(self, specification):
         result = {
-            'module_name_dialog.tmpl':
-            '%s_dialog.py' % specification.module_name,
-            'module_name_dialog_base.ui.tmpl':
-            '%s_dialog_base.ui' % specification.module_name,
+            "module_name_dialog.tmpl": "%s_dialog.py" % specification.module_name,
+            "module_name_dialog_base.ui.tmpl": "%s_dialog_base.ui"
+            % specification.module_name,
         }
         if specification.gen_tests:
-            result.update({
-                'test/test_module_name_dialog.templ':
-                'test/test_%s_dialog.py' % specification.module_name,
-                'test/test_resources.templ': 'test/test_resources.py'
-            })
+            result.update(
+                {
+                    "test/test_module_name_dialog.templ": "test/test_%s_dialog.py"
+                    % specification.module_name,
+                    "test/test_resources.templ": "test/test_resources.py",
+                }
+            )
         return result
 
     def copy_files(self, specification):
-        return {
-            'icon.png': 'icon.png'
-        }
+        return {"icon.png": "icon.png"}

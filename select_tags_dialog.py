@@ -25,12 +25,14 @@ import os
 
 from qgis.PyQt import QtGui, QtWidgets, uic
 
-FORM_CLASS, _ = uic.loadUiType(os.path.join(
-    os.path.dirname(__file__), 'select_tags_dialog_base.ui'))
+FORM_CLASS, _ = uic.loadUiType(
+    os.path.join(os.path.dirname(__file__), "select_tags_dialog_base.ui")
+)
 
 
 class SelectTagsDialog(QtWidgets.QDialog, FORM_CLASS):
     """Dialog for selecting one or more tags for the plugin."""
+
     def __init__(self, parent=None):
         super(SelectTagsDialog, self).__init__(parent)
         # Set up the user interface from Designer.
