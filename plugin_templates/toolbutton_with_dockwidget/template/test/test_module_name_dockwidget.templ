@@ -18,7 +18,7 @@ from qgis.PyQt.QtWidgets import QDockWidget
 
 from ${TemplateModuleName}_dockwidget import ${TemplateClass}DockWidget
 
-from utilities import get_qgis_app
+from .utilities import get_qgis_app
 
 QGIS_APP = get_qgis_app()
 
@@ -40,7 +40,5 @@ class ${TemplateClass}DockWidgetTest(unittest.TestCase):
         self.assertTrue(hasattr(self.dockwidget, 'closingPlugin'))
 
 if __name__ == "__main__":
-    suite = unittest.makeSuite(${TemplateClass}DockWidgetTest)
-    runner = unittest.TextTestRunner(verbosity=2)
-    runner.run(suite)
+    unittest.main()
 

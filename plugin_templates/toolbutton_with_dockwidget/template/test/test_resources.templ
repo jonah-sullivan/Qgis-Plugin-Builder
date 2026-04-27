@@ -12,10 +12,10 @@ __author__ = '$TemplateEmail'
 __date__ = '$TemplateBuildDate'
 __copyright__ = 'Copyright $TemplateYear, $TemplateAuthor'
 
+import os
 import unittest
 
 from qgis.PyQt.QtGui import QIcon
-
 
 
 class ${TemplateClass}DialogTest(unittest.TestCase):
@@ -31,14 +31,12 @@ class ${TemplateClass}DialogTest(unittest.TestCase):
 
     def test_icon_png(self):
         """Test we can click OK."""
-        path = ':/plugins/${TemplateClass}/icon.png'
+        path = os.path.join(os.path.dirname(__file__), '..', 'icon.png')
         icon = QIcon(path)
         self.assertFalse(icon.isNull())
 
 if __name__ == "__main__":
-    suite = unittest.makeSuite(${TemplateClass}DialogTest)
-    runner = unittest.TextTestRunner(verbosity=2)
-    runner.run(suite)
+    unittest.main()
 
 
 

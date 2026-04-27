@@ -77,9 +77,9 @@ test: compile
 		python -m pytest -v || true
 	@echo
 	@echo "----------------------"
-	@echo "If you get a 'no module named qgis.core error, try sourcing"
-	@echo "the helper script we have provided first then run make test."
-	@echo "e.g. source run-env-linux.sh <path to qgis install>; make test"
+	@echo "If you get a 'no module named qgis.core' error:"
+	@echo "  Linux/Mac: source run-env-linux.sh <path to qgis install>; make test"
+	@echo "  Windows:   activate your OSGeo4W-based venv and run make test from Git Bash"
 	@echo "----------------------"
 
 

@@ -24,7 +24,7 @@ __copyright__ = (
 )
 
 import logging
-from qgis.PyQt.QtCore import QObject, pyqtSlot, pyqtSignal
+from qgis.PyQt.QtCore import QObject, pyqtSignal
 from qgis.core import QgsMapLayer, QgsProject
 
 LOGGER = logging.getLogger("QGIS")
@@ -52,14 +52,11 @@ class QgisInterface(QObject):
         # noinspection PyArgumentList
         QgsProject.instance().layersAdded.connect(self.addLayers)
         # noinspection PyArgumentList
-        QgsProject.instance().layerAdded.connect(self.addLayer)
-        # noinspection PyArgumentList
         QgsProject.instance().layersRemoved.connect(self.removeAllLayers)
 
         # For processing module
         self.destCrs = None
 
-    @pyqtSlot("QStringList")
     def addLayers(self, layers):
         """Handle layers being added to the registry so they show up in canvas.
 
@@ -72,7 +69,6 @@ class QgisInterface(QObject):
         final_layers = list(current_layers) + list(layers)
         self.canvas.setLayers(final_layers)
 
-    @pyqtSlot("QgsMapLayer")
     def addLayer(self, layer):
         """Handle a layer being added to the registry so it shows up in canvas.
 
@@ -83,7 +79,6 @@ class QgisInterface(QObject):
         """
         pass
 
-    @pyqtSlot()
     def removeAllLayers(self):
         """Remove layers from the canvas before they get deleted."""
         self.canvas.setLayers([])

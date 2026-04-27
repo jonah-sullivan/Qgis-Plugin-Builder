@@ -19,7 +19,7 @@ from qgis.PyQt.QtWidgets import QDialogButtonBox, QDialog
 
 from ${TemplateModuleName}_dialog import ${TemplateClass}Dialog
 
-from utilities import get_qgis_app
+from .utilities import get_qgis_app
 QGIS_APP = get_qgis_app()
 
 if Qgis.QGIS_VERSION_INT >= 40000:
@@ -60,7 +60,5 @@ class ${TemplateClass}DialogTest(unittest.TestCase):
         self.assertEqual(result, REJECTED)
 
 if __name__ == "__main__":
-    suite = unittest.makeSuite(${TemplateClass}DialogTest)
-    runner = unittest.TextTestRunner(verbosity=2)
-    runner.run(suite)
+    unittest.main()
 
