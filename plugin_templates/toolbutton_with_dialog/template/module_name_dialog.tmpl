@@ -31,9 +31,7 @@ from qgis.PyQt import QtWidgets
 FORM_CLASS, _ = uic.loadUiType(
     os.path.join(
         os.path.dirname(__file__),
-        '${TemplateModuleName}_dialog_base.ui'),
-    from_imports=True,
-    import_from='${TemplateModuleName}')
+        '${TemplateModuleName}_dialog_base.ui'))
 
 
 class ${TemplateClass}Dialog(QtWidgets.QDialog, FORM_CLASS):
