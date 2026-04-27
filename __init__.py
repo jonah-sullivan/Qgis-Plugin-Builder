@@ -7,7 +7,7 @@
     development.
                              -------------------
         begin                : 2011-01-20
-        copyright            : (C) 2011-2014 by GeoApt LLC
+        copyright            : (C) 2011-2026 by Gary Sherman, 2026 Jonah Sullivan
         email                : gsherman@geoapt.com
  ***************************************************************************/
 
