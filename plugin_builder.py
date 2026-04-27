@@ -265,7 +265,7 @@ class PluginBuilder:
         )
         metadata_comment = (
             "# This file contains metadata for your plugin.\n\n"
-            "# This file should be included when you package your plugin."
+            "# This file should be included when you package your plugin.\n"
             "# Mandatory items:\n\n"
         )
         metadata_file.write(metadata_comment)

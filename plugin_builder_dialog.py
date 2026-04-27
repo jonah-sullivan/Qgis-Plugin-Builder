@@ -210,11 +210,12 @@ class PluginBuilderDialog(QDialog, FORM_CLASS):
                 "plugin repository.",
             )
             return False
-        elif url_tracker[0:4] != "http" or url_repo[0:4] != "http":
+        elif not (url_tracker.startswith("http://") or url_tracker.startswith("https://")) or \
+                not (url_repo.startswith("http://") or url_repo.startswith("https://")):
             QMessageBox.warning(
                 self,
                 "Malformed URL(s)",
-                "Your tracker and repository URLs must begin with http. "
+                "Your tracker and repository URLs must begin with http:// or https://. "
                 "Use a fully qualified URL.",
             )
             return False
