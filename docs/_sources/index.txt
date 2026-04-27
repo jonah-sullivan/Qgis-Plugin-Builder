@@ -323,7 +323,7 @@ The Environment Variable Method
 Using the ``QGIS_PLUGINPATH`` environment variable you can tell QGIS to look
 in an additional location for plugins. This can be handy for development,
 allowing you to test your plugin without copying it to
-``.qgis2/python/plugins``.
+``.qgis4/python/plugins``.
 
 To use this method, set the ``QGIS_PLUGINPATH`` environment variable to point
 to your development directory before starting QGIS. When QGIS starts up, all
