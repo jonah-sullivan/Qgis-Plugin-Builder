@@ -242,7 +242,7 @@ class PluginBuilder:
             "UserPluginDir": self.user_plugin_dir,
             "TemplateVCSFormat": specification.template_map["TemplateVCSFormat"],
         }
-        popped = template.substitute(result_map)
+        popped = template.safe_substitute(result_map)
         # write the results info to the README txt file
         readme_txt = codecs.open(
             os.path.join(str(self.plugin_path), "README.txt"), "w", "utf-8"
@@ -334,7 +334,7 @@ class PluginBuilder:
             "UserPluginDir": self.user_plugin_dir,
             "TemplateVCSFormat": specification.template_map["TemplateVCSFormat"],
         }
-        results_popped = template.substitute(result_map)
+        results_popped = template.safe_substitute(result_map)
         # write the results info to the README HTML file
         readme = codecs.open(
             os.path.join(str(self.plugin_path), "README.html"), "w", "utf-8"
@@ -508,7 +508,7 @@ class PluginBuilder:
         content = template_file.read()
         template_file.close()
         template = Template(content)
-        popped = template.substitute(specification.template_map)
+        popped = template.safe_substitute(specification.template_map)
         plugin_file = codecs.open(output_name_path, "w", "utf-8")
         plugin_file.write(popped)
         plugin_file.close()
