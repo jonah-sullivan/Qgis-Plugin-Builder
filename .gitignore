@@ -15,4 +15,5 @@ help/build
 .gitignore
 .venv
 .vscode/
+.env
 
