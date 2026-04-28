@@ -1,26 +1,11 @@
 # coding=utf-8
-"""Dialog test.
+"""Dialog tests for ${TemplateClass}Dialog."""
 
-.. note:: This program is free software; you can redistribute it and/or modify
-     it under the terms of the GNU General Public License as published by
-     the Free Software Foundation; either version 2 of the License, or
-     (at your option) any later version.
-
-"""
-
-__author__ = '$TemplateEmail'
-__date__ = '$TemplateBuildDate'
-__copyright__ = 'Copyright $TemplateYear, $TemplateAuthor'
-
-import unittest
-
+import pytest
 from qgis.core import Qgis
 from qgis.PyQt.QtWidgets import QDialogButtonBox, QDialog
 
 from ${TemplateModuleName}_dialog import ${TemplateClass}Dialog
-
-from .utilities import get_qgis_app
-QGIS_APP = get_qgis_app()
 
 if Qgis.QGIS_VERSION_INT >= 40000:
     OK_BUTTON = QDialogButtonBox.StandardButton.Ok
@@ -34,31 +19,20 @@ else:
     REJECTED = QDialog.Rejected
 
 
-class ${TemplateClass}DialogTest(unittest.TestCase):
-    """Test dialog works."""
+@pytest.fixture
+def dialog(qgis_app):
+    dlg = ${TemplateClass}Dialog(None)
+    yield dlg
+    dlg.close()
 
-    def setUp(self):
-        """Runs before each test."""
-        self.dialog = ${TemplateClass}Dialog(None)
 
-    def tearDown(self):
-        """Runs after each test."""
-        self.dialog = None
+def test_dialog_ok(dialog):
+    """Clicking OK closes the dialog with Accepted."""
+    dialog.button_box.button(OK_BUTTON).click()
+    assert dialog.result() == ACCEPTED
 
-    def test_dialog_ok(self):
-        """Test we can click OK."""
-        button = self.dialog.button_box.button(OK_BUTTON)
-        button.click()
-        result = self.dialog.result()
-        self.assertEqual(result, ACCEPTED)
 
-    def test_dialog_cancel(self):
-        """Test we can click cancel."""
-        button = self.dialog.button_box.button(CANCEL_BUTTON)
-        button.click()
-        result = self.dialog.result()
-        self.assertEqual(result, REJECTED)
-
-if __name__ == "__main__":
-    unittest.main()
-
+def test_dialog_cancel(dialog):
+    """Clicking Cancel closes the dialog with Rejected."""
+    dialog.button_box.button(CANCEL_BUTTON).click()
+    assert dialog.result() == REJECTED

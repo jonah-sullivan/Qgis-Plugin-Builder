@@ -1,0 +1,6 @@
+[tool.pytest.ini_options]
+testpaths = ["test"]
+# pytest-qgis reads QGIS_PREFIX_PATH from the environment.
+# On most Linux systems: export QGIS_PREFIX_PATH=/usr
+# On macOS with homebrew: export QGIS_PREFIX_PATH=/usr/local
+# On Windows set it in your shell before running pytest.

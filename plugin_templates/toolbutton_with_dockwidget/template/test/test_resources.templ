@@ -1,42 +1,24 @@
 # coding=utf-8
-"""Resources test.
-
-.. note:: This program is free software; you can redistribute it and/or modify
-     it under the terms of the GNU General Public License as published by
-     the Free Software Foundation; either version 2 of the License, or
-     (at your option) any later version.
-
-"""
-
-__author__ = '$TemplateEmail'
-__date__ = '$TemplateBuildDate'
-__copyright__ = 'Copyright $TemplateYear, $TemplateAuthor'
+"""Resource sanity tests for ${TemplateClass}."""
 
 import os
-import unittest
 
-from qgis.PyQt.QtGui import QIcon
-
-
-class ${TemplateClass}DialogTest(unittest.TestCase):
-    """Test rerources work."""
-
-    def setUp(self):
-        """Runs before each test."""
-        pass
-
-    def tearDown(self):
-        """Runs after each test."""
-        pass
-
-    def test_icon_png(self):
-        """Test we can click OK."""
-        path = os.path.join(os.path.dirname(__file__), '..', 'icon.png')
-        icon = QIcon(path)
-        self.assertFalse(icon.isNull())
-
-if __name__ == "__main__":
-    unittest.main()
+import pytest
 
 
+def test_icon_file_exists():
+    """icon.png exists in the plugin directory."""
+    plugin_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    icon_path = os.path.join(plugin_dir, "icon.png")
+    assert os.path.isfile(icon_path), f"icon.png not found at {icon_path}"
 
+
+def test_icon_via_resource_system(qgis_app):
+    """icon.png is accessible through the Qt resource system."""
+    try:
+        from . import resources  # noqa: F401
+    except ImportError:
+        pytest.skip("resources module not compiled — run pb_tool compile first")
+    from qgis.PyQt.QtGui import QIcon
+    icon = QIcon(":/plugins/${TemplateClass}/icon.png")
+    assert not icon.isNull()

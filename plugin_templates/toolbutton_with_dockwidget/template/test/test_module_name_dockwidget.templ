@@ -1,44 +1,24 @@
 # coding=utf-8
-"""DockWidget test.
+"""DockWidget tests for ${TemplateClass}DockWidget."""
 
-.. note:: This program is free software; you can redistribute it and/or modify
-     it under the terms of the GNU General Public License as published by
-     the Free Software Foundation; either version 2 of the License, or
-     (at your option) any later version.
-
-"""
-
-__author__ = '$TemplateEmail'
-__date__ = '$TemplateBuildDate'
-__copyright__ = 'Copyright $TemplateYear, $TemplateAuthor'
-
-import unittest
-
+import pytest
 from qgis.PyQt.QtWidgets import QDockWidget
 
 from ${TemplateModuleName}_dockwidget import ${TemplateClass}DockWidget
 
-from .utilities import get_qgis_app
 
-QGIS_APP = get_qgis_app()
+@pytest.fixture
+def dockwidget(qgis_app):
+    widget = ${TemplateClass}DockWidget(None)
+    yield widget
+    widget.close()
 
 
-class ${TemplateClass}DockWidgetTest(unittest.TestCase):
-    """Test dockwidget works."""
+def test_dockwidget_is_qdockwidget(dockwidget):
+    """The generated dockwidget is a QDockWidget instance."""
+    assert isinstance(dockwidget, QDockWidget)
 
-    def setUp(self):
-        """Runs before each test."""
-        self.dockwidget = ${TemplateClass}DockWidget(None)
 
-    def tearDown(self):
-        """Runs after each test."""
-        self.dockwidget = None
-
-    def test_dockwidget_ok(self):
-        """Test the dockwidget is a QDockWidget and exposes its closing signal."""
-        self.assertIsInstance(self.dockwidget, QDockWidget)
-        self.assertTrue(hasattr(self.dockwidget, 'closingPlugin'))
-
-if __name__ == "__main__":
-    unittest.main()
-
+def test_dockwidget_has_closing_signal(dockwidget):
+    """The dockwidget exposes a closingPlugin signal."""
+    assert hasattr(dockwidget, "closingPlugin")

@@ -1,0 +1,29 @@
+# coding=utf-8
+"""Lifecycle tests: classFactory -> initGui -> unload."""
+
+import pytest
+
+
+def test_class_factory_returns_instance(qgis_iface):
+    """classFactory returns a plugin instance."""
+    from ${TemplateModuleName} import ${TemplateClass}
+    plugin = ${TemplateClass}(qgis_iface)
+    assert plugin is not None
+
+
+def test_init_gui_registers_action(qgis_iface):
+    """initGui adds a toolbar icon via iface."""
+    from ${TemplateModuleName} import ${TemplateClass}
+    plugin = ${TemplateClass}(qgis_iface)
+    plugin.initGui()
+    qgis_iface.addToolBarIcon.assert_called()
+    plugin.unload()
+
+
+def test_unload_removes_action(qgis_iface):
+    """unload removes the toolbar icon via iface."""
+    from ${TemplateModuleName} import ${TemplateClass}
+    plugin = ${TemplateClass}(qgis_iface)
+    plugin.initGui()
+    plugin.unload()
+    qgis_iface.removeToolBarIcon.assert_called()

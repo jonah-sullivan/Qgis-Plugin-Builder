@@ -114,17 +114,34 @@ class PluginBuilder:
                 return False
         return True
 
-    def _prepare_tests(self):
-        """Populate and write help files.
-
-        :param specification: Specification instance containing template
-            replacement keys/values.
-        :type specification: PluginSpecification
-        """
-        # copy the unit tests folder
+    def _prepare_tests(self, specification):
+        """Populate and write test files."""
         test_source = os.path.join(self.shared_dir, "test")
         test_destination = os.path.join(self.plugin_path, "test")
         copy(test_source, test_destination)
+
+        # Render lifecycle test for iface-based plugin types
+        is_processing = specification.template_map.get(
+            "TemplateHasProcessingProvider", False
+        )
+        if not is_processing:
+            self.populate_template(
+                specification,
+                os.path.join(self.shared_dir),
+                "test_plugin_lifecycle.tmpl",
+                "test/test_plugin_lifecycle.py",
+            )
+
+        # Render pyproject.toml at plugin root
+        self.populate_template(
+            specification, self.shared_dir, "pyproject.toml.tmpl", "pyproject.toml"
+        )
+
+        # Copy requirements-dev.txt to plugin root
+        QFile.copy(
+            os.path.join(self.shared_dir, "requirements-dev.txt"),
+            os.path.join(self.plugin_path, "requirements-dev.txt"),
+        )
 
     def _prepare_scripts(self):
         """Copy the scripts folder."""
@@ -462,7 +479,7 @@ class PluginBuilder:
                 "help/source/index.rst",
             )
         if specification.gen_tests:
-            self._prepare_tests()
+            self._prepare_tests(specification)
 
         if specification.gen_scripts:
             self._prepare_scripts()

@@ -52,7 +52,10 @@ class ProcessingProviderPluginTemplate(PluginTemplate):
         }
 
     def template_files(self, specification):
-        return {
+        files = {
             "module_name_algorithm.tmpl": "%s_algorithm.py" % specification.module_name,
             "module_name_provider.tmpl": "%s_provider.py" % specification.module_name,
         }
+        if specification.gen_tests:
+            files["test/test_plugin_lifecycle.templ"] = "test/test_plugin_lifecycle.py"
+        return files
