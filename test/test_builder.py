@@ -2,12 +2,14 @@
 """Tests for the plugin builder."""
 
 import os
+import platform
 
 import pytest
 from qgis.core import QgsProviderRegistry
 
-from test.utilities import temp_dir, unique_filename
+from test.utilities import unique_filename
 from plugin_builder import PluginBuilder, copy
+from qgis_dirs import _qgis_dir_location, deployment_dir
 
 
 class FakePluginSpecification:
@@ -76,7 +78,9 @@ def spec():
 def builder(qgis_app, qgis_iface, tmp_path):
     b = PluginBuilder(qgis_iface)
     b.shared_dir = os.path.abspath(
-        os.path.join(os.path.dirname(__file__), "..", "plugin_templates", "shared")
+        os.path.join(
+            os.path.dirname(__file__), "..", "plugin_templates", "shared"
+        )
     )
     b.template_dir = os.path.abspath(
         os.path.join(
@@ -109,9 +113,9 @@ def test_prepare_code(builder, spec):
     """_prepare_code writes the expected output files."""
     builder._prepare_code(spec)
     for expected in ["Makefile", "pb_tool.cfg", "__init__.py", "fake_module.py"]:
-        assert os.path.exists(os.path.join(builder.plugin_path, expected)), (
-            f"{expected} was not created"
-        )
+        assert os.path.exists(
+            os.path.join(builder.plugin_path, expected)
+        ), f"{expected} was not created"
 
 
 def test_prepare_results_html(builder, spec):
@@ -150,3 +154,86 @@ def test_prepare_metadata(builder, spec):
     assert "qgisMinimumVersion=4.0.0" in content
     assert "qgisMaximumVersion=4.99" in content
     assert "[general]" in content
+
+
+def test_deployment_dir():
+    """deployment_dir points to the QGIS4 plugins directory for the current OS."""
+    expected_suffix = _qgis_dir_location[platform.system()]
+    assert deployment_dir.endswith(expected_suffix)
+    assert "QGIS4" in deployment_dir
+    assert os.path.isabs(deployment_dir)
+
+
+def test_copy_single_file(tmp_path):
+    """copy() falls back to shutil.copy when source is a file not a directory."""
+    src = tmp_path / "source.txt"
+    src.write_text("hello")
+    dest = str(tmp_path / "dest.txt")
+    copy(str(src), dest)
+    assert os.path.exists(dest)
+    with open(dest) as f:
+        assert f.read() == "hello"
+
+
+def test_prepare_scripts(builder):
+    """_prepare_scripts copies the scripts directory into plugin_path."""
+    builder._prepare_scripts()
+    assert os.path.isdir(os.path.join(builder.plugin_path, "scripts"))
+
+
+def test_prepare_i18n(builder):
+    """_prepare_i18n copies the i18n directory into plugin_path."""
+    builder._prepare_i18n()
+    assert os.path.isdir(os.path.join(builder.plugin_path, "i18n"))
+
+
+def test_prepare_tests(builder, spec):
+    """_prepare_tests copies test files and renders lifecycle and pyproject templates."""
+    builder._prepare_tests(spec)
+    assert os.path.isdir(os.path.join(builder.plugin_path, "test"))
+    assert os.path.exists(
+        os.path.join(builder.plugin_path, "test", "test_plugin_lifecycle.py")
+    )
+    assert os.path.exists(os.path.join(builder.plugin_path, "pyproject.toml"))
+
+
+def test_prepare_help(builder):
+    """_prepare_help creates the expected help directory structure."""
+    builder._prepare_help()
+    for subdir in [
+        "help",
+        os.path.join("help", "build"),
+        os.path.join("help", "build", "html"),
+        os.path.join("help", "source"),
+        os.path.join("help", "source", "_static"),
+        os.path.join("help", "source", "_templates"),
+    ]:
+        assert os.path.isdir(os.path.join(builder.plugin_path, subdir))
+
+
+def test_prepare_specific_files(builder, spec):
+    """_prepare_specific_files renders template files and copies static files."""
+
+    class FakeTemplate:
+        def template_files(self, specification):
+            return {
+                "module_name_dialog.tmpl": (
+                    "%s_dialog.py" % specification.module_name
+                ),
+                "module_name_dialog_base.ui.tmpl": (
+                    "%s_dialog_base.ui" % specification.module_name
+                ),
+            }
+
+        def copy_files(self, specification):
+            return {"icon.png": "icon.png"}
+
+    builder.template = FakeTemplate()
+    builder._prepare_specific_files(spec)
+    assert os.path.exists(
+        os.path.join(builder.plugin_path, "fake_module_dialog.py")
+    )
+    assert os.path.exists(
+        os.path.join(builder.plugin_path, "fake_module_dialog_base.ui")
+    )
+    assert os.path.exists(os.path.join(builder.plugin_path, "icon.png"))

@@ -20,10 +20,10 @@ jobs:
       PYTHONDONTWRITEBYTECODE: "1"
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
       - name: Install pytest-qgis
-        run: pip3 install pytest-qgis --break-system-packages
+        run: pip3 install pytest-qgis pytest-cov --break-system-packages
 
       - name: Run tests
-        run: python3 -m pytest
+        run: python3 -m pytest --cov=. --cov-report=term-missing

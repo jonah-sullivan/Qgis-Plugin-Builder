@@ -6,6 +6,9 @@ NOTE
 QGIS Plugin Builder
 ===================
 
+.. image:: https://github.com/jonah-sullivan/Qgis-Plugin-Builder/workflows/Tests/badge.svg
+   :target: https://github.com/jonah-sullivan/Qgis-Plugin-Builder/actions
+
 .. figure:: help/source/images/wizard_required_info.png
 
 This is a QGIS plugin that generates a QGIS plugin template for use in
