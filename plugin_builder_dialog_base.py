@@ -577,12 +577,12 @@ class Ui_PluginBuilderDialogBase(object):
         self.qgis_minimum_version.setToolTip(
             _translate(
                 "PluginBuilderDialogBase",
-                "Minimum QGIS minor version required for this plugin to work e.g. 3.0",
+                "Minimum QGIS minor version required for this plugin to work e.g. 4.0",
             )
         )
-        self.qgis_minimum_version.setText(_translate("PluginBuilderDialogBase", "3.44"))
+        self.qgis_minimum_version.setText(_translate("PluginBuilderDialogBase", "4.0"))
         self.qgis_minimum_version.setPlaceholderText(
-            _translate("PluginBuilderDialogBase", "e.g. 3.0")
+            _translate("PluginBuilderDialogBase", "e.g. 4.0")
         )
         self.author_label.setText(
             _translate("PluginBuilderDialogBase", "Author/Company")

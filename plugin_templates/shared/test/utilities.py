@@ -24,7 +24,7 @@ def get_qgis_app():
 
     try:
         from qgis.PyQt import QtWidgets, QtCore
-        from qgis.core import Qgis, QgsApplication
+        from qgis.core import QgsApplication
         from qgis.gui import QgsMapCanvas
         from .qgis_interface import QgisInterface
     except ImportError:
@@ -35,7 +35,7 @@ def get_qgis_app():
     if QGIS_APP is None:
         gui_flag = True  # All test will run qgis in gui mode
         # noinspection PyPep8Naming
-        argv = [a.encode() for a in sys.argv] if Qgis.QGIS_VERSION_INT >= 40000 else sys.argv
+        argv = [a.encode() for a in sys.argv]
         QGIS_APP = QgsApplication(argv, gui_flag)
         prefix_path = os.environ.get("QGIS_PREFIX_PATH", "/usr")
         QgsApplication.setPrefixPath(prefix_path, True)

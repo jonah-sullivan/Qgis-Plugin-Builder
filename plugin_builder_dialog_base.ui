@@ -308,13 +308,13 @@ Acme Corp.</string>
           </size>
          </property>
          <property name="toolTip">
-          <string>Minimum QGIS minor version required for this plugin to work e.g. 3.0</string>
+          <string>Minimum QGIS minor version required for this plugin to work e.g. 4.0</string>
          </property>
          <property name="text">
-          <string>3.44</string>
+          <string>4.0</string>
          </property>
          <property name="placeholderText">
-          <string>e.g. 3.0</string>
+          <string>e.g. 4.0</string>
          </property>
         </widget>
        </item>

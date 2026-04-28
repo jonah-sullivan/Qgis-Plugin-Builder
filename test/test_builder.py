@@ -20,7 +20,7 @@ class FakePluginSpecification:
         self.module_name = "fake_module"
         self.email_address = "fake@mail.com"
         self.menu_text = "Fake Menu"
-        self.qgis_minimum_version = "3.0.0"
+        self.qgis_minimum_version = "4.0.0"
         self.qgis_maximum_version = "4.99"
         self.title = "A fake plugin"
         self.plugin_version = "1.0.0"
@@ -147,6 +147,6 @@ def test_prepare_metadata(builder, spec):
     assert "name=A fake plugin" in content
     assert "author=Fake Author" in content
     assert "email=fake@mail.com" in content
-    assert "qgisMinimumVersion=3.0.0" in content
+    assert "qgisMinimumVersion=4.0.0" in content
     assert "qgisMaximumVersion=4.99" in content
     assert "[general]" in content
