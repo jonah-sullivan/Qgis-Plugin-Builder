@@ -1,0 +1,29 @@
+name: Tests
+
+on:
+  push:
+    branches: [QGIS4]
+  pull_request:
+    branches: [QGIS4]
+
+# Windows is not tested: the qgis/qgis Docker image is Linux-only and there
+# is no reliable lightweight alternative for running pytest-qgis on Windows
+# runners. Revisit if a Windows-specific bug surfaces.
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    container:
+      image: qgis/qgis:latest
+
+    env:
+      QT_QPA_PLATFORM: offscreen
+      PYTHONDONTWRITEBYTECODE: "1"
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install pytest-qgis
+        run: pip3 install pytest-qgis --break-system-packages
+
+      - name: Run tests
+        run: python3 -m pytest
