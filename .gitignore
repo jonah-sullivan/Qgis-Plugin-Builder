@@ -1,19 +1,14 @@
-# ignore swap files
-*swp
-plugin_template/*swp
-# ignore compiled python files
-*pyc
-plugin_template/*pyc
+*.swp
+*.pyc
 .idea
 .coverage
 .noseids
 nohup.out
-
-# ignore the help build dir
-help/build
 .flake8
 .gitignore
 .venv
-.vscode/
+.vscode
 .env
-
+.qgis-settings
+.pytest_cache
+__pycache__
