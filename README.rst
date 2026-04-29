@@ -25,7 +25,7 @@ Documentation
 
 See the `help`_ documentation about using the plugin.
 
-.. _help: help/source/index.rst
+.. _help: https://jonah-sullivan.github.io/Qgis-Plugin-Builder/
 
 Contributing
 ------------
