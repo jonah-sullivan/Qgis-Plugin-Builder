@@ -12,6 +12,7 @@ description=Creates a QGIS plugin template for use as a starting point in plugin
 version=3.3.0
 qgisMinimumVersion=4.0
 qgisMaximumVersion=4.99
+license=GPL version 2 or newer
 
 changelog=3.3.0 2026-04-25
       * Add QGIS 4 compatibility
