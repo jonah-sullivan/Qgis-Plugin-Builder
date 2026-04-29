@@ -12,3 +12,4 @@ nohup.out
 .qgis-settings
 .pytest_cache
 __pycache__
+docs/doctrees/

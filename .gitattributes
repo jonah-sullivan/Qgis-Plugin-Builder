@@ -1,0 +1,7 @@
+plugin_builder.py export-subst
+metadata.txt export-subst
+plugin_templates/plugin_template.py export-subst
+plugin_templates/processing_provider/plugin_template.py export-subst
+plugin_templates/toolbutton_with_dialog/plugin_template.py export-subst
+plugin_templates/toolbutton_with_dockwidget/plugin_template.py export-subst
+plugin_templates/shared/test/qgis_interface.py export-subst
