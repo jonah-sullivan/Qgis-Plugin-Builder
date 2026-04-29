@@ -79,10 +79,10 @@ class ${TemplateClass}:
         We implement this ourselves since we do not inherit QObject.
 
         :param message: String for translation.
-        :type message: str, QString
+        :type message: str
 
         :returns: Translated version of message.
-        :rtype: QString
+        :rtype: str
         """
         # noinspection PyTypeChecker,PyArgumentList,PyCallByClass
         return QCoreApplication.translate('${TemplateClass}', message)

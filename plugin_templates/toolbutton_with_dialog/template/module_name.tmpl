@@ -73,10 +73,10 @@ class ${TemplateClass}:
         We implement this ourselves since we do not inherit QObject.
 
         :param message: String for translation.
-        :type message: str, QString
+        :type message: str
 
         :returns: Translated version of message.
-        :rtype: QString
+        :rtype: str
         """
         # noinspection PyTypeChecker,PyArgumentList,PyCallByClass
         return QCoreApplication.translate('${TemplateClass}', message)
@@ -191,7 +191,7 @@ class ${TemplateClass}:
         # show the dialog
         self.dlg.show()
         # Run the dialog event loop
-        result = self.dlg.exec_()
+        result = self.dlg.exec()
         # See if OK was pressed
         if result:
             # Do something useful here - delete the line containing pass and
