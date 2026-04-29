@@ -485,7 +485,10 @@ class Ui_PluginBuilderDialogBase(object):
         PluginBuilderDialogBase.setTabOrder(
             self.plugin_version, self.qgis_minimum_version
         )
-        PluginBuilderDialogBase.setTabOrder(self.qgis_minimum_version, self.author)
+        PluginBuilderDialogBase.setTabOrder(
+            self.qgis_minimum_version, self.qgis_maximum_version
+        )
+        PluginBuilderDialogBase.setTabOrder(self.qgis_maximum_version, self.author)
         PluginBuilderDialogBase.setTabOrder(self.author, self.email_address)
         PluginBuilderDialogBase.setTabOrder(self.email_address, self.about)
         PluginBuilderDialogBase.setTabOrder(self.about, self.tracker)

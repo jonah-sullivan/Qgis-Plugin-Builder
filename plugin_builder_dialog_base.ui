@@ -1080,6 +1080,7 @@ It should be in CamelCase e.g. PhotoLinker.</string>
   <tabstop>module_name</tabstop>
   <tabstop>plugin_version</tabstop>
   <tabstop>qgis_minimum_version</tabstop>
+  <tabstop>qgis_maximum_version</tabstop>
   <tabstop>author</tabstop>
   <tabstop>email_address</tabstop>
   <tabstop>about</tabstop>
