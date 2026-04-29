@@ -30,7 +30,7 @@ jobs:
 
       - uses: actions/upload-pages-artifact@v3
         with:
-          path: help/build/html
+          path: docs
 
   deploy:
     needs: build
