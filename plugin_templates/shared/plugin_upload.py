@@ -5,11 +5,11 @@ git sha              : $TemplateVCSFormat
 """
 
 import base64
+import http.client
 import os
 import sys
 import getpass
-import urllib.request
-import urllib.error
+import urllib.parse
 from optparse import OptionParser
 
 import defusedxml.ElementTree as ET
@@ -23,6 +23,10 @@ ENDPOINT = "/plugins/RPC2/"
 
 def _post_upload(address, plugin_data):
     """POST a plugin.upload XML-RPC call and return the raw response bytes."""
+    parsed = urllib.parse.urlparse(address)
+    if parsed.scheme not in ("http", "https"):
+        raise ValueError("Address must use http or https scheme: %s" % address)
+
     encoded = base64.b64encode(plugin_data).decode("ascii")
     payload = (
         "<?xml version='1.0'?>"
@@ -34,13 +38,19 @@ def _post_upload(address, plugin_data):
         "</methodCall>"
     ).format(encoded).encode("utf-8")
 
-    req = urllib.request.Request(
-        address,
-        data=payload,
-        headers={"Content-Type": "text/xml"},
-    )
-    with urllib.request.urlopen(req) as response:
-        return response.read()
+    auth = base64.b64encode(
+        "{}:{}".format(parsed.username, parsed.password).encode()
+    ).decode("ascii")
+    headers = {"Content-Type": "text/xml", "Authorization": "Basic " + auth}
+    port = parsed.port or (443 if parsed.scheme == "https" else 80)
+
+    if parsed.scheme == "https":
+        conn = http.client.HTTPSConnection(parsed.hostname, port)
+    else:
+        conn = http.client.HTTPConnection(parsed.hostname, port)
+
+    conn.request("POST", parsed.path, body=payload, headers=headers)
+    return conn.getresponse().read()
 
 
 def _parse_response(xml_data):
@@ -78,12 +88,9 @@ def main(parameters, arguments):
         plugin_id, version_id = _parse_response(response_data)
         print("Plugin ID: %s" % plugin_id)
         print("Version ID: %s" % version_id)
-    except urllib.error.HTTPError as err:
+    except http.client.HTTPException as err:
         print("A protocol error occurred")
-        print("URL: %s" % hide_password(err.url, 0))
-        print("HTTP headers: %s" % err.headers)
-        print("Error code: %d" % err.code)
-        print("Error message: %s" % err.reason)
+        print("Error: %s" % err)
     except RuntimeError as err:
         print("A fault occurred")
         print(str(err))

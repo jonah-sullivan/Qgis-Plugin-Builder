@@ -121,15 +121,15 @@ class PluginBuilderDialog(QDialog, FORM_CLASS):
         """Check to see that all fields have been entered."""
         message = ""
         if (
-            self.class_name.text() == ""
-            or self.title.text() == ""
-            or self.description.text() == ""
-            or self.module_name.text() == ""
-            or self.plugin_version.text() == ""
-            or self.qgis_minimum_version.text() == ""
-            or self.qgis_maximum_version.text() == ""
-            or self.author.text() == ""
-            or self.email_address.text() == ""
+            self.class_name.text() == "" or
+            self.title.text() == "" or
+            self.description.text() == "" or
+            self.module_name.text() == "" or
+            self.plugin_version.text() == "" or
+            self.qgis_minimum_version.text() == "" or
+            self.qgis_maximum_version.text() == "" or
+            self.author.text() == "" or
+            self.email_address.text() == ""
         ):
             message = "Some required fields are missing. " "Please complete the form.\n"
 
@@ -143,9 +143,9 @@ class PluginBuilderDialog(QDialog, FORM_CLASS):
         min_ver = self.qgis_minimum_version.text()
         max_ver = self.qgis_maximum_version.text()
         if (
-            not is_valid_version(self.plugin_version.text())
-            or not is_valid_version(min_ver)
-            or (max_ver and not is_valid_version(max_ver))
+            not is_valid_version(self.plugin_version.text()) or
+            not is_valid_version(min_ver) or
+            (max_ver and not is_valid_version(max_ver))
         ):
             message += "Version numbers must be numeric.\n"
 

@@ -83,9 +83,9 @@ class Ui_PluginBuilderDialogBase(object):
         self.plugin_name_label.setMinimumSize(QtCore.QSize(0, 0))
         self.plugin_name_label.setMaximumSize(QtCore.QSize(16777215, 16777215))
         self.plugin_name_label.setAlignment(
-            QtCore.Qt.AlignmentFlag.AlignRight
-            | QtCore.Qt.AlignmentFlag.AlignTrailing
-            | QtCore.Qt.AlignmentFlag.AlignVCenter
+            QtCore.Qt.AlignmentFlag.AlignRight |
+            QtCore.Qt.AlignmentFlag.AlignTrailing |
+            QtCore.Qt.AlignmentFlag.AlignVCenter
         )
         self.plugin_name_label.setObjectName("plugin_name_label")
         self.gridLayout_3.addWidget(self.plugin_name_label, 2, 0, 1, 1)
@@ -93,9 +93,9 @@ class Ui_PluginBuilderDialogBase(object):
         self.class_name_label.setMinimumSize(QtCore.QSize(0, 0))
         self.class_name_label.setMaximumSize(QtCore.QSize(16772215, 16777215))
         self.class_name_label.setAlignment(
-            QtCore.Qt.AlignmentFlag.AlignRight
-            | QtCore.Qt.AlignmentFlag.AlignTrailing
-            | QtCore.Qt.AlignmentFlag.AlignVCenter
+            QtCore.Qt.AlignmentFlag.AlignRight |
+            QtCore.Qt.AlignmentFlag.AlignTrailing |
+            QtCore.Qt.AlignmentFlag.AlignVCenter
         )
         self.class_name_label.setObjectName("class_name_label")
         self.gridLayout_3.addWidget(self.class_name_label, 1, 0, 1, 1)
@@ -116,9 +116,9 @@ class Ui_PluginBuilderDialogBase(object):
         self.plugin_version_label.setMinimumSize(QtCore.QSize(0, 0))
         self.plugin_version_label.setMaximumSize(QtCore.QSize(16777215, 16777215))
         self.plugin_version_label.setAlignment(
-            QtCore.Qt.AlignmentFlag.AlignRight
-            | QtCore.Qt.AlignmentFlag.AlignTrailing
-            | QtCore.Qt.AlignmentFlag.AlignVCenter
+            QtCore.Qt.AlignmentFlag.AlignRight |
+            QtCore.Qt.AlignmentFlag.AlignTrailing |
+            QtCore.Qt.AlignmentFlag.AlignVCenter
         )
         self.plugin_version_label.setObjectName("plugin_version_label")
         self.gridLayout_3.addWidget(self.plugin_version_label, 5, 0, 1, 1)
@@ -131,9 +131,9 @@ class Ui_PluginBuilderDialogBase(object):
         self.author_label.setMinimumSize(QtCore.QSize(0, 0))
         self.author_label.setMaximumSize(QtCore.QSize(16777215, 16777215))
         self.author_label.setAlignment(
-            QtCore.Qt.AlignmentFlag.AlignRight
-            | QtCore.Qt.AlignmentFlag.AlignTrailing
-            | QtCore.Qt.AlignmentFlag.AlignVCenter
+            QtCore.Qt.AlignmentFlag.AlignRight |
+            QtCore.Qt.AlignmentFlag.AlignTrailing |
+            QtCore.Qt.AlignmentFlag.AlignVCenter
         )
         self.author_label.setObjectName("author_label")
         self.gridLayout_3.addWidget(self.author_label, 8, 0, 1, 1)
@@ -141,9 +141,9 @@ class Ui_PluginBuilderDialogBase(object):
         self.module_name_label.setMinimumSize(QtCore.QSize(0, 0))
         self.module_name_label.setMaximumSize(QtCore.QSize(16777215, 16777215))
         self.module_name_label.setAlignment(
-            QtCore.Qt.AlignmentFlag.AlignRight
-            | QtCore.Qt.AlignmentFlag.AlignTrailing
-            | QtCore.Qt.AlignmentFlag.AlignVCenter
+            QtCore.Qt.AlignmentFlag.AlignRight |
+            QtCore.Qt.AlignmentFlag.AlignTrailing |
+            QtCore.Qt.AlignmentFlag.AlignVCenter
         )
         self.module_name_label.setObjectName("module_name_label")
         self.gridLayout_3.addWidget(self.module_name_label, 4, 0, 1, 1)
@@ -157,9 +157,9 @@ class Ui_PluginBuilderDialogBase(object):
         self.email_address_label.setMinimumSize(QtCore.QSize(0, 0))
         self.email_address_label.setMaximumSize(QtCore.QSize(16777215, 16777215))
         self.email_address_label.setAlignment(
-            QtCore.Qt.AlignmentFlag.AlignRight
-            | QtCore.Qt.AlignmentFlag.AlignTrailing
-            | QtCore.Qt.AlignmentFlag.AlignVCenter
+            QtCore.Qt.AlignmentFlag.AlignRight |
+            QtCore.Qt.AlignmentFlag.AlignTrailing |
+            QtCore.Qt.AlignmentFlag.AlignVCenter
         )
         self.email_address_label.setObjectName("email_address_label")
         self.gridLayout_3.addWidget(self.email_address_label, 9, 0, 1, 1)
@@ -178,9 +178,9 @@ class Ui_PluginBuilderDialogBase(object):
         self.qgis_minimum_version_label.setMinimumSize(QtCore.QSize(0, 0))
         self.qgis_minimum_version_label.setMaximumSize(QtCore.QSize(16777215, 16777215))
         self.qgis_minimum_version_label.setAlignment(
-            QtCore.Qt.AlignmentFlag.AlignRight
-            | QtCore.Qt.AlignmentFlag.AlignTrailing
-            | QtCore.Qt.AlignmentFlag.AlignVCenter
+            QtCore.Qt.AlignmentFlag.AlignRight |
+            QtCore.Qt.AlignmentFlag.AlignTrailing |
+            QtCore.Qt.AlignmentFlag.AlignVCenter
         )
         self.qgis_minimum_version_label.setObjectName("qgis_minimum_version_label")
         self.gridLayout_3.addWidget(self.qgis_minimum_version_label, 6, 0, 1, 1)
@@ -195,9 +195,9 @@ class Ui_PluginBuilderDialogBase(object):
         self.description_label.setMinimumSize(QtCore.QSize(0, 0))
         self.description_label.setMaximumSize(QtCore.QSize(16777215, 16777215))
         self.description_label.setAlignment(
-            QtCore.Qt.AlignmentFlag.AlignRight
-            | QtCore.Qt.AlignmentFlag.AlignTrailing
-            | QtCore.Qt.AlignmentFlag.AlignVCenter
+            QtCore.Qt.AlignmentFlag.AlignRight |
+            QtCore.Qt.AlignmentFlag.AlignTrailing |
+            QtCore.Qt.AlignmentFlag.AlignVCenter
         )
         self.description_label.setObjectName("description_label")
         self.gridLayout_3.addWidget(self.description_label, 3, 0, 1, 1)
@@ -262,9 +262,9 @@ class Ui_PluginBuilderDialogBase(object):
         self.template_label.setMinimumSize(QtCore.QSize(0, 0))
         self.template_label.setMaximumSize(QtCore.QSize(16777215, 16777215))
         self.template_label.setAlignment(
-            QtCore.Qt.AlignmentFlag.AlignRight
-            | QtCore.Qt.AlignmentFlag.AlignTrailing
-            | QtCore.Qt.AlignmentFlag.AlignVCenter
+            QtCore.Qt.AlignmentFlag.AlignRight |
+            QtCore.Qt.AlignmentFlag.AlignTrailing |
+            QtCore.Qt.AlignmentFlag.AlignVCenter
         )
         self.template_label.setObjectName("template_label")
         self.gridLayout_5.addWidget(self.template_label, 0, 0, 1, 1)
@@ -325,9 +325,9 @@ class Ui_PluginBuilderDialogBase(object):
         self.tracker_label.setMinimumSize(QtCore.QSize(0, 0))
         self.tracker_label.setMaximumSize(QtCore.QSize(16777215, 16777215))
         self.tracker_label.setAlignment(
-            QtCore.Qt.AlignmentFlag.AlignRight
-            | QtCore.Qt.AlignmentFlag.AlignTrailing
-            | QtCore.Qt.AlignmentFlag.AlignVCenter
+            QtCore.Qt.AlignmentFlag.AlignRight |
+            QtCore.Qt.AlignmentFlag.AlignTrailing |
+            QtCore.Qt.AlignmentFlag.AlignVCenter
         )
         self.tracker_label.setObjectName("tracker_label")
         self.gridLayout_2.addWidget(self.tracker_label, 1, 0, 1, 1)
@@ -347,9 +347,9 @@ class Ui_PluginBuilderDialogBase(object):
         self.repository_label.setMinimumSize(QtCore.QSize(0, 0))
         self.repository_label.setMaximumSize(QtCore.QSize(16777215, 16777215))
         self.repository_label.setAlignment(
-            QtCore.Qt.AlignmentFlag.AlignRight
-            | QtCore.Qt.AlignmentFlag.AlignTrailing
-            | QtCore.Qt.AlignmentFlag.AlignVCenter
+            QtCore.Qt.AlignmentFlag.AlignRight |
+            QtCore.Qt.AlignmentFlag.AlignTrailing |
+            QtCore.Qt.AlignmentFlag.AlignVCenter
         )
         self.repository_label.setObjectName("repository_label")
         self.gridLayout_2.addWidget(self.repository_label, 2, 0, 1, 1)
@@ -369,9 +369,9 @@ class Ui_PluginBuilderDialogBase(object):
         self.homepage_label.setMinimumSize(QtCore.QSize(0, 0))
         self.homepage_label.setMaximumSize(QtCore.QSize(16777215, 16777215))
         self.homepage_label.setAlignment(
-            QtCore.Qt.AlignmentFlag.AlignRight
-            | QtCore.Qt.AlignmentFlag.AlignTrailing
-            | QtCore.Qt.AlignmentFlag.AlignVCenter
+            QtCore.Qt.AlignmentFlag.AlignRight |
+            QtCore.Qt.AlignmentFlag.AlignTrailing |
+            QtCore.Qt.AlignmentFlag.AlignVCenter
         )
         self.homepage_label.setObjectName("homepage_label")
         self.gridLayout_2.addWidget(self.homepage_label, 4, 0, 1, 1)
@@ -383,9 +383,9 @@ class Ui_PluginBuilderDialogBase(object):
         self.tags_label = QtWidgets.QLabel(parent=self.page3)
         self.tags_label.setMaximumSize(QtCore.QSize(16777215, 16777215))
         self.tags_label.setAlignment(
-            QtCore.Qt.AlignmentFlag.AlignRight
-            | QtCore.Qt.AlignmentFlag.AlignTrailing
-            | QtCore.Qt.AlignmentFlag.AlignVCenter
+            QtCore.Qt.AlignmentFlag.AlignRight |
+            QtCore.Qt.AlignmentFlag.AlignTrailing |
+            QtCore.Qt.AlignmentFlag.AlignVCenter
         )
         self.tags_label.setObjectName("tags_label")
         self.gridLayout_2.addWidget(self.tags_label, 5, 0, 1, 1)
