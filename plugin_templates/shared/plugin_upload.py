@@ -8,6 +8,13 @@ import os
 import sys
 import getpass
 import xmlrpc.client
+
+try:
+    import defusedxml.xmlrpc
+
+    defusedxml.xmlrpc.monkey_patch()
+except ImportError:
+    pass
 from optparse import OptionParser
 
 # Configuration

@@ -212,7 +212,7 @@ class PluginBuilder:
             os.makedirs(scripts_dir, exist_ok=True)
             plugin_upload = QFile(os.path.join(self.shared_dir, "plugin_upload.py"))
             plugin_upload.copy(os.path.join(scripts_dir, "plugin_upload.py"))
-            os.chmod(os.path.join(scripts_dir, "plugin_upload.py"), 0o755)
+            os.chmod(os.path.join(scripts_dir, "plugin_upload.py"), 0o755)  # nosec B103
 
     def _prepare_specific_files(self, specification):
         """Prepare specific templates and files.
@@ -301,6 +301,7 @@ class PluginBuilder:
         metadata_file.write("about=%s\n\n" % specification.about)
         metadata_file.write("tracker=%s\n" % specification.tracker)
         metadata_file.write("repository=%s\n" % specification.repository)
+        metadata_file.write("license=GNU GPL v2\n")
         metadata_file.write("# End of mandatory metadata\n\n")
         metadata_file.write("# Recommended items:\n\n")
         metadata_file.write(

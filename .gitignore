@@ -13,3 +13,5 @@ nohup.out
 .pytest_cache
 __pycache__
 docs/doctrees/
+docs/.buildinfo
+docs/.buildinfo.bak
