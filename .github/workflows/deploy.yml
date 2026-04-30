@@ -1,0 +1,41 @@
+name: Deploy
+
+on:
+  push:
+    tags:
+      - "v*"
+
+jobs:
+  deploy:
+    name: Deploy to QGIS plugin repository
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.x"
+
+      - name: Install dependencies
+        run: pip install defusedxml
+
+      - name: Build plugin zip
+        run: |
+          mkdir pluginbuilder4
+          cp __init__.py plugin_builder.py plugin_builder_dialog.py \
+             plugin_builder_dialog_base.py plugin_specification.py \
+             result_dialog.py select_tags_dialog.py qgis_dirs.py \
+             plugin_builder_dialog_base.ui results_dialog_base.ui \
+             select_tags_dialog_base.ui \
+             icon.png plugin_builder.png metadata.txt taglist.txt LICENSE \
+             pluginbuilder4/
+          cp -r plugin_templates pluginbuilder4/
+          cp -r docs pluginbuilder4/help
+          zip -r pluginbuilder4.zip pluginbuilder4
+
+      - name: Upload to QGIS plugin repository
+        env:
+          PLUGIN_UPLOAD_USERNAME: ${{ secrets.OSGEO_USERNAME }}
+          PLUGIN_UPLOAD_PASSWORD: ${{ secrets.OSGEO_PASSWORD }}
+        run: python plugin_templates/shared/plugin_upload.py pluginbuilder4.zip
