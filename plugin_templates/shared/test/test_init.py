@@ -1,8 +1,8 @@
 # coding=utf-8
 """Tests that metadata.txt contains all fields required by plugins.qgis.org."""
 
-import os
 import configparser
+import os
 
 REQUIRED_METADATA = [
     "name",

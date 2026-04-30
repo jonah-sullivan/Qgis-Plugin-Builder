@@ -25,13 +25,14 @@ import os
 from string import capwords
 
 from qgis.PyQt import uic
-from qgis.PyQt.QtCore import Qt, QFileInfo
+from qgis.PyQt.QtCore import QFileInfo, Qt
 
 try:
     Key_Escape = Qt.Key.Key_Escape
 except AttributeError:
     Key_Escape = Qt.Key_Escape
-from qgis.PyQt.QtWidgets import QMessageBox, QFrame, QDialog, QFileDialog
+from qgis.PyQt.QtWidgets import QDialog, QFileDialog, QFrame, QMessageBox
+
 from .plugin_templates import templates
 
 FORM_CLASS, _ = uic.loadUiType(

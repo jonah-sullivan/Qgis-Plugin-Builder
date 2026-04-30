@@ -7,9 +7,9 @@ import platform
 import pytest
 from qgis.core import QgsProviderRegistry
 
-from test.utilities import unique_filename
 from plugin_builder import PluginBuilder, copy
 from qgis_dirs import _qgis_dir_location, deployment_dir
+from test.utilities import unique_filename
 
 
 class FakePluginSpecification:

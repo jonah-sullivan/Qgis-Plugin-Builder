@@ -8,9 +8,9 @@ Tim Sutton
 """
 
 import getpass
+import logging
 import os
 import sys
-import logging
 from datetime import date
 from tempfile import mkstemp
 
@@ -32,15 +32,15 @@ def get_qgis_app():
     """
 
     try:
-        from qgis.PyQt import QtGui, QtCore
         from qgis.core import QgsApplication
         from qgis.gui import QgsMapCanvas
+        from qgis.PyQt import QtCore, QtGui
+
         from .qgis_interface import QgisInterface
     except ImportError:
         return None, None, None, None
 
-    global QGIS_APP  # pylint: disable=W0603
-
+    global QGIS_APP
     if QGIS_APP is None:
         gui_flag = True  # All test will run qgis in gui mode
         # noinspection PyPep8Naming
@@ -50,18 +50,18 @@ def get_qgis_app():
         s = QGIS_APP.showSettings()
         LOGGER.debug(s)
 
-    global PARENT  # pylint: disable=W0603
+    global PARENT
     if PARENT is None:
         # noinspection PyPep8Naming
         PARENT = QtGui.QWidget()
 
-    global CANVAS  # pylint: disable=W0603
+    global CANVAS
     if CANVAS is None:
         # noinspection PyPep8Naming
         CANVAS = QgsMapCanvas(PARENT)
         CANVAS.resize(QtCore.QSize(400, 400))
 
-    global IFACE  # pylint: disable=W0603
+    global IFACE
     if IFACE is None:
         # QgisInterface is a stub implementation of the QGIS plugin interface
         # noinspection PyPep8Naming

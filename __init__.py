@@ -23,7 +23,6 @@
 """
 
 
-# pylint: disable=C0103
 # noinspection PyPep8Naming
 def classFactory(iface):
     """Load PluginBuilder class from file PluginBuilder.
@@ -34,6 +33,3 @@ def classFactory(iface):
     from .plugin_builder import PluginBuilder
 
     return PluginBuilder(iface)
-
-
-# pylint: enable=C0103

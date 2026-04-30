@@ -22,8 +22,9 @@
 """
 
 import os
-from ..plugin_template import PluginTemplate
+
 from ...qgis_dirs import deployment_dir
+from ..plugin_template import PluginTemplate
 
 
 class ToolbuttonWithDialogPluginTemplate(PluginTemplate):

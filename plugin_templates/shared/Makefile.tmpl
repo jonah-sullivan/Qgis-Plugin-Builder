@@ -206,18 +206,12 @@ doc:
 		echo "sphinx-build not found - skipping documentation build. Install sphinx to enable: pip install sphinx"; \
 	fi
 
-pylint:
+lint:
 	@echo
-	@echo "-----------------"
-	@echo "Pylint violations"
-	@echo "-----------------"
-	@pylint --reports=n --rcfile=pylintrc . || true
-	@echo
-	@echo "----------------------"
-	@echo "If you get a 'no module named qgis.core' error, try sourcing"
-	@echo "the helper script we have provided first then run make pylint."
-	@echo "e.g. source run-env-linux.sh <path to qgis install>; make pylint"
-	@echo "----------------------"
+	@echo "------------"
+	@echo "Ruff results"
+	@echo "------------"
+	@ruff check .
 
 
 # Run pep8 style checking

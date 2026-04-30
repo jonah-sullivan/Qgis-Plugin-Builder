@@ -5,10 +5,10 @@ git sha              : $TemplateVCSFormat
 """
 
 import base64
+import getpass
 import http.client
 import os
 import sys
-import getpass
 import urllib.parse
 from optparse import OptionParser
 

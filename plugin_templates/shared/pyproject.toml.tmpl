@@ -1,3 +1,14 @@
+[tool.ruff]
+line-length = 88
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "N"]
+ignore = [
+    "N802",  # QGIS requires camelCase for classFactory and Qt overrides
+    "N803",  # Qt argument names follow camelCase conventions
+    "N806",  # Qt variable names follow camelCase conventions
+]
+
 [tool.pytest.ini_options]
 testpaths = ["test"]
 # pytest-qgis reads QGIS_PREFIX_PATH from the environment.

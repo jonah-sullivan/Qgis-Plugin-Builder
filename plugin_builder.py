@@ -22,31 +22,30 @@
 """
 
 # Import Python stuff
-import os
-
-import errno
-import shutil
-from string import Template
 import codecs
 import configparser
+import errno
+import os
+import shutil
+from string import Template
+
+from qgis.core import QgsApplication
 
 # Import the PyQt and QGIS libraries
-from qgis.PyQt.QtCore import QFileInfo, QUrl, QFile, QDir, QSettings
-from qgis.PyQt.QtWidgets import QAction, QFileDialog, QMessageBox
-
+from qgis.PyQt.QtCore import QDir, QFile, QFileInfo, QSettings, QUrl
 from qgis.PyQt.QtGui import (
-    QIcon,
     QDesktopServices,
-    QStandardItemModel,
+    QIcon,
     QStandardItem,
+    QStandardItemModel,
 )
-from qgis.core import QgsApplication
+from qgis.PyQt.QtWidgets import QAction, QFileDialog, QMessageBox
 
 # Import the code for the dialog
 from .plugin_builder_dialog import PluginBuilderDialog
+from .plugin_specification import PluginSpecification
 from .result_dialog import ResultDialog
 from .select_tags_dialog import SelectTagsDialog
-from .plugin_specification import PluginSpecification
 
 
 class PluginBuilder:
@@ -155,12 +154,6 @@ class PluginBuilder:
 
     def _prepare_help(self):
         """Prepare the help directory."""
-        # Copy over pylintrc
-        # noinspection PyCallByClass,PyTypeChecker
-        QFile.copy(
-            os.path.join(self.shared_dir, "pylintrc"),
-            os.path.join(self.plugin_path, "pylintrc"),
-        )
         # Create sphinx default project for help
         QDir().mkdir(self.plugin_path + "/help")
         QDir().mkdir(self.plugin_path + "/help/build")

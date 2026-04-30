@@ -3,7 +3,7 @@
 
 import os
 
-from qgis.core import QgsProviderRegistry, QgsCoordinateReferenceSystem, QgsRasterLayer
+from qgis.core import QgsCoordinateReferenceSystem, QgsProviderRegistry, QgsRasterLayer
 
 
 def test_qgis_environment(qgis_app):

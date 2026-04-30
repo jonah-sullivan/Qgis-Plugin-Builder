@@ -84,12 +84,12 @@ test: compile
 
 
 
-pylint:
+lint:
 	@echo
-	@echo "-----------------"
-	@echo "Pylint violations"
-	@echo "-----------------"
-	@pylint --reports=n --rcfile=pylintrc . || true
+	@echo "------------"
+	@echo "Ruff results"
+	@echo "------------"
+	@ruff check .
 
 
 # Run pep8 style checking

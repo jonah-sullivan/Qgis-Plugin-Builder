@@ -1,9 +1,9 @@
 # coding=utf-8
 """Common functionality used by regression tests."""
 
+import logging
 import os
 import sys
-import logging
 
 LOGGER = logging.getLogger("QGIS")
 QGIS_APP = None  # Static variable used to hold hand to running QGIS app
@@ -23,15 +23,15 @@ def get_qgis_app():
     """
 
     try:
-        from qgis.PyQt import QtWidgets, QtCore
         from qgis.core import QgsApplication
         from qgis.gui import QgsMapCanvas
+        from qgis.PyQt import QtCore, QtWidgets
+
         from .qgis_interface import QgisInterface
     except ImportError:
         return None, None, None, None
 
-    global QGIS_APP  # pylint: disable=W0603
-
+    global QGIS_APP
     if QGIS_APP is None:
         gui_flag = True  # All test will run qgis in gui mode
         # noinspection PyPep8Naming
@@ -43,18 +43,18 @@ def get_qgis_app():
         s = QGIS_APP.showSettings()
         LOGGER.debug(s)
 
-    global PARENT  # pylint: disable=W0603
+    global PARENT
     if PARENT is None:
         # noinspection PyPep8Naming
         PARENT = QtWidgets.QWidget()
 
-    global CANVAS  # pylint: disable=W0603
+    global CANVAS
     if CANVAS is None:
         # noinspection PyPep8Naming
         CANVAS = QgsMapCanvas(PARENT)
-        CANVAS.resize(QtCore.QSize(400, 400))  # noqa: PyUnresolvedReferences
+        CANVAS.resize(QtCore.QSize(400, 400))
 
-    global IFACE  # pylint: disable=W0603
+    global IFACE
     if IFACE is None:
         # QgisInterface is a stub implementation of the QGIS plugin interface
         # noinspection PyPep8Naming

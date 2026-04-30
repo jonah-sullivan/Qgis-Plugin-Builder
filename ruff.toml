@@ -1,0 +1,7 @@
+line-length = 88
+
+[lint]
+select = ["E", "F", "W", "I", "N"]
+
+[lint.per-file-ignores]
+"__init__.py" = ["N802"]
