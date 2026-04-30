@@ -31,7 +31,7 @@ UI_FILES = plugin_builder_dialog_base.ui results_dialog_base.ui select_tags_dial
 
 TEMPLATE_DIR = plugin_templates
 
-EXTRAS = icon.png plugin_builder.png metadata.txt taglist.txt
+EXTRAS = icon.png metadata.txt taglist.txt
 
 HELP_BUILD = help/build/html/*
 

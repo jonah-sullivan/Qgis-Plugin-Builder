@@ -28,8 +28,7 @@ jobs:
              result_dialog.py select_tags_dialog.py qgis_dirs.py \
              plugin_builder_dialog_base.ui results_dialog_base.ui \
              select_tags_dialog_base.ui \
-             icon.png plugin_builder.png metadata.txt taglist.txt LICENSE \
-             pluginbuilder4/
+             icon.png metadata.txt taglist.txt LICENSE pluginbuilder4/
           cp -r plugin_templates pluginbuilder4/
           cp -r docs pluginbuilder4/help
           zip -r pluginbuilder4.zip pluginbuilder4
