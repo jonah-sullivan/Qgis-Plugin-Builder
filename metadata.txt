@@ -14,7 +14,9 @@ qgisMinimumVersion=4.0
 qgisMaximumVersion=4.99
 license=GNU GPL v2
 
-changelog=3.3.2 2026-05-01
+changelog=3.3.3 2026-05-01
+      * add translations
+    3.3.2 2026-05-01
       * remove sphinx buildinfo file to pass plugins.qgis.org checks
     3.3.1 2026-05-01
       * Replaced pylint with ruff for linting in both the plugin and all generated plugin templates
