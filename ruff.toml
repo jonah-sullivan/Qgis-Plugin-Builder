@@ -2,6 +2,7 @@ line-length = 88
 
 [lint]
 select = ["E", "F", "W", "I", "N"]
+ignore = ["N802"]
 
 [lint.per-file-ignores]
-"__init__.py" = ["N802"]
+"plugin_builder_dialog_base.py" = ["E501", "N801", "N803", "N806"]

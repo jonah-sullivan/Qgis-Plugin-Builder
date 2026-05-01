@@ -66,7 +66,6 @@ class ${TemplateClass}:
         # Must be set in initGui() to survive plugin reloads
         self.first_start = None
 
-    # noinspection PyMethodMayBeStatic
     def tr(self, message):
         """Get the translation for a string using Qt translation API.
 
@@ -78,7 +77,6 @@ class ${TemplateClass}:
         :returns: Translated version of message.
         :rtype: str
         """
-        # noinspection PyTypeChecker,PyArgumentList,PyCallByClass
         return QCoreApplication.translate('${TemplateClass}', message)
 
 

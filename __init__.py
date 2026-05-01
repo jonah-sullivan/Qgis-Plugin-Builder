@@ -23,7 +23,6 @@
 """
 
 
-# noinspection PyPep8Naming
 def classFactory(iface):
     """Load PluginBuilder class from file PluginBuilder.
 

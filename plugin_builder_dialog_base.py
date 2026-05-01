@@ -10,7 +10,7 @@ from qgis.PyQt import QtCore, QtGui, QtWidgets
 
 
 class Ui_PluginBuilderDialogBase(object):
-    def setupUi(self, PluginBuilderDialogBase):
+    def setupUi(self, PluginBuilderDialogBase):  # Qt generated - camelCase required
         PluginBuilderDialogBase.setObjectName("PluginBuilderDialogBase")
         PluginBuilderDialogBase.resize(512, 413)
         PluginBuilderDialogBase.setSizeGripEnabled(False)
@@ -509,7 +509,7 @@ class Ui_PluginBuilderDialogBase(object):
         PluginBuilderDialogBase.setTabOrder(self.select_tags, self.pb_tool_cb)
         PluginBuilderDialogBase.setTabOrder(self.pb_tool_cb, self.help_cb)
 
-    def retranslateUi(self, PluginBuilderDialogBase):
+    def retranslateUi(self, PluginBuilderDialogBase):  # Qt generated - camelCase required
         _translate = QtCore.QCoreApplication.translate
         PluginBuilderDialogBase.setWindowTitle(
             _translate("PluginBuilderDialogBase", "QGIS Plugin Builder")

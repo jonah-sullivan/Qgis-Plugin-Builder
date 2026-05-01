@@ -174,7 +174,6 @@ class PluginBuilderDialog(QDialog, FORM_CLASS):
                 "The Class name must use CamelCase. "
                 "No spaces are allowed; the name has been modified for you."
             )
-        # noinspection PyArgumentList
         if message != "":
             QMessageBox.warning(self, "Information missing or invalid", message)
         else:
@@ -211,8 +210,10 @@ class PluginBuilderDialog(QDialog, FORM_CLASS):
                 "plugin repository.",
             )
             return False
-        elif not (url_tracker.startswith("http://") or url_tracker.startswith("https://")) or \
-                not (url_repo.startswith("http://") or url_repo.startswith("https://")):
+        elif (
+            not (url_tracker.startswith("http://") or url_tracker.startswith("https://"))
+            or not (url_repo.startswith("http://") or url_repo.startswith("https://"))
+        ):
             QMessageBox.warning(
                 self,
                 "Malformed URL(s)",
@@ -264,7 +265,7 @@ class PluginBuilderDialog(QDialog, FORM_CLASS):
 
         return good_dir
 
-    def keyPressEvent(self, event):
+    def keyPressEvent(self, event):  # Qt override - camelCase required
         # prevent escape from closing the dialog
         if event.key() == Key_Escape:
             # QDialog.keyPressEvent(event)

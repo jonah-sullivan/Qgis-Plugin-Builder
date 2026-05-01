@@ -188,7 +188,8 @@ def test_prepare_i18n(builder):
 
 
 def test_prepare_tests(builder, spec):
-    """_prepare_tests copies test files and renders lifecycle and pyproject templates."""
+    """_prepare_tests copies test files and renders lifecycle and pyproject
+    templates."""
     builder._prepare_tests(spec)
     assert os.path.isdir(os.path.join(builder.plugin_path, "test"))
     assert os.path.exists(

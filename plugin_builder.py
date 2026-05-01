@@ -77,8 +77,7 @@ class PluginBuilder:
         self.shared_dir = None
         self.template_dir = None
 
-    # noinspection PyPep8Naming
-    def initGui(self):
+    def initGui(self):  # QGIS API override - camelCase required
         """Create the menu entries and toolbar icons inside the QGIS GUI."""
         # Create action that will start plugin configuration
         self.action = QAction(
@@ -320,7 +319,9 @@ class PluginBuilder:
         metadata_file.write("# (or upgraded) can be specified.\n")
         metadata_file.write("# Check the documentation for more information.\n")
         metadata_file.write("# plugin_dependencies=\n\n")
-        metadata_file.write("# Category of the plugin: Raster, Vector, Database or Web\n")
+        metadata_file.write(
+            "# Category of the plugin: Raster, Vector, Database or Web\n"
+        )
         metadata_file.write("# category=\n\n")
         metadata_file.write("# If the plugin can run on QGIS Server.\n")
         metadata_file.write("server=False\n\n")
@@ -398,7 +399,6 @@ class PluginBuilder:
                 seltags.append(tag.data())
             taglist = ", ".join(seltags)
             self.dialog.tags.setText(taglist)
-        # QMessageBox.information(None, "Selection", seltags)
 
     def run(self):
         """Run method that performs all the real work"""

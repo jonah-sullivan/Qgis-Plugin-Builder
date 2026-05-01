@@ -72,7 +72,6 @@ class ${TemplateClass}:
         self.dockwidget = None
 
 
-    # noinspection PyMethodMayBeStatic
     def tr(self, message):
         """Get the translation for a string using Qt translation API.
 
@@ -84,7 +83,6 @@ class ${TemplateClass}:
         :returns: Translated version of message.
         :rtype: str
         """
-        # noinspection PyTypeChecker,PyArgumentList,PyCallByClass
         return QCoreApplication.translate('${TemplateClass}', message)
 
 

@@ -51,8 +51,6 @@ EXTRAS = metadata.txt ${TemplateExtraFiles}
 
 EXTRA_DIRS =
 
-PEP8EXCLUDE=pydev,conf.py,third_party,ui
-
 # QGISDIR is the absolute path to your QGIS 4 Python plugins directory:
 #	* Linux:   ~/.local/share/QGIS/QGIS4/profiles/default/python/plugins
 #	* Mac OS X: ~/Library/Application Support/QGIS/QGIS4/profiles/default/python/plugins
@@ -212,16 +210,3 @@ lint:
 	@echo "Ruff results"
 	@echo "------------"
 	@ruff check .
-
-
-# Run pep8 style checking
-#http://pypi.python.org/pypi/pep8
-pep8:
-	@echo
-	@echo "-----------"
-	@echo "PEP8 issues"
-	@echo "-----------"
-	@pep8 --repeat --ignore=E203,E121,E122,E123,E124,E125,E126,E127,E128 --exclude $$(PEP8EXCLUDE) . || true
-	@echo "-----------"
-	@echo "Ignored in PEP8 check:"
-	@echo $$(PEP8EXCLUDE)

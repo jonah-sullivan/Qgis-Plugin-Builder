@@ -31,7 +31,6 @@ from qgis.PyQt.QtCore import QObject, pyqtSignal
 LOGGER = logging.getLogger("QGIS")
 
 
-# noinspection PyMethodMayBeStatic,PyPep8Naming
 class QgisInterface(QObject):
     """Class to expose QGIS objects and functions to plugins.
 
@@ -50,15 +49,13 @@ class QgisInterface(QObject):
         # Set up slots so we can mimic the behaviour of QGIS when layers
         # are added.
         LOGGER.debug("Initialising canvas...")
-        # noinspection PyArgumentList
         QgsProject.instance().layersAdded.connect(self.addLayers)
-        # noinspection PyArgumentList
         QgsProject.instance().layersRemoved.connect(self.removeAllLayers)
 
         # For processing module
         self.destCrs = None
 
-    def addLayers(self, layers):
+    def addLayers(self, layers):  # QgsInterface override - camelCase required
         """Handle layers being added to the registry so they show up in canvas.
 
         :param layers: list<QgsMapLayer> list of map layers that were added
@@ -70,7 +67,7 @@ class QgisInterface(QObject):
         final_layers = list(current_layers) + list(layers)
         self.canvas.setLayers(final_layers)
 
-    def addLayer(self, layer):
+    def addLayer(self, layer):  # QgsInterface override - camelCase required
         """Handle a layer being added to the registry so it shows up in canvas.
 
         :param layer: list<QgsMapLayer> list of map layers that were added
@@ -80,34 +77,33 @@ class QgisInterface(QObject):
         """
         pass
 
-    def removeAllLayers(self):
+    def removeAllLayers(self):  # QgsInterface override - camelCase required
         """Remove layers from the canvas before they get deleted."""
         self.canvas.setLayers([])
 
-    def newProject(self):
+    def newProject(self):  # QgsInterface override - camelCase required
         """Create new project."""
-        # noinspection PyArgumentList
         QgsProject.instance().removeAllMapLayers()
 
     # ---------------- API Mock for QgsInterface follows -------------------
 
-    def zoomFull(self):
+    def zoomFull(self):  # QgsInterface override - camelCase required
         """Zoom to the map full extent."""
         pass
 
-    def zoomToPrevious(self):
+    def zoomToPrevious(self):  # QgsInterface override - camelCase required
         """Zoom to previous view extent."""
         pass
 
-    def zoomToNext(self):
+    def zoomToNext(self):  # QgsInterface override - camelCase required
         """Zoom to next view extent."""
         pass
 
-    def zoomToActiveLayer(self):
+    def zoomToActiveLayer(self):  # QgsInterface override - camelCase required
         """Zoom to extent of active layer."""
         pass
 
-    def addVectorLayer(self, path, base_name, provider_key):
+    def addVectorLayer(self, path, base_name, provider_key):  # QgsInterface override
         """Add a vector layer.
 
         :param path: Path to layer.
@@ -121,7 +117,7 @@ class QgisInterface(QObject):
         """
         pass
 
-    def addRasterLayer(self, path, base_name):
+    def addRasterLayer(self, path, base_name):  # QgsInterface override
         """Add a raster layer given a raster layer file name
 
         :param path: Path to layer.
@@ -132,14 +128,13 @@ class QgisInterface(QObject):
         """
         pass
 
-    def activeLayer(self):
+    def activeLayer(self):  # QgsInterface override - camelCase required
         """Get pointer to the active layer (layer selected in the legend)."""
-        # noinspection PyArgumentList
         layers = QgsProject.instance().mapLayers()
         for item in layers:
             return layers[item]
 
-    def addToolBarIcon(self, action):
+    def addToolBarIcon(self, action):  # QgsInterface override - camelCase required
         """Add an icon to the plugins toolbar.
 
         :param action: Action to add to the toolbar.
@@ -147,7 +142,7 @@ class QgisInterface(QObject):
         """
         pass
 
-    def removeToolBarIcon(self, action):
+    def removeToolBarIcon(self, action):  # QgsInterface override - camelCase required
         """Remove an action (icon) from the plugin toolbar.
 
         :param action: Action to add to the toolbar.
@@ -155,7 +150,7 @@ class QgisInterface(QObject):
         """
         pass
 
-    def addToolBar(self, name):
+    def addToolBar(self, name):  # QgsInterface override - camelCase required
         """Add toolbar with specified name.
 
         :param name: Name for the toolbar.
@@ -163,18 +158,18 @@ class QgisInterface(QObject):
         """
         pass
 
-    def mapCanvas(self):
+    def mapCanvas(self):  # QgsInterface override - camelCase required
         """Return a pointer to the map canvas."""
         return self.canvas
 
-    def mainWindow(self):
+    def mainWindow(self):  # QgsInterface override - camelCase required
         """Return a pointer to the main window.
 
         In case of QGIS it returns an instance of QgisApp.
         """
         pass
 
-    def addDockWidget(self, area, dock_widget):
+    def addDockWidget(self, area, dock_widget):  # QgsInterface override
         """Add a dock widget to the main window.
 
         :param area: Where in the ui the dock should be placed.
