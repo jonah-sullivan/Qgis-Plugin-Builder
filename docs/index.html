@@ -5,10 +5,10 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>QGIS Plugin Builder &#8212; QGIS Plugin Builder 3.3.0 documentation</title>
+    <title>QGIS Plugin Builder &#8212; QGIS Plugin Builder 3.3.2 documentation</title>
     <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=fa44fd50" />
     <link rel="stylesheet" type="text/css" href="_static/pyramid.css?v=424f8d56" />
-    <script src="_static/documentation_options.js?v=3eb8911e"></script>
+    <script src="_static/documentation_options.js?v=ad389f6d"></script>
     <script src="_static/doctools.js?v=fd6eb6e6"></script>
     <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
     <link rel="index" title="Index" href="genindex.html" />
@@ -27,7 +27,7 @@
         <li class="right" style="margin-right: 10px">
           <a href="genindex.html" title="General Index"
              accesskey="I">index</a></li>
-        <li class="nav-item nav-item-0"><a href="#">QGIS Plugin Builder 3.3.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="#">QGIS Plugin Builder 3.3.2 documentation</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">QGIS Plugin Builder</a></li> 
       </ul>
     </div>  
@@ -51,8 +51,7 @@ your own plugin.</p>
 <li><p>Open the Plugin Builder from within QGIS</p></li>
 <li><p>Fill out the required information for the selected plugin template, working your way through each step</p></li>
 <li><p>Designate where to store your new plugin</p></li>
-<li><p>If automatic compilation failed during plugin generation, manually compile your resource file using rcc</p></li>
-<li><p>Install the plugin</p></li>
+<li><p>Install the plugin using <code class="docutils literal notranslate"><span class="pre">pb_tool</span> <span class="pre">deploy</span></code></p></li>
 <li><p>Test it</p></li>
 </ol>
 </section>
@@ -260,19 +259,22 @@ QGIS plugin directory, and what to do next. This same information is contained
 in the <code class="docutils literal notranslate"><span class="pre">README.html</span></code> and <code class="docutils literal notranslate"><span class="pre">README.txt</span></code> files in your generated plugin
 directory.</p>
 </section>
-<section id="compiling-the-resource-file">
-<span id="index-5"></span><span id="index-4"></span><h1>Compiling the resource file<a class="headerlink" href="#compiling-the-resource-file" title="Link to this heading">¶</a></h1>
-<p>The resource file contains definitions of media used in your plugin. Upon
-generation, this contains one entry for icon.png, the icon file for the plugin.</p>
-<p>The resource file needs to be compiled before it is functional in QGIS.</p>
-<p>Plugin Builder attempts to compile it for you during generation, but if that fails (i.e. <code class="docutils literal notranslate"><span class="pre">rcc</span></code> isn’t found), you’ll
-have to do it manually.</p>
-<p id="index-6">To compile the resource file into Python code, use the <code class="docutils literal notranslate"><span class="pre">rcc</span></code> utility
-that comes as part of your Qt installation:</p>
+<section id="resource-files">
+<span id="index-5"></span><span id="index-4"></span><h1>Resource files<a class="headerlink" href="#resource-files" title="Link to this heading">¶</a></h1>
+<p id="index-6">Resource files (<code class="docutils literal notranslate"><span class="pre">*.qrc</span></code>) define media assets such as icons and images used
+in your plugin. Compiling a resource file is <strong>optional</strong> — the recommended
+approach is to reference assets directly using <code class="docutils literal notranslate"><span class="pre">os.path</span></code>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">icon_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="vm">__file__</span><span class="p">),</span> <span class="s1">&#39;icon.png&#39;</span><span class="p">)</span>
+<span class="n">icon</span> <span class="o">=</span> <span class="n">QIcon</span><span class="p">(</span><span class="n">icon_path</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>This keeps assets as ordinary files alongside your plugin source and avoids
+the need to run <code class="docutils literal notranslate"><span class="pre">rcc</span></code> at build time.</p>
+<p>If you prefer to use Qt’s resource system, compile your <code class="docutils literal notranslate"><span class="pre">.qrc</span></code> file using
+the <code class="docutils literal notranslate"><span class="pre">rcc</span></code> utility that comes with your Qt installation:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">rcc</span> <span class="o">-</span><span class="n">g</span> <span class="n">python</span> <span class="n">resources</span><span class="o">.</span><span class="n">qrc</span> <span class="o">-</span><span class="n">o</span> <span class="n">resources</span><span class="o">.</span><span class="n">py</span>
 </pre></div>
 </div>
-<p>Once the resource file is compiled, the generated plugin can be loaded in QGIS.</p>
 </section>
 <section id="deploying">
 <span id="index-8"></span><span id="index-7"></span><h1>Deploying<a class="headerlink" href="#deploying" title="Link to this heading">¶</a></h1>
@@ -471,7 +473,7 @@ community.</p>
 </li>
 <li><a class="reference internal" href="#generating">Generating</a></li>
 <li><a class="reference internal" href="#results">Results</a></li>
-<li><a class="reference internal" href="#compiling-the-resource-file">Compiling the resource file</a></li>
+<li><a class="reference internal" href="#resource-files">Resource files</a></li>
 <li><a class="reference internal" href="#deploying">Deploying</a><ul>
 <li><a class="reference internal" href="#the-copy-method">The Copy Method</a></li>
 <li><a class="reference internal" href="#the-environment-variable-method">The Environment Variable Method</a></li>
@@ -517,7 +519,7 @@ community.</p>
         <li class="right" style="margin-right: 10px">
           <a href="genindex.html" title="General Index"
              >index</a></li>
-        <li class="nav-item nav-item-0"><a href="#">QGIS Plugin Builder 3.3.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="#">QGIS Plugin Builder 3.3.2 documentation</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">QGIS Plugin Builder</a></li> 
       </ul>
     </div>

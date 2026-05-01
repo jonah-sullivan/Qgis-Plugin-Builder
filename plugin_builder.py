@@ -32,7 +32,16 @@ from string import Template
 from qgis.core import QgsApplication
 
 # Import the PyQt and QGIS libraries
-from qgis.PyQt.QtCore import QDir, QFile, QFileInfo, QSettings, QUrl
+from qgis.PyQt.QtCore import (
+    QCoreApplication,
+    QDir,
+    QFile,
+    QFileInfo,
+    QLocale,
+    QSettings,
+    QTranslator,
+    QUrl,
+)
 from qgis.PyQt.QtGui import (
     QDesktopServices,
     QIcon,
@@ -50,6 +59,9 @@ from .select_tags_dialog import SelectTagsDialog
 
 class PluginBuilder:
     """A QGIS plugin that allows you to build QGIS plugins."""
+
+    def tr(self, message):
+        return QCoreApplication.translate("PluginBuilder", message)
 
     def __init__(self, iface):
         """Constructor
@@ -69,6 +81,17 @@ class PluginBuilder:
         )
         self.plugin_builder_path = os.path.dirname(__file__)
 
+        locale = QLocale(QgsApplication.locale())
+        locale_path = os.path.join(
+            self.plugin_builder_path,
+            "i18n",
+            "{}.qm".format(locale.name()[:2]),
+        )
+        if os.path.exists(locale_path):
+            self.translator = QTranslator()
+            self.translator.load(locale_path)
+            QCoreApplication.installTranslator(self.translator)
+
         # class members
         self.action = None
         self.dialog = None
@@ -82,7 +105,7 @@ class PluginBuilder:
         # Create action that will start plugin configuration
         self.action = QAction(
             QIcon(os.path.join(self.plugin_builder_path, "icon.png")),
-            "Plugin Builder",
+            self.tr("Plugin Builder"),
             self.iface.mainWindow(),
         )
         # connect the action to the run method
@@ -90,22 +113,23 @@ class PluginBuilder:
 
         # Add toolbar button and menu item
         self.iface.addToolBarIcon(self.action)
-        self.iface.addPluginToMenu("&Plugin Builder", self.action)
+        self.iface.addPluginToMenu(self.tr("&Plugin Builder"), self.action)
 
     def unload(self):
         """Removes the plugin menu item and icon from QGIS GUI."""
-        self.iface.removePluginMenu("&Plugin Builder", self.action)
+        self.iface.removePluginMenu(self.tr("&Plugin Builder"), self.action)
         self.iface.removeToolBarIcon(self.action)
 
     def _get_plugin_path(self):
         """Prompt the user for the path where the plugin should be written to."""
         while not QFileInfo(self.plugin_path).isWritable():
             # noinspection PyTypeChecker,PyArgumentList
-            QMessageBox.critical(None, "Error", "Directory is not writeable")
-            # noinspection PyCallByClass,PyTypeChecker
+            QMessageBox.critical(
+                None, self.tr("Error"), self.tr("Directory is not writeable")
+            )
             self.plugin_path = QFileDialog.getExistingDirectory(
                 self.dialog,
-                "Select the Directory for your Plugin",
+                self.tr("Select the Directory for your Plugin"),
                 self._last_used_path(),
             )
             if self.plugin_path == "":
@@ -409,7 +433,7 @@ class PluginBuilder:
         cfg = configparser.ConfigParser()
         cfg.read(os.path.join(self.plugin_builder_path, "metadata.txt"))
         version = cfg.get("general", "version")
-        self.dialog.setWindowTitle("QGIS Plugin Builder - {}".format(version))
+        self.dialog.setWindowTitle(self.tr("QGIS Plugin Builder - {}").format(version))
 
         # connect the ok button to our method
         self.dialog.button_box.helpRequested.connect(self.show_help)

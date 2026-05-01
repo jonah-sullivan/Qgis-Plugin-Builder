@@ -22,8 +22,7 @@ The steps to using Plugin Builder are fairly simple:
 #. Open the Plugin Builder from within QGIS
 #. Fill out the required information for the selected plugin template, working your way through each step
 #. Designate where to store your new plugin
-#. If automatic compilation failed during plugin generation, manually compile your resource file using rcc
-#. Install the plugin
+#. Install the plugin using ``pb_tool deploy``
 #. Test it
 
 .. index:: Plugins; creating
@@ -273,28 +272,25 @@ directory.
 
 .. index:: Plugins; compiling
 
-Compiling the resource file
+Resource files
 ===========================
 
-The resource file contains definitions of media used in your plugin. Upon
-generation, this contains one entry for icon.png, the icon file for the plugin.
-
-The resource file needs to be compiled before it is functional in QGIS.
-
-Plugin Builder attempts to compile it for you during generation, but if that fails (i.e. ``rcc`` isn't found), you'll
-have to do it manually.
-
 .. index:: resource file
-   double: compiling; resource file
 
+Resource files (``*.qrc``) define media assets such as icons and images used
+in your plugin. Compiling a resource file is **optional** — the recommended
+approach is to reference assets directly using ``os.path``::
 
-To compile the resource file into Python code, use the ``rcc`` utility
-that comes as part of your Qt installation::
+  icon_path = os.path.join(os.path.dirname(__file__), 'icon.png')
+  icon = QIcon(icon_path)
+
+This keeps assets as ordinary files alongside your plugin source and avoids
+the need to run ``rcc`` at build time.
+
+If you prefer to use Qt's resource system, compile your ``.qrc`` file using
+the ``rcc`` utility that comes with your Qt installation::
 
   rcc -g python resources.qrc -o resources.py
-
-
-Once the resource file is compiled, the generated plugin can be loaded in QGIS.
 
 .. index:: deploying
 

@@ -33,6 +33,8 @@ TEMPLATE_DIR = plugin_templates
 
 EXTRAS = icon.png metadata.txt taglist.txt
 
+I18N_DIR = i18n
+
 HELP_BUILD = help/build/html/*
 
 # The deploy target copies plugin files to the QGIS plugins directory
@@ -42,6 +44,7 @@ deploy:
 	cp -vf $(UI_FILES) $(QGISDIR)/$(PLUGINNAME)
 	cp -vf $(EXTRAS) $(QGISDIR)/$(PLUGINNAME)
 	cp -rvf $(TEMPLATE_DIR) $(QGISDIR)/$(PLUGINNAME)
+	cp -rvf $(I18N_DIR) $(QGISDIR)/$(PLUGINNAME)
 
 # remove the deployed plugin
 dclean:
