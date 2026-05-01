@@ -167,11 +167,6 @@ class PluginBuilder:
             os.path.join(self.plugin_path, "requirements-dev.txt"),
         )
 
-    def _prepare_scripts(self):
-        """Copy the scripts folder."""
-        scripts_source = os.path.join(self.shared_dir, "scripts")
-        copy(scripts_source, os.path.join(self.plugin_path, "scripts"))
-
     def _prepare_i18n(self):
         """Copy the i18n folder."""
         scripts_source = os.path.join(self.shared_dir, "i18n")
@@ -500,9 +495,6 @@ class PluginBuilder:
             )
         if specification.gen_tests:
             self._prepare_tests(specification)
-
-        if specification.gen_scripts:
-            self._prepare_scripts()
 
         if specification.gen_i18n:
             self._prepare_i18n()

@@ -175,11 +175,6 @@ def test_copy_single_file(tmp_path):
         assert f.read() == "hello"
 
 
-def test_prepare_scripts(builder):
-    """_prepare_scripts copies the scripts directory into plugin_path."""
-    builder._prepare_scripts()
-    assert os.path.isdir(os.path.join(builder.plugin_path, "scripts"))
-
 
 def test_prepare_i18n(builder):
     """_prepare_i18n copies the i18n directory into plugin_path."""
