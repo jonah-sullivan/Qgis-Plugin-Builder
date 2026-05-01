@@ -9,12 +9,16 @@
 name=Plugin Builder 4
 about=Create a template for a QGIS plugin
 description=Creates a QGIS plugin template for use as a starting point in plugin development
-version=3.3.0
+version=3.3.1
 qgisMinimumVersion=4.0
 qgisMaximumVersion=4.99
 license=GNU GPL v2
 
-changelog=3.3.0 2026-04-25
+changelog=3.3.1 2026-05-01
+      * Replaced pylint with ruff for linting in both the plugin and all generated plugin templates
+      * Added step-by-step walkthrough to README
+      * Fixed Qt6/QGIS4 compatibility in generated plugin templates
+    3.3.0 2026-04-25
       * Add QGIS 4 compatibility
       * Add Qt6 compatibility
       * Remove Qt resource compilation in favour of filesystem paths for icons

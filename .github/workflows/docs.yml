@@ -2,8 +2,8 @@ name: Deploy docs
 
 on:
   push:
-    branches:
-      - QGIS4
+    tags:
+      - "v*"
 
 permissions:
   contents: read
