@@ -94,6 +94,7 @@ class PluginBuilder:
 
         # class members
         self.action = None
+        self.menu = None
         self.dialog = None
         self.plugin_path = None
         self.template = None
@@ -102,22 +103,23 @@ class PluginBuilder:
 
     def initGui(self):  # QGIS API override - camelCase required
         """Create the menu entries and toolbar icons inside the QGIS GUI."""
-        # Create action that will start plugin configuration
+        icon = QIcon(os.path.join(self.plugin_builder_path, "icon.png"))
+        self.menu = self.iface.pluginMenu().addMenu(
+            icon, self.tr("&Plugin Builder")
+        )
         self.action = QAction(
-            QIcon(os.path.join(self.plugin_builder_path, "icon.png")),
+            icon,
             self.tr("Plugin Builder"),
             self.iface.mainWindow(),
         )
-        # connect the action to the run method
         self.action.triggered.connect(self.run)
+        self.menu.addAction(self.action)
 
-        # Add toolbar button and menu item
         self.iface.addToolBarIcon(self.action)
-        self.iface.addPluginToMenu(self.tr("&Plugin Builder"), self.action)
 
     def unload(self):
         """Removes the plugin menu item and icon from QGIS GUI."""
-        self.iface.removePluginMenu(self.tr("&Plugin Builder"), self.action)
+        self.iface.pluginMenu().removeAction(self.menu.menuAction())
         self.iface.removeToolBarIcon(self.action)
 
     def _get_plugin_path(self):
