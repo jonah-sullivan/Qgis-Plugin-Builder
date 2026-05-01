@@ -49,7 +49,7 @@ dclean:
 
 zip: dclean deploy
 	rm -f $(PLUGINNAME).zip
-	cd $(QGISDIR); zip -9vr $(CURDIR)/$(PLUGINNAME).zip $(PLUGINNAME)
+	cd $(QGISDIR); zip -9vr $(CURDIR)/$(PLUGINNAME).zip $(PLUGINNAME) --exclude "*.buildinfo" --exclude "*.buildinfo.bak"
 
 
 # Create a zip package. Requires passing a valid commit or tag as follows:

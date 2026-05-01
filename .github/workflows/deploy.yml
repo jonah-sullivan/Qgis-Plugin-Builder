@@ -31,7 +31,7 @@ jobs:
              icon.png metadata.txt taglist.txt LICENSE pluginbuilder4/
           cp -r plugin_templates pluginbuilder4/
           cp -r docs pluginbuilder4/help
-          zip -r pluginbuilder4.zip pluginbuilder4
+          zip -r pluginbuilder4.zip pluginbuilder4 --exclude "*.buildinfo" --exclude "*.buildinfo.bak"
 
       - name: Upload to QGIS plugin repository
         env:
