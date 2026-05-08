@@ -93,6 +93,12 @@ Plugin name and required information
   be sure to set this field accordingly to prevent problems for those running
   older versions. Plugin Builder defaults this field to 4.0.
 
+**Maximum QGIS version**
+  This is the maximum version of QGIS your plugin is tested and known to work
+  with. Plugin Builder defaults this field to 4.99, which effectively means
+  "no upper limit within the QGIS 4.x series". Only lower this value if you
+  know your plugin is incompatible with newer QGIS releases.
+
 **Author/Company**
   Put your name or company name here---this information is used
   in writing the copyright statement in the source files of your plugin, as well
