@@ -48,6 +48,14 @@ class ToolbuttonWithDockWidgetPluginTemplate(PluginTemplate):
         self.category = menu
 
         dockwidget_area = dialog.template_subframe.dockwidget_area.currentText()
+        
+        # Map dock widget area names to Qt.DockWidgetArea enum values
+        dock_area_map = {
+            "Left": "Qt.DockWidgetArea.Left",
+            "Right": "Qt.DockWidgetArea.Right",
+            "Top": "Qt.DockWidgetArea.Top",
+            "Bottom": "Qt.DockWidgetArea.Bottom",
+        }
 
         return {
             # Makefile
@@ -62,7 +70,7 @@ class ToolbuttonWithDockWidgetPluginTemplate(PluginTemplate):
             "TemplateMenuAddMethod": add_method,
             "TemplateMenuRemoveMethod": remove_method,
             # DockWidget
-            "TemplateDockWidgetArea": "Qt.{}DockWidgetArea".format(dockwidget_area),
+            "TemplateDockWidgetArea": dock_area_map[dockwidget_area],
         }
 
     def template_files(self, specification):
