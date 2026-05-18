@@ -24,7 +24,7 @@
 from qgis.PyQt.QtCore import QLocale, QTranslator, QCoreApplication, Qt
 from qgis.core import QgsSettings
 from qgis.PyQt.QtGui import QIcon
-from qgis.PyQt.QtWidgets import QAction
+from qgis.PyQt.QtWidgets import QAction, QDockWidget
 # Import the code for the DockWidget
 from .${TemplateModuleName}_dockwidget import ${TemplateClass}DockWidget
 import os.path
@@ -223,6 +223,5 @@ class ${TemplateClass}:
             self.dockwidget.closingPlugin.connect(self.onClosePlugin)
 
             # show the dockwidget
-            # TODO: fix to allow choice of dock location
             self.iface.addDockWidget(${TemplateDockWidgetArea}, self.dockwidget)
             self.dockwidget.show()

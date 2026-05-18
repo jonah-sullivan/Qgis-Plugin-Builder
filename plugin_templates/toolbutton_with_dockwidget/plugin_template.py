@@ -51,10 +51,10 @@ class ToolbuttonWithDockWidgetPluginTemplate(PluginTemplate):
         
         # Map dock widget area names to Qt.DockWidgetArea enum values
         dock_area_map = {
-            "Left": "Qt.DockWidgetArea.Left",
-            "Right": "Qt.DockWidgetArea.Right",
-            "Top": "Qt.DockWidgetArea.Top",
-            "Bottom": "Qt.DockWidgetArea.Bottom",
+            "Left": "Qt.DockWidgetArea.LeftDockWidgetArea",
+            "Right": "Qt.DockWidgetArea.RightDockWidgetArea",
+            "Top": "Qt.DockWidgetArea.TopDockWidgetArea",
+            "Bottom": "Qt.DockWidgetArea.BottomDockWidgetArea",
         }
 
         return {
