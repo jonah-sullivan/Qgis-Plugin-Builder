@@ -58,5 +58,5 @@ class ProcessingProviderPluginTemplate(PluginTemplate):
             "module_name_provider.tmpl": "%s_provider.py" % specification.module_name,
         }
         if specification.gen_tests:
-            files["test/test_plugin_lifecycle.templ"] = "test/test_plugin_lifecycle.py"
+            files[os.path.join("test", "test_plugin_lifecycle.templ")] = os.path.join("test", "test_plugin_lifecycle.py")
         return files

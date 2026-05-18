@@ -69,9 +69,8 @@ class ToolbuttonWithDialogPluginTemplate(PluginTemplate):
         if specification.gen_tests:
             result.update(
                 {
-                    "test/test_module_name_dialog.templ": "test/test_%s_dialog.py"
-                    % specification.module_name,
-                    "test/test_resources.templ": "test/test_resources.py",
+                    os.path.join("test", "test_module_name_dialog.templ"): os.path.join("test", "test_%s_dialog.py" % specification.module_name),
+                    os.path.join("test", "test_resources.templ"): os.path.join("test", "test_resources.py"),
                 }
             )
         return result

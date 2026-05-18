@@ -83,10 +83,10 @@ class ToolbuttonWithDockWidgetPluginTemplate(PluginTemplate):
         if specification.gen_tests:
             result.update(
                 {
-                    "test/test_module_name_dockwidget.templ": (
-                        "test/test_%s_dockwidget.py" % specification.module_name
+                    os.path.join("test", "test_module_name_dockwidget.templ"): (
+                        os.path.join("test", "test_%s_dockwidget.py" % specification.module_name)
                     ),
-                    "test/test_resources.templ": "test/test_resources.py",
+                    os.path.join("test", "test_resources.templ"): os.path.join("test", "test_resources.py"),
                 }
             )
         return result
