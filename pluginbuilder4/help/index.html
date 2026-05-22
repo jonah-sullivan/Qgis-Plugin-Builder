@@ -5,10 +5,10 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>QGIS Plugin Builder &#8212; QGIS Plugin Builder 3.3.5 documentation</title>
+    <title>QGIS Plugin Builder &#8212; QGIS Plugin Builder 3.4.2 documentation</title>
     <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="_static/pyramid.css?v=424f8d56" />
-    <script src="_static/documentation_options.js?v=66b10fa0"></script>
+    <script src="_static/documentation_options.js?v=23636ea3"></script>
     <script src="_static/doctools.js?v=fd6eb6e6"></script>
     <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
     <link rel="index" title="Index" href="genindex.html" />
@@ -27,7 +27,7 @@
         <li class="right" style="margin-right: 10px">
           <a href="genindex.html" title="General Index"
              accesskey="I">index</a></li>
-        <li class="nav-item nav-item-0"><a href="#">QGIS Plugin Builder 3.3.5 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="#">QGIS Plugin Builder 3.4.2 documentation</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">QGIS Plugin Builder</a></li> 
       </ul>
     </div>  
@@ -192,9 +192,6 @@ See <a class="reference internal" href="#documenting-your-plugin">Documenting yo
 </dd>
 <dt><strong>Unit tests</strong></dt><dd><p>Creates a basic set of unit tests for your plugin.</p>
 </dd>
-<dt><strong>Helper scripts</strong></dt><dd><p>Adds a helper script for publishing your plugin on <a class="reference external" href="http://plugins.qgis.org/">http://plugins.qgis.org/</a> and
-additional scripts for internationalization and testing.</p>
-</dd>
 <dt><strong>Makefile</strong></dt><dd><p>Adds a Makefile for building your plugin with GNU make.
 See <a class="reference internal" href="#using-the-makefile">Using the Makefile</a> for more information.</p>
 </dd>
@@ -242,6 +239,27 @@ allows users to filter out experimental plugins in the Plugin Installer if
 they choose not to live on the bleeding edge.</p>
 </dd>
 </dl>
+</section>
+<section id="ci-cd-configuration">
+<h2>CI/CD Configuration<a class="headerlink" href="#ci-cd-configuration" title="Link to this heading">¶</a></h2>
+<p>If you selected <strong>qgis-plugin-ci</strong> on the options page, an additional step
+collects the information needed to generate a GitHub Actions release workflow.</p>
+<img alt="_images/wizard_ci.png" src="_images/wizard_ci.png" />
+<dl class="simple">
+<dt><strong>GitHub organisation</strong></dt><dd><p>Your GitHub organisation or username (e.g. <code class="docutils literal notranslate"><span class="pre">myorg</span></code>). This is used in the
+generated <code class="docutils literal notranslate"><span class="pre">.qgis-plugin-ci</span></code> configuration file.</p>
+</dd>
+<dt><strong>Project slug</strong></dt><dd><p>The repository name on GitHub (e.g. <code class="docutils literal notranslate"><span class="pre">my-plugin</span></code>). If your repository URL
+follows the standard GitHub format, these fields are pre-filled automatically.</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>After generating your plugin, add <code class="docutils literal notranslate"><span class="pre">OSGEO_USER</span></code> and <code class="docutils literal notranslate"><span class="pre">OSGEO_PASSWORD</span></code> as
+repository secrets in GitHub → Settings → Secrets and variables → Actions.
+These are required by the generated <code class="docutils literal notranslate"><span class="pre">.github/workflows/release.yml</span></code>
+workflow to upload your plugin to the QGIS plugin repository.</p>
+</div>
 </section>
 </section>
 <section id="generating">
@@ -474,6 +492,7 @@ community.</p>
 <li><a class="reference internal" href="#template-specific-parameters">Template specific parameters</a></li>
 <li><a class="reference internal" href="#additional-components">Additional components</a></li>
 <li><a class="reference internal" href="#publication-information">Publication information</a></li>
+<li><a class="reference internal" href="#ci-cd-configuration">CI/CD Configuration</a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#generating">Generating</a></li>
@@ -524,7 +543,7 @@ community.</p>
         <li class="right" style="margin-right: 10px">
           <a href="genindex.html" title="General Index"
              >index</a></li>
-        <li class="nav-item nav-item-0"><a href="#">QGIS Plugin Builder 3.3.5 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="#">QGIS Plugin Builder 3.4.2 documentation</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">QGIS Plugin Builder</a></li> 
       </ul>
     </div>
