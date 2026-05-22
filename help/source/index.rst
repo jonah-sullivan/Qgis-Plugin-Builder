@@ -186,10 +186,6 @@ recommended, but not strictly required.
 **Unit tests**
   Creates a basic set of unit tests for your plugin.
 
-**Helper scripts**
-  Adds a helper script for publishing your plugin on http://plugins.qgis.org/ and
-  additional scripts for internationalization and testing.
-
 **Makefile**
   Adds a Makefile for building your plugin with GNU make.
   See `Using the Makefile`_ for more information.
@@ -244,6 +240,28 @@ plugin is accepted and users can be successful using it.
   meaning it is either incomplete or may cause unintended consequences. This
   allows users to filter out experimental plugins in the Plugin Installer if
   they choose not to live on the bleeding edge.
+
+CI/CD Configuration
+...................
+
+If you selected **qgis-plugin-ci** on the options page, an additional step
+collects the information needed to generate a GitHub Actions release workflow.
+
+.. image:: images/wizard_ci.png
+
+**GitHub organisation**
+  Your GitHub organisation or username (e.g. ``myorg``). This is used in the
+  generated ``.qgis-plugin-ci`` configuration file.
+
+**Project slug**
+  The repository name on GitHub (e.g. ``my-plugin``). If your repository URL
+  follows the standard GitHub format, these fields are pre-filled automatically.
+
+.. note::
+   After generating your plugin, add ``OSGEO_USER`` and ``OSGEO_PASSWORD`` as
+   repository secrets in GitHub → Settings → Secrets and variables → Actions.
+   These are required by the generated ``.github/workflows/release.yml``
+   workflow to upload your plugin to the QGIS plugin repository.
 
 Generating
 ==========

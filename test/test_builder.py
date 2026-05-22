@@ -5,10 +5,10 @@ import os
 import platform
 
 import pytest
-from qgis.core import QgsProviderRegistry
-
 from plugin_builder import PluginBuilder, copy
+from qgis.core import QgsProviderRegistry
 from qgis_dirs import _qgis_dir_location, deployment_dir
+
 from test.utilities import unique_filename
 
 
@@ -36,9 +36,9 @@ class FakePluginSpecification:
         self.gen_i18n = True
         self.gen_help = True
         self.gen_tests = True
-        self.gen_scripts = True
         self.gen_makefile = True
         self.gen_pb_tool = True
+        self.gen_qgis_plugin_ci = False
         self.deprecated = False
         self.build_year = 2001
         self.build_date = "31-01-2014"
@@ -66,6 +66,9 @@ class FakePluginSpecification:
             "TemplateMenuAddMethod": "addPluginToMenu",
             "TemplateMenuRemoveMethod": "removePluginMenu",
             "TemplateHasProcessingProvider": False,
+            "TemplateGitHubOrg": "",
+            "TemplateProjectSlug": "",
+            "TemplateQgisPluginCiSteps": "",
         }
 
 
@@ -78,12 +81,19 @@ def spec():
 def builder(qgis_app, qgis_iface, tmp_path):
     b = PluginBuilder(qgis_iface)
     b.shared_dir = os.path.abspath(
-        os.path.join(os.path.dirname(__file__), "..", "plugin_templates", "shared")
+        os.path.join(
+            os.path.dirname(__file__),
+            "..",
+            "pluginbuilder4",
+            "plugin_templates",
+            "shared",
+        )
     )
     b.template_dir = os.path.abspath(
         os.path.join(
             os.path.dirname(__file__),
             "..",
+            "pluginbuilder4",
             "plugin_templates",
             "toolbutton_with_dialog",
             "template",
@@ -202,6 +212,31 @@ def test_prepare_help(builder):
         os.path.join("help", "source", "_templates"),
     ]:
         assert os.path.isdir(os.path.join(builder.plugin_path, subdir))
+
+
+def test_prepare_qgis_plugin_ci(builder, spec):
+    """_prepare_qgis_plugin_ci writes .qgis-plugin-ci, release.yml, and .gitattributes."""  # noqa: E501
+    spec.template_map["TemplateGitHubOrg"] = "myorg"
+    spec.template_map["TemplateProjectSlug"] = "my-plugin"
+    builder._prepare_qgis_plugin_ci(spec)
+    assert os.path.exists(os.path.join(builder.plugin_path, ".qgis-plugin-ci"))
+    assert os.path.exists(
+        os.path.join(builder.plugin_path, ".github", "workflows", "release.yml")
+    )
+    assert os.path.exists(os.path.join(builder.plugin_path, ".gitattributes"))
+    with open(os.path.join(builder.plugin_path, ".qgis-plugin-ci")) as f:
+        content = f.read()
+    assert "myorg" in content
+    assert "my-plugin" in content
+    assert "fake_module" in content
+
+
+def test_prepare_results_html_with_qgis_plugin_ci(builder, spec):
+    """_prepare_results_html includes CI/CD steps when gen_qgis_plugin_ci is True."""
+    spec.gen_qgis_plugin_ci = True
+    results_popped, _ = builder._prepare_results_html(spec)
+    assert "OSGEO_USER" in results_popped
+    assert "GitHub Release" in results_popped
 
 
 def test_prepare_specific_files(builder, spec):

@@ -35,14 +35,15 @@ QgsApplication.initQgis()
 # Load the plugin package (mirrors conftest.py — repo dir has hyphens so it
 # cannot be a Python package name; register it as a synthetic package instead)
 # ---------------------------------------------------------------------------
-import importlib.util
-import types
+import importlib.util  # noqa: E402
+import types  # noqa: E402
 
 repo_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+src_dir = os.path.join(repo_dir, "pluginbuilder4")
 
 _PKG = "_pluginbuilder"
 _pkg = types.ModuleType(_PKG)
-_pkg.__path__ = [repo_dir]
+_pkg.__path__ = [src_dir]
 _pkg.__package__ = _PKG
 sys.modules[_PKG] = _pkg
 
@@ -51,7 +52,7 @@ def _load_module(bare_name, filepath=None):
     full = f"{_PKG}.{bare_name}"
     if full in sys.modules:
         return sys.modules[full]
-    path = filepath or os.path.join(repo_dir, f"{bare_name}.py")
+    path = filepath or os.path.join(src_dir, f"{bare_name}.py")
     spec = importlib.util.spec_from_file_location(full, path)
     mod = importlib.util.module_from_spec(spec)
     mod.__package__ = _PKG
@@ -78,7 +79,7 @@ def _load_subpackage(bare_name, directory):
 
 
 _load_module("plugin_specification")
-_load_subpackage("plugin_templates", os.path.join(repo_dir, "plugin_templates"))
+_load_subpackage("plugin_templates", os.path.join(src_dir, "plugin_templates"))
 _load_module("select_tags_dialog")
 _load_module("result_dialog")
 _load_module("plugin_builder_dialog")
@@ -106,6 +107,8 @@ SAMPLE = {
     "tracker": "https://github.com/example/my_plugin/issues",
     "repository": "https://github.com/example/my_plugin",
     "tags": "vector, analysis",
+    "github_org_slug": "example",
+    "project_slug": "my_plugin",
 }
 
 output_dir = os.path.join(repo_dir, "help", "source", "images")
@@ -134,8 +137,11 @@ PAGES = [
     (2, "wizard_template.png"),
     (3, "wizard_helpers.png"),
     (4, "wizard_publication_info.png"),
-    (5, "generating.png"),
+    (5, "wizard_ci.png"),
+    (6, "generating.png"),
 ]
+
+dialog.qgis_plugin_ci_cb.setChecked(True)
 
 dialog.show()
 app.processEvents()

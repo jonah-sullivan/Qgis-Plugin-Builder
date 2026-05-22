@@ -26,7 +26,7 @@ __copyright__ = (
 import logging
 
 from qgis.core import QgsMapLayer, QgsProject
-from qgis.PyQt.QtCore import QObject, pyqtSignal, pyqtSlot
+from qgis.PyQt.QtCore import QObject, pyqtSignal
 
 LOGGER = logging.getLogger("QGIS")
 
@@ -50,13 +50,11 @@ class QgisInterface(QObject):
         # are added.
         LOGGER.debug("Initialising canvas...")
         QgsProject.instance().layersAdded.connect(self.addLayers)
-        QgsProject.instance().layerAdded.connect(self.addLayer)
         QgsProject.instance().layersRemoved.connect(self.removeAllLayers)
 
         # For processing module
         self.destCrs = None
 
-    @pyqtSlot("QStringList")
     def addLayers(self, layers):  # QgsInterface override - camelCase required
         """Handle layers being added to the registry so they show up in canvas.
 
@@ -69,7 +67,6 @@ class QgisInterface(QObject):
         final_layers = list(current_layers) + list(layers)
         self.canvas.setLayers(final_layers)
 
-    @pyqtSlot("QgsMapLayer")
     def addLayer(self, layer):  # QgsInterface override - camelCase required
         """Handle a layer being added to the registry so it shows up in canvas.
 
@@ -80,7 +77,6 @@ class QgisInterface(QObject):
         """
         pass
 
-    @pyqtSlot()
     def removeAllLayers(self):  # QgsInterface override - camelCase required
         """Remove layers from the canvas before they get deleted."""
         self.canvas.setLayers([])

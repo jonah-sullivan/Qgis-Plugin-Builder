@@ -1,0 +1,73 @@
+# -*- coding: utf-8 -*-
+"""
+/***************************************************************************
+ PluginTemplate
+                                 A QGIS plugin
+ plugin_template
+                              -------------------
+        begin                : 2015-03-17
+        git sha              : $Format:%H$
+        copyright            : (C) 2015 by Pirmin Kalberer
+        email                : pka@sourcepole.ch
+ ***************************************************************************/
+
+/***************************************************************************
+ *                                                                         *
+ *   This program is free software; you can redistribute it and/or modify  *
+ *   it under the terms of the GNU General Public License as published by  *
+ *   the Free Software Foundation; either version 2 of the License, or     *
+ *   (at your option) any later version.                                   *
+ *                                                                         *
+ ***************************************************************************/
+"""
+
+import os
+
+from ...qgis_dirs import deployment_dir
+from ..plugin_template import PluginTemplate
+
+
+class ProcessingProviderPluginTemplate(PluginTemplate):
+
+    def descr(self):
+        return "Processing Provider"
+
+    def subdir(self):
+        return os.path.dirname(__file__)
+
+    def template_map(self, specification, dialog):
+        self.category = "Analysis"
+        frame = dialog.template_subframe
+        return {
+            # Makefile
+            "TemplateQGISDir": deployment_dir,
+            "TemplatePyFiles": "%s_algorithm.py %s_provider.py"
+            % (specification.module_name, specification.module_name),
+            # Metadata
+            "TemplateHasProcessingProvider": True,
+            # Processing
+            "TemplateAlgoName": frame.algo_name_text.text(),
+            "TemplateAlgoGroup": frame.algo_group_text.text(),
+            "TemplateProviderName": frame.provider_name_text.text(),
+            "TemplateProviderDescr": frame.provider_descr_text.text(),
+        }
+
+    def what_next_items_html(self, plugin_path, module_name, ui_file):
+        algo_file = f"{module_name}_algorithm.py"
+        return (
+            f"    <li>Test the plugin by enabling it in the QGIS plugin manager"
+            f" and enabling the provider in the Processing Options\n"
+            f"    <li>Customize it by editing the implementation file"
+            f' <a href="file:///{plugin_path}/{algo_file}"><b>{algo_file}</b></a>'
+        )
+
+    def template_files(self, specification):
+        files = {
+            "module_name_algorithm.tmpl": "%s_algorithm.py" % specification.module_name,
+            "module_name_provider.tmpl": "%s_provider.py" % specification.module_name,
+        }
+        if specification.gen_tests:
+            files[os.path.join("test", "test_plugin_lifecycle.templ")] = os.path.join(
+                "test", "test_plugin_lifecycle.py"
+            )
+        return files

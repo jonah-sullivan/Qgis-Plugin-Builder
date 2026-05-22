@@ -1,0 +1,1174 @@
+2d
+360
+3d
+4g
+5g
+accessibility
+accretion
+accuracy
+accuracy assessment
+actions
+acurácia posicional
+address
+addresses
+adresse
+aerial
+affine
+africa
+agent
+agriculture
+ahp
+ai
+air quality
+alert
+algorithm
+alkis
+als
+analysis
+analytics
+andalucía
+android
+angle
+animal
+animation
+annotation
+api
+append
+arcgis
+archaeology
+archive
+area
+argentina
+army
+artificial intelligence
+asset
+assistant
+atlas
+atom
+attribute
+attribute edit
+attribute table
+attributes
+audit
+australia
+auto
+automatic
+automation
+autosave
+aviation
+azimuth
+backup
+ban
+basemap
+basemaps
+basin
+batch
+bathymetry
+bbox
+bdoo
+bdot
+bdot10k
+beachball
+bearing
+bebauungsplan
+bgt
+bim
+bing
+biodiversity
+biomass
+biomasse
+borehole
+boundary
+bounding box
+bplan
+brasil
+brazil
+brgm
+browser
+buffer
+builder
+building
+building detection
+buildings
+cad
+cadastral
+cadastre
+calculation
+calculator
+calibration
+canopy
+canvas
+capture
+car
+cartografia
+cartography
+catalog
+catalonia
+catasto
+catastro
+catchment
+catchment area
+cbers
+census
+centerline
+centroid
+cesium
+chainage
+change
+change detection
+changes
+channel
+channel network
+chart
+charts
+chat
+chatgpt
+check
+china
+chirps
+chm
+circle
+citizen science
+cityjson
+civc
+ckan
+classification
+claude
+click
+client
+climate
+climate change
+clip
+clipboard
+closest
+cloud
+cloud removal
+cluster
+clustering
+cn
+coastal erosion
+coastline
+code
+coding
+cog
+collaboration
+collaborative
+collection
+collections
+colombia
+color
+comments
+community
+compare
+compass
+composer
+computer vision
+comuni
+configuration
+conflict
+confusion matrix
+connection
+connectivity
+connector
+conservation
+console
+contamination
+contour
+contour lines
+contrast
+control
+controle de qualidade cartográfica
+conversion
+convert
+converter
+convex hull
+coordenadas
+coordinate
+coordinate system
+coordinates
+coords
+copernicus
+copy
+cost
+coverage
+create
+crop
+cross section
+cross-section
+crs
+css
+csv
+curvature
+curve number
+custom
+customization
+d3
+dam
+danish
+danmark
+dansk
+dashboard
+data
+data collection
+data management
+data migration
+data quality
+database
+dataforsyningen
+datasets
+datasource
+dataviz
+date
+datos
+db
+debug
+debugging
+declination
+deep learning
+deforestation
+deformation
+delete
+delimitation
+dem
+democracy
+denmark
+densify
+density
+design
+detection
+development
+diamètre
+diff
+difference
+digital elevation model
+digital surface model
+digital twin
+digitising
+digitization
+digitize
+digitizing
+dip
+direction
+disaster
+discharge
+diseases
+displacement
+dissolve
+distance
+distribution
+districting
+diversity
+divide
+dji
+dms
+dock
+dockable
+document
+documentation
+dop
+download
+download service
+downloader
+drainage
+draw
+drawing
+drillhole
+drilling
+drone
+drones
+drought
+dsm
+dtm
+duckdb
+duplicate
+duplicates
+dutch
+dwg
+dxf
+dynamic
+dynamic segmentation
+e.re.c.a
+earth
+earth engine
+earth observation
+earthdata
+earthquake
+ecology
+ecosystem
+ecw
+edge
+edit
+editing
+editor
+egib
+elevation
+ellipse
+emergency
+energy
+engineering
+enhancement
+envi-met
+environment
+environmental
+environmental assessment
+environmental monitoring
+envirosolutions
+epanet
+epsg
+equirectangular
+erosion
+esa
+esda
+españa
+esri
+estonia
+etl
+evapotranspiration
+events
+evi
+ewidencja
+ewkt
+excel
+exif
+exploration
+export
+expression
+expressions
+extent
+extract
+extraction
+fault
+feature
+feature extraction
+features
+fiber
+field
+field calculator
+field-calculator
+fields
+fieldwork
+file
+filter
+find
+fire
+fit
+flight
+flood
+flooding
+flow
+flächennutzungsplan
+fnp
+foncier
+food security
+forest
+forestry
+form
+format
+forms
+france
+french
+ftp
+ftth
+function
+functions
+fuzzy
+gamma
+garmin
+gazetteer
+gbif
+gdal
+gdi
+gee
+generalization
+generator
+geochemistry
+geocode
+geocoder
+geocoding
+geodata
+geodatabase
+geodesic
+geodesy
+geographic mcda
+geohash
+geojson
+geology
+geometry
+geomorphology
+geonetwork
+geonorge
+geoone
+geopackage
+geopaparazzi
+geophysics
+geoplateforme
+geoportal
+geoprocessing
+georeference
+georeferencer
+georeferencing
+georreferenciamento
+georural
+geoscience
+geoserver
+geoservico
+geospatial
+geospatial analysis
+geospatial analytics
+geotag
+geotagged
+geotiff
+germany
+gesut
+gfd
+gis
+github
+gltf
+gml
+gnss
+google
+google earth
+google earth engine
+google maps
+gpkg
+gps
+gpx
+graph
+graph analysis
+graphab
+grass
+gravity model
+greek
+grib
+grid
+grids
+groundwater
+group
+grouping
+gsi
+gtfs
+gugik
+gui
+géoplateforme
+h3
+habitat
+hazard
+health
+heatmap
+hec-ras
+height
+hemmi
+here
+hexagon
+hide
+hidrologia
+hiking
+hillshade
+histogram
+history
+hole
+home range
+hotspot
+html
+hydraulic
+hydraulic modelling
+hydraulics
+hydrogeology
+hydrographic network
+hydrography
+hydrology
+hyperspectral
+ibama
+ibge
+icon
+ide
+ideogram
+idw
+ign
+image
+image classification
+image processing
+imagery
+images
+import
+importer
+inaturalist
+incra
+inde
+index
+index map
+india
+indices
+ineffable
+infrastructure
+inp
+inpe
+inspection
+inspire
+instance segmentation
+integration
+interactive
+interface
+interlis
+internet
+interpolation
+intersection
+inundation
+inventory
+ios
+iso 19157
+isochrone
+isochrones
+italia
+italy
+item
+japan
+japanese
+javascript
+jhemmi.eu
+join
+jpeg
+jpg
+json
+jupyter
+k-means
+kanal
+kanalkataster
+kappa
+kartverket
+kataster
+kernel
+kernel density
+kmeans
+kml
+kmz
+knn
+korea
+kp
+kriging
+label
+labeling
+labels
+lai
+land
+land administration
+land cover
+land surface temperature
+land surface temperatures
+land use
+landcover
+landsat
+landscape
+landscape metrics
+landslide
+landuse
+landxml
+las
+latitude
+layer
+layer tree
+layers
+layout
+laz
+leaflet
+legend
+length
+library
+lidar
+line
+linear
+linear referencing
+lines
+link
+linked data
+linux
+lizmap
+llm
+load
+loader
+local
+location
+locator
+log
+longitude
+lrs
+lst
+lte
+lulc
+machine learning
+magnetic
+management
+manager
+manholes
+manning
+map
+map tool
+mapbiomas
+mapbox
+mapcanvas
+mapillary
+mapinfo
+maplibre
+mapping
+maps
+mapserver
+maptool
+marine
+markdown
+mars
+mask
+match
+matplotlib
+matrix
+maxent
+mbtiles
+mcda
+mcp
+measure
+measurement
+measurements
+memorial
+memory
+menu
+merge
+mesh
+metadata
+meteo
+meteorology
+mgrs
+microclimate
+migration
+military
+mining
+mjnetwork
+mnt
+mobile
+mobility
+model
+modeling
+modelling
+modis
+moj
+mongo
+mongodb
+monitoring
+moon
+morphology
+mosaic
+move
+ms sql
+multi
+multilingual
+multimodal
+multiple
+multispectral
+nas
+nasa
+natural language
+nautical
+navigate
+navigation
+nbr
+ndvi
+ndwi
+nearest
+nederland
+netcdf
+netherlands
+network
+network analysis
+networkanalysis
+neural network
+nextgis
+nodes
+nominatim
+norway
+nrw
+obj
+object detection
+observations
+occurrence
+odk
+ods
+offline
+ogc
+ogr
+ollama
+online
+onnx
+opacity
+open
+open data
+open data kit
+openai
+opendata
+openeo
+openlayers
+openstreetmap
+opentripplanner
+optimization
+oracle
+order
+ordnance survey
+orientation
+orthomosaic
+orthophoto
+ortofoto
+ortofotomapa
+osm
+overlap
+overlay
+overpass
+package
+palette
+pan
+panel
+panorama
+parallel
+parcel
+parcels
+parquet
+particelle
+paste
+patches
+path
+pca
+pdf
+pdok
+performance
+permeability
+photo
+photogrammetry
+photos
+physiocap
+picture
+pie
+pip
+pipeline
+pipes
+planning
+planting
+planx
+plot
+plotting
+plugin
+plugins
+png
+poi
+point
+point cloud
+point sampling
+pointcloud
+pointclouds
+points
+poland
+pollution
+polska
+polygon
+polygons
+polyline
+population
+positional accuracy
+postgis
+postgres
+postgresql
+precipitation
+precision agriculture
+pressure
+prevfogo
+prg
+principal components analysis
+print
+print template
+printing
+processing
+productivity
+professional
+profil
+profile
+profiles
+project
+projection
+properties
+property
+provider
+public
+public transport
+publication
+publish
+publishing
+pyqgis
+python
+pytorch
+qa
+qc
+qfield
+qfieldcloud
+qgis
+qgis plugin
+qgis server
+qgis-web-client
+qgis3
+qgis4
+qlr
+qml
+qt5
+qt6
+qualidade
+quality
+query
+quick
+r
+radar
+radiance
+radioactivity
+radius
+rainfall
+random forest
+raster
+rdf
+real time
+real-time
+realtime
+reclassification
+rectangle
+redistricting
+reference
+region
+regression
+relation
+relations
+relationship
+reload
+remote
+remote sensing
+remote-sensing
+remove
+rename
+rendering
+repair
+replace
+report
+reporting
+reports
+repository
+reproject
+reprojection
+resample
+reservoir
+resolution
+rest
+results viewer
+reverse
+reverse geocoding
+rf
+rf planning
+ring
+risk
+river
+road
+roadnetwork
+roads
+roi
+rose diagram
+rotation
+roughness
+route
+routing
+runoff
+rural
+saga
+sam
+sam2
+sample
+sampling
+sampling design
+sampling plan
+sar
+sarment
+satellite
+satellite data
+satellite imagery
+satellite images
+save
+scale
+schema
+schweiz
+screenshot
+script
+scripts
+scs
+sdi
+sdm
+search
+section
+segment
+segmentation
+seismic
+seismic hazard
+seismic microzonation
+seismology
+select
+selection
+semantic segmentation
+sensor
+sensors
+sentinel
+sentinel-1
+sentinel-2
+server
+service
+service area
+services
+settings
+sewer
+shadow
+shape
+shapefile
+shared
+sharing
+shell
+shift
+shoreline
+shortcut
+shortcuts
+shortest path
+shp
+sigef
+similarity
+simple
+simplification
+simplify
+simulation
+sisfogo
+size
+skeleton
+sketching
+sld
+slope
+slovakia
+slovenia
+smart city
+smartphone
+smoothing
+snap
+snapping
+snapshot
+soil
+sort
+space syntax
+spain
+sparql
+spatial
+spatial analysis
+spatial data quality
+spatial indicators
+spatial join
+spatial planning
+spatial-analysis
+spatialite
+species
+spectral
+spectral indices
+spectrometry
+spelling
+spline
+split
+spreadsheet
+sql
+sqlite
+square
+stac
+standard
+statistics
+stats
+stl
+stratigraphy
+stream
+street
+street network
+street view
+streetview
+strike
+string
+structural geology
+style
+styles
+subset
+suche
+suisse
+suitability analysis
+sun
+sunrise
+sunset
+supervised classification
+surface
+survey
+surveying
+sustainability
+svg
+svm
+swipe
+swiss
+switzerland
+symbol
+symbology
+symbols
+sync
+synchronization
+table
+tablet
+telecom
+telecommunications
+telemac
+temperature
+template
+templates
+temporal
+temporal analysis
+terrain
+terrain analysis
+test
+text
+thematic
+theme
+themes
+thermal
+thermal comfort
+threshold
+tif
+tiff
+tile
+tiles
+time
+time series
+timeline
+timeseries
+tin
+tms
+toc
+toggle
+tool
+toolbar
+toolbars
+tools
+topografia
+topography
+topojson
+topology
+tracker
+tracking
+tracks
+traffic
+training
+transform
+transformation
+transit
+translate
+translation
+transmission
+transparency
+transport
+transport planning
+transportation
+tree
+trigger
+tuflow
+turkey
+txt
+uav
+ufv
+ui
+ukraine
+uldk
+uncertainty
+update
+upload
+urban
+urban climate
+urban development
+urban geometry
+urban mobility
+urban morphology
+urban planning
+urban sprawl
+urbanisme
+utilities
+utility
+utm
+validation
+value
+vector
+vector layer
+vector tile
+vector tiles
+vectorization
+vegetation
+vegetation index
+versioning
+vertices
+veterinary
+vetor
+video
+vietnam
+view
+viewer
+viewshed
+visibility
+visualization
+vn2000
+volume
+voronoi
+vrt
+vulnerability
+wastewater
+water
+water network analysis
+water quality
+watershed
+watershed analysis
+waterway
+wcs
+weather
+web
+web map
+web mapping
+web services
+webgis
+webmap
+webmapping
+webmaps
+webservice
+webservices
+well
+wfs
+wgs84
+widget
+wildlife
+wincan
+wind
+windows
+wkb
+wkt
+wlc
+wms
+wmts
+workflow
+worldcover
+worldpop
+wps
+xls
+xlsx
+xml
+xplan
+xplanung
+xyz
+yandex
+yolo
+zip
+zonal
+zonal statistics
+zones
+zoning
+zoology
+zoom

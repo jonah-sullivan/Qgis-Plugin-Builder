@@ -6,7 +6,7 @@ default: html
 SPHINXOPTS    =
 SPHINXBUILD   = sphinx-build
 PAPER         =
-BUILDDIR      = ../docs
+BUILDDIR      = ../pluginbuilder4/help
 
 # Internal variables.
 PAPEROPT_a4     = -D latex_paper_size=a4

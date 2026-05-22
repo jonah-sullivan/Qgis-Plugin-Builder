@@ -1,0 +1,5 @@
+# qgis-plugin-ci configuration — Plugin Builder 4
+# See https://opengisch.github.io/qgis-plugin-ci/
+plugin_path: pluginbuilder4
+github_organization_slug: jonah-sullivan
+project_slug: Qgis-Plugin-Builder

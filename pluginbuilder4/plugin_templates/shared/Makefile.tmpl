@@ -1,0 +1,193 @@
+#/***************************************************************************
+# ${TemplateClass}
+#
+# ${TemplateDescription}
+#							 -------------------
+#		begin				: $TemplateBuildDate
+#		git sha				: $TemplateVCSFormat
+#		copyright			: (C) $TemplateYear by $TemplateAuthor
+#		email				: $TemplateEmail
+# ***************************************************************************/
+#
+#/***************************************************************************
+# *																		 *
+# *   This program is free software; you can redistribute it and/or modify  *
+# *   it under the terms of the GNU General Public License as published by  *
+# *   the Free Software Foundation; either version 2 of the License, or	 *
+# *   (at your option) any later version.								   *
+# *																		 *
+# ***************************************************************************/
+
+#################################################
+# Edit the following to match your sources lists
+#################################################
+
+
+#Add iso code for any locales you want to support here (space separated)
+# default is no locales
+# LOCALES = af
+LOCALES =
+
+# If locales are enabled, set the name of the lrelease binary on your system. If
+# you have trouble compiling the translations, you may have to specify the full path to
+# lrelease
+#LRELEASE = lrelease
+
+
+# translation
+SOURCES = \
+	__init__.py \
+	${TemplateModuleName}.py ${TemplatePyFiles}
+
+PLUGINNAME = ${TemplateModuleName}
+
+PY_FILES = \
+	__init__.py \
+	${TemplateModuleName}.py ${TemplatePyFiles}
+
+UI_FILES = ${TemplateUiFiles}
+
+EXTRAS = metadata.txt ${TemplateExtraFiles}
+
+EXTRA_DIRS =
+
+# QGISDIR is the absolute path to your QGIS 4 Python plugins directory:
+#	* Linux:   ~/.local/share/QGIS/QGIS4/profiles/default/python/plugins
+#	* Mac OS X: ~/Library/Application Support/QGIS/QGIS4/profiles/default/python/plugins
+#	* Windows: %APPDATA%\QGIS\QGIS4\profiles\default\python\plugins
+
+QGISDIR=${TemplateQGISDir}
+
+#################################################
+# Normally you would not need to edit below here
+#################################################
+
+HELP = help/build/html
+
+.PHONY: default
+default:
+	@echo Useful targets:
+	@echo   deploy  - copy plugin to your QGIS plugins directory
+	@echo   test    - run the test suite
+	@echo   lint    - check code style with ruff
+	@echo   doc     - build Sphinx documentation
+	@echo   zip     - create a deployable zip from your QGIS plugins directory
+	@echo   package - create a release zip from git (use with VERSION=tag)
+	@echo   clean   - remove compiled Python files and zip artifacts
+	@echo
+	@echo For local development, pb_tool is a simpler alternative to make:
+	@echo   pip install pb_tool && pb_tool deploy
+	@echo   See https://jonah-sullivan.github.io/plugin_build_tool/
+	@echo
+	@echo For automated releases to the QGIS plugin repository, see .github/workflows/release.yml
+
+%.qm : %.ts
+	$$(LRELEASE) $$<
+
+test: ${TemplateTestDeps}
+	@echo
+	@echo "----------------------"
+	@echo "Regression Test Suite"
+	@echo "----------------------"
+
+	@# Preceding dash means that make will continue in case of errors
+	@-export PYTHONPATH=`pwd`:$$(PYTHONPATH); \
+		export QGIS_DEBUG=0; \
+		export QGIS_LOG_FILE=/dev/null; \
+		python -m pytest -v || true
+	@echo "----------------------"
+	@echo "If you get a 'no module named qgis.core' error:"
+	@echo "  Activate your QGIS Python environment and run make test again."
+	@echo "----------------------"
+
+deploy: ${TemplateDeployDeps}
+	@echo
+	@echo "------------------------------------------"
+	@echo "Deploying plugin to your QGIS plugins directory."
+	@echo "------------------------------------------"
+	mkdir -p $$(QGISDIR)/$$(PLUGINNAME)
+	cp -vf $$(PY_FILES) $$(QGISDIR)/$$(PLUGINNAME)
+	$$(if $$(UI_FILES), cp -vf $$(UI_FILES) $$(QGISDIR)/$$(PLUGINNAME))
+	cp -vf $$(EXTRAS) $$(QGISDIR)/$$(PLUGINNAME)
+${TemplateDeployCopyI18n}
+${TemplateDeployCopyHelp}
+	# Copy extra directories if any
+	$$(if $$(EXTRA_DIRS), $$(foreach EXTRA_DIR,$$(EXTRA_DIRS), cp -R $$(EXTRA_DIR) $$(QGISDIR)/$$(PLUGINNAME)/;))
+
+
+# The dclean target removes compiled python files from plugin directory
+# also deletes any .git entry
+dclean:
+	@echo
+	@echo "-----------------------------------"
+	@echo "Removing any compiled python files."
+	@echo "-----------------------------------"
+	find $$(QGISDIR)/$$(PLUGINNAME) -iname "*.pyc" -delete
+	find $$(QGISDIR)/$$(PLUGINNAME) -iname ".git" -prune -exec rm -Rf {} \;
+
+
+derase:
+	@echo
+	@echo "-------------------------"
+	@echo "Removing deployed plugin."
+	@echo "-------------------------"
+	rm -Rf $$(QGISDIR)/$$(PLUGINNAME)
+
+zip: deploy dclean
+	@echo
+	@echo "---------------------------"
+	@echo "Creating plugin zip bundle."
+	@echo "---------------------------"
+	rm -f $$(PLUGINNAME).zip
+	cd $$(QGISDIR); zip -9r $$(CURDIR)/$$(PLUGINNAME).zip $$(PLUGINNAME)
+
+package:
+	# Create a release zip from git. Requires a git repository.
+	# Usage: make package VERSION=v0.1.0
+	# Note: if you opted in to qgis-plugin-ci, GitHub Releases trigger
+	#       automated packaging and upload — you may not need this target.
+ifeq ($$(VERSION),)
+	@echo "ERROR: No VERSION specified. Usage: make package VERSION=v0.1.0"
+else
+	@echo
+	@echo "------------------------------------"
+	@echo "Exporting plugin to zip package."
+	@echo "------------------------------------"
+	rm -f $$(PLUGINNAME).zip
+	git archive --prefix=$$(PLUGINNAME)/ -o $$(PLUGINNAME).zip $$(VERSION)
+	echo "Created package: $$(PLUGINNAME).zip"
+endif
+
+transclean:
+	@echo
+	@echo "------------------------------------"
+	@echo "Removing compiled translation files."
+	@echo "------------------------------------"
+	rm -f i18n/*.qm
+
+clean:
+	@echo
+	@echo "----------------------------------"
+	@echo "Removing compiled Python files and build artifacts."
+	@echo "----------------------------------"
+	find . -name "__pycache__" -type d -exec rm -rf {} + 2>/dev/null || true
+	find . -name "*.pyc" -delete
+	rm -f $$(PLUGINNAME).zip
+
+doc:
+	@echo
+	@echo "------------------------------------"
+	@echo "Building documentation using sphinx."
+	@echo "------------------------------------"
+	@if command -v sphinx-build >/dev/null 2>&1; then \
+		cd help && make html; \
+	else \
+		echo "sphinx-build not found - skipping documentation build. Install sphinx to enable: pip install sphinx"; \
+	fi
+
+lint:
+	@echo
+	@echo "------------"
+	@echo "Ruff results"
+	@echo "------------"
+	@ruff check .

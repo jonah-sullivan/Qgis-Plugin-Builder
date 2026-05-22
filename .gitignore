@@ -12,6 +12,6 @@ nohup.out
 .qgis-settings
 .pytest_cache
 __pycache__
-docs/doctrees/
-docs/.buildinfo
-docs/.buildinfo.bak
+pluginbuilder4/help/doctrees/
+pluginbuilder4/help/.buildinfo
+pluginbuilder4/help/.buildinfo.bak

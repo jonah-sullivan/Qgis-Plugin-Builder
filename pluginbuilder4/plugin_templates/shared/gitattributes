@@ -1,0 +1,5 @@
+# If you add Qt resource files (*.qrc) to this plugin, this rule prevents
+# qgis-plugin-ci from attempting to compile them with its bundled PyQt5 tools,
+# which are incompatible with PyQt6. Compile resources locally with pyrcc6 and
+# commit the output before releasing.
+*.qrc export-ignore

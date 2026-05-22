@@ -4,9 +4,9 @@
 plugin_builder.py and its siblings use relative imports (from .foo import Bar)
 which require them to be loaded as part of a package. The project directory name
 contains hyphens so it cannot serve as a Python package name directly. This
-conftest registers the project root as a synthetic package named '_pluginbuilder'
-and loads each module within that namespace, aliasing each to its bare name so
-that 'from plugin_builder import PluginBuilder' works in the tests.
+conftest registers the pluginbuilder4 subdirectory as a synthetic package named
+'_pluginbuilder' and loads each module within that namespace, aliasing each to
+its bare name so that 'from plugin_builder import PluginBuilder' works in tests.
 """
 
 import importlib.util
@@ -15,10 +15,11 @@ import sys
 import types
 
 _PROJ = os.path.dirname(os.path.abspath(__file__))
+_SRC = os.path.join(_PROJ, "pluginbuilder4")
 _PKG = "_pluginbuilder"
 
 _pkg = types.ModuleType(_PKG)
-_pkg.__path__ = [_PROJ]
+_pkg.__path__ = [_SRC]
 _pkg.__package__ = _PKG
 sys.modules[_PKG] = _pkg
 
@@ -27,7 +28,7 @@ def _load_module(bare_name, filepath=None):
     full = f"{_PKG}.{bare_name}"
     if full in sys.modules:
         return sys.modules[full]
-    path = filepath or os.path.join(_PROJ, f"{bare_name}.py")
+    path = filepath or os.path.join(_SRC, f"{bare_name}.py")
     spec = importlib.util.spec_from_file_location(full, path)
     mod = importlib.util.module_from_spec(spec)
     mod.__package__ = _PKG
@@ -54,8 +55,9 @@ def _load_subpackage(bare_name, directory):
 
 
 # Load in dependency order so each relative import resolves correctly.
+_load_module("qgis_dirs")
 _load_module("plugin_specification")
-_load_subpackage("plugin_templates", os.path.join(_PROJ, "plugin_templates"))
+_load_subpackage("plugin_templates", os.path.join(_SRC, "plugin_templates"))
 _load_module("select_tags_dialog")
 _load_module("result_dialog")
 _load_module("plugin_builder_dialog")
