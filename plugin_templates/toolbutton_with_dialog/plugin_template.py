@@ -46,10 +46,12 @@ class ToolbuttonWithDialogPluginTemplate(PluginTemplate):
             add_method = "addPluginTo{}Menu".format(menu)
             remove_method = "removePlugin{}Menu".format(menu)
         self.category = menu
+        m = specification.module_name
+        ui_file = f"{m}_dialog_base.ui"
         return {
             # Makefile
-            "TemplatePyFiles": "%s_dialog.py" % specification.module_name,
-            "TemplateUiFiles": "%s_dialog_base.ui" % specification.module_name,
+            "TemplatePyFiles": f"{m}_dialog.py",
+            "TemplateUiFiles": ui_file,
             "TemplateExtraFiles": "icon.png",
             "TemplateQGISDir": deployment_dir,
             # Metadata
@@ -58,6 +60,12 @@ class ToolbuttonWithDialogPluginTemplate(PluginTemplate):
             "TemplateMenuText": menu_text,
             "TemplateMenuAddMethod": add_method,
             "TemplateMenuRemoveMethod": remove_method,
+            # readme.tmpl extras
+            "TemplateCompileResourcesStep": "\n\n  * Compile the resources file using pyrcc5",
+            "TemplateUiDesignerLine": (
+                f"\n\n  * Create your own custom icon, replacing the default icon.png"
+                f"\n\n  * Modify your user interface by opening {ui_file} in Qt Designer"
+            ),
         }
 
     def template_files(self, specification):

@@ -52,6 +52,13 @@ class ProcessingProviderPluginTemplate(PluginTemplate):
             "TemplateProviderDescr": frame.provider_descr_text.text(),
         }
 
+    def what_next_items_html(self, plugin_path, module_name, ui_file):
+        algo_file = f"{module_name}_algorithm.py"
+        return (
+            f"    <li>Test the plugin by enabling it in the QGIS plugin manager and enabling the provider in the Processing Options\n"
+            f'    <li>Customize it by editing the implementation file <a href="file:///{plugin_path}/{algo_file}"><b>{algo_file}</b></a>'
+        )
+
     def template_files(self, specification):
         files = {
             "module_name_algorithm.tmpl": "%s_algorithm.py" % specification.module_name,

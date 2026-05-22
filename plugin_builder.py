@@ -248,6 +248,11 @@ class PluginBuilder:
             t_file = QFile(os.path.join(self.template_dir, template_file))
             t_file.copy(os.path.join(self.plugin_path, output_name))
 
+        QFile.copy(
+            os.path.join(self.shared_dir, "LICENSE"),
+            os.path.join(self.plugin_path, "LICENSE"),
+        )
+
     def _prepare_readme(self, specification, template_module_name):
         """Prepare the README file.
 
@@ -260,17 +265,15 @@ class PluginBuilder:
         :type template_module_name: str
         """
         # populate the results readme text template
-        template_file = open(os.path.join(self.template_dir, "readme.tmpl"))
+        template_file = open(os.path.join(self.shared_dir, "readme.tmpl"))
         content = template_file.read()
         template_file.close()
         template = Template(content)
-        # TODO: update this to simply pass the specification.template_map
         result_map = {
+            **specification.template_map,
             "PluginDir": self.plugin_path,
-            "TemplateClass": specification.template_map["TemplateClass"],
             "TemplateModuleName": template_module_name,
             "UserPluginDir": self.user_plugin_dir,
-            "TemplateVCSFormat": specification.template_map["TemplateVCSFormat"],
         }
         popped = template.safe_substitute(result_map)
         # write the results info to the README txt file
@@ -356,16 +359,22 @@ class PluginBuilder:
         :type specification: PluginSpecification
         """
         template_module_name = specification.template_map["TemplateModuleName"]
-        template_file = open(os.path.join(self.template_dir, "results.tmpl"))
+        template_file = open(os.path.join(self.shared_dir, "results.tmpl"))
         content = template_file.read()
         template_file.close()
         template = Template(content)
+        ui_file = specification.template_map.get("TemplateUiFiles", "")
+        what_next = (
+            self.template.what_next_items_html(self.plugin_path, template_module_name, ui_file)
+            if self.template is not None
+            else ""
+        )
         result_map = {
+            **specification.template_map,
             "PluginDir": self.plugin_path,
-            "TemplateClass": specification.template_map["TemplateClass"],
             "TemplateModuleName": template_module_name,
             "UserPluginDir": self.user_plugin_dir,
-            "TemplateVCSFormat": specification.template_map["TemplateVCSFormat"],
+            "TemplateWhatNextItems": what_next,
         }
         results_popped = template.safe_substitute(result_map)
         # write the results info to the README HTML file

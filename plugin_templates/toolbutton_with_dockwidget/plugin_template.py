@@ -48,19 +48,26 @@ class ToolbuttonWithDockWidgetPluginTemplate(PluginTemplate):
         self.category = menu
 
         dockwidget_area = dialog.template_subframe.dockwidget_area.currentText()
-        
-        # Map dock widget area names to Qt.DockWidgetArea enum values
+
         dock_area_map = {
             "Left": "Qt.DockWidgetArea.LeftDockWidgetArea",
             "Right": "Qt.DockWidgetArea.RightDockWidgetArea",
             "Top": "Qt.DockWidgetArea.TopDockWidgetArea",
             "Bottom": "Qt.DockWidgetArea.BottomDockWidgetArea",
         }
+        area = dock_area_map[dockwidget_area]
 
+        if dialog.tabify_dockwidget.isChecked():
+            add_dock_call = f"addTabifiedDockWidget({area}, self.dockwidget, raiseTab=True)"
+        else:
+            add_dock_call = f"addDockWidget({area}, self.dockwidget)"
+
+        m = specification.module_name
+        ui_file = f"{m}_dockwidget_base.ui"
         return {
             # Makefile
-            "TemplatePyFiles": "%s_dockwidget.py" % specification.module_name,
-            "TemplateUiFiles": "%s_dockwidget_base.ui" % specification.module_name,
+            "TemplatePyFiles": f"{m}_dockwidget.py",
+            "TemplateUiFiles": ui_file,
             "TemplateExtraFiles": "icon.png",
             "TemplateQGISDir": deployment_dir,
             # Metadata
@@ -70,7 +77,13 @@ class ToolbuttonWithDockWidgetPluginTemplate(PluginTemplate):
             "TemplateMenuAddMethod": add_method,
             "TemplateMenuRemoveMethod": remove_method,
             # DockWidget
-            "TemplateDockWidgetArea": dock_area_map[dockwidget_area],
+            "TemplateAddDockWidgetCall": add_dock_call,
+            # readme.tmpl extras
+            "TemplateCompileResourcesStep": "\n\n  * Compile the resources file using pyrcc5",
+            "TemplateUiDesignerLine": (
+                f"\n\n  * Create your own custom icon, replacing the default icon.png"
+                f"\n\n  * Modify your user interface by opening {ui_file} in Qt Designer"
+            ),
         }
 
     def template_files(self, specification):

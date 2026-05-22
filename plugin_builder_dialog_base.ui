@@ -655,6 +655,16 @@ It should be in CamelCase e.g. PhotoLinker.</string>
          <layout class="QGridLayout" name="frame_layout"/>
         </widget>
        </item>
+       <item row="3" column="0" colspan="2">
+        <widget class="QCheckBox" name="tabify_dockwidget">
+         <property name="text">
+          <string>Tabify dock widget with existing docks</string>
+         </property>
+         <property name="visible">
+          <bool>false</bool>
+         </property>
+        </widget>
+       </item>
       </layout>
      </widget>
      <widget class="QWidget" name="page2">

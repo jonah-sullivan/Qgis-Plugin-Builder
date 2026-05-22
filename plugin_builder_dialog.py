@@ -117,6 +117,10 @@ class PluginBuilderDialog(QDialog, FORM_CLASS):
         self.template_subframe = uic.loadUi(
             os.path.join(self.template().subdir(), "wizard_form_base.ui"), subframe
         )
+        is_dockwidget = "dock" in self.template().descr().lower()
+        self.tabify_dockwidget.setVisible(is_dockwidget)
+        if not is_dockwidget:
+            self.tabify_dockwidget.setChecked(False)
 
     def validate_entries(self):
         """Check to see that all fields have been entered."""

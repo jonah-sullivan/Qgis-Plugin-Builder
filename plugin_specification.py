@@ -94,4 +94,7 @@ class PluginSpecification:
             "TemplateExtraFiles": "",
             "TemplateQrcFiles": "",
             "TemplateRcFiles": "",
+            # readme.tmpl template-specific lines (overridden by each template)
+            "TemplateCompileResourcesStep": "",
+            "TemplateUiDesignerLine": "",
         }

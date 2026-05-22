@@ -39,3 +39,11 @@ class PluginTemplate:
 
     def copy_files(self, specification):
         return {}
+
+    def what_next_items_html(self, plugin_path, module_name, ui_file):
+        return (
+            f"    <li>Test the plugin by enabling it in the QGIS plugin manager\n"
+            f"    <li>Customize it by editing the implementation file <b>{module_name}.py</b>\n"
+            f"    <li>Create your own custom icon, replacing the default <b>icon.png</b>\n"
+            f'    <li>Modify your user interface by opening <a href="file:///{plugin_path}/{ui_file}"><b>{ui_file}</b></a> in Qt Designer'
+        )
