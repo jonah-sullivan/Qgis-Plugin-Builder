@@ -29,14 +29,18 @@ def _post_upload(address, plugin_data):
 
     encoded = base64.b64encode(plugin_data).decode("ascii")
     payload = (
-        "<?xml version='1.0'?>"
-        "<methodCall>"
-        "<methodName>plugin.upload</methodName>"
-        "<params><param>"
-        "<value><base64>{}</base64></value>"
-        "</param></params>"
-        "</methodCall>"
-    ).format(encoded).encode("utf-8")
+        (
+            "<?xml version='1.0'?>"
+            "<methodCall>"
+            "<methodName>plugin.upload</methodName>"
+            "<params><param>"
+            "<value><base64>{}</base64></value>"
+            "</param></params>"
+            "</methodCall>"
+        )
+        .format(encoded)
+        .encode("utf-8")
+    )
 
     auth = base64.b64encode(
         "{}:{}".format(parsed.username, parsed.password).encode()
@@ -63,16 +67,12 @@ def _parse_response(xml_data):
             name = member.find("name").text
             value_el = member.find("value")
             members[name] = next(iter(value_el), value_el).text
-        raise RuntimeError(
-            "Fault {faultCode}: {faultString}".format(**members)
-        )
+        raise RuntimeError("Fault {faultCode}: {faultString}".format(**members))
     return tuple(int(v.text) for v in root.iter("int"))
 
 
 def main(parameters, arguments):
-    address = (
-        "{protocol}://{username}:{password}@{server}:{port}{endpoint}"
-    ).format(
+    address = ("{protocol}://{username}:{password}@{server}:{port}{endpoint}").format(
         protocol=PROTOCOL,
         username=parameters.username,
         password=parameters.password,
@@ -128,8 +128,7 @@ if __name__ == "__main__":
         metavar="user",
     )
     parser.add_option(
-        "-p", "--port", dest="port",
-        help="Server port to connect to", metavar="80"
+        "-p", "--port", dest="port", help="Server port to connect to", metavar="80"
     )
     parser.add_option(
         "-s",

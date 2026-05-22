@@ -78,9 +78,7 @@ def spec():
 def builder(qgis_app, qgis_iface, tmp_path):
     b = PluginBuilder(qgis_iface)
     b.shared_dir = os.path.abspath(
-        os.path.join(
-            os.path.dirname(__file__), "..", "plugin_templates", "shared"
-        )
+        os.path.join(os.path.dirname(__file__), "..", "plugin_templates", "shared")
     )
     b.template_dir = os.path.abspath(
         os.path.join(
@@ -175,7 +173,6 @@ def test_copy_single_file(tmp_path):
         assert f.read() == "hello"
 
 
-
 def test_prepare_i18n(builder):
     """_prepare_i18n copies the i18n directory into plugin_path."""
     builder._prepare_i18n()
@@ -213,9 +210,7 @@ def test_prepare_specific_files(builder, spec):
     class FakeTemplate:
         def template_files(self, specification):
             return {
-                "module_name_dialog.tmpl": (
-                    "%s_dialog.py" % specification.module_name
-                ),
+                "module_name_dialog.tmpl": ("%s_dialog.py" % specification.module_name),
                 "module_name_dialog_base.ui.tmpl": (
                     "%s_dialog_base.ui" % specification.module_name
                 ),
@@ -226,9 +221,7 @@ def test_prepare_specific_files(builder, spec):
 
     builder.template = FakeTemplate()
     builder._prepare_specific_files(spec)
-    assert os.path.exists(
-        os.path.join(builder.plugin_path, "fake_module_dialog.py")
-    )
+    assert os.path.exists(os.path.join(builder.plugin_path, "fake_module_dialog.py"))
     assert os.path.exists(
         os.path.join(builder.plugin_path, "fake_module_dialog_base.ui")
     )

@@ -58,7 +58,9 @@ class ToolbuttonWithDockWidgetPluginTemplate(PluginTemplate):
         area = dock_area_map[dockwidget_area]
 
         if dialog.tabify_dockwidget.isChecked():
-            add_dock_call = f"addTabifiedDockWidget({area}, self.dockwidget, raiseTab=True)"
+            add_dock_call = (
+                f"addTabifiedDockWidget({area}, self.dockwidget, raiseTab=True)"
+            )
         else:
             add_dock_call = f"addDockWidget({area}, self.dockwidget)"
 
@@ -97,9 +99,13 @@ class ToolbuttonWithDockWidgetPluginTemplate(PluginTemplate):
             result.update(
                 {
                     os.path.join("test", "test_module_name_dockwidget.templ"): (
-                        os.path.join("test", "test_%s_dockwidget.py" % specification.module_name)
+                        os.path.join(
+                            "test", "test_%s_dockwidget.py" % specification.module_name
+                        )
                     ),
-                    os.path.join("test", "test_resources.templ"): os.path.join("test", "test_resources.py"),
+                    os.path.join("test", "test_resources.templ"): os.path.join(
+                        "test", "test_resources.py"
+                    ),
                 }
             )
         return result

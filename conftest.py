@@ -8,6 +8,7 @@ conftest registers the project root as a synthetic package named '_pluginbuilder
 and loads each module within that namespace, aliasing each to its bare name so
 that 'from plugin_builder import PluginBuilder' works in the tests.
 """
+
 import importlib.util
 import os
 import sys
