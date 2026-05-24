@@ -142,6 +142,8 @@ PAGES = [
 ]
 
 dialog.qgis_plugin_ci_cb.setChecked(True)
+dialog.gitlab_ci_cb.setChecked(True)
+dialog.gitlab_namespace.setText(SAMPLE["github_org_slug"])
 
 dialog.show()
 app.processEvents()
