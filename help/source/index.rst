@@ -191,12 +191,26 @@ recommended, but not strictly required.
   See `Using the Makefile`_ for more information.
 
 **pb_tool**
-  Genrates a configuration for *pb_tool*, a Python command line tool for compiling 
+  Generates a configuration for *pb_tool*, a Python command line tool for compiling
   and deploying QGIS plugins on Linux, Mac OS X, and Windows.
 
   It is **strongly recommended** that you use ``pb_tool`` rather than ``make`` for building and deploying your plugins.
-  
+
   See `Using pb_tool`_ for more information.
+
+**qgis-plugin-ci (GitHub Actions release workflow)**
+  Generates a ``.github/workflows/release.yml`` that publishes your plugin to the
+  QGIS plugin repository automatically when you create a GitHub Release.
+  Selecting this option also generates a ``.qgis-plugin-ci`` configuration file.
+
+  See `CI/CD Configuration`_ for the required setup steps.
+
+**qgis-plugin-ci (GitLab CI release pipeline)**
+  Generates a ``.gitlab-ci.yml`` that publishes your plugin to the QGIS plugin
+  repository automatically when you push a git tag.
+  Selecting this option also generates a ``.qgis-plugin-ci`` configuration file.
+
+  See `CI/CD Configuration`_ for the required setup steps.
 
 Publication information
 .......................
@@ -244,24 +258,54 @@ plugin is accepted and users can be successful using it.
 CI/CD Configuration
 ...................
 
-If you selected **qgis-plugin-ci** on the options page, an additional step
-collects the information needed to generate a GitHub Actions release workflow.
+If you selected either CI/CD option on the additional components page, an extra
+step collects the information needed to configure the release automation.
+You can select GitHub Actions, GitLab CI, or both.
 
 .. image:: images/wizard_ci.png
 
 **GitHub organisation**
-  Your GitHub organisation or username (e.g. ``myorg``). This is used in the
-  generated ``.qgis-plugin-ci`` configuration file.
+  Your GitHub organisation or username (e.g. ``myorg``). Required when the
+  **GitHub Actions** option is checked. Used in the generated
+  ``.qgis-plugin-ci`` configuration file.
 
 **Project slug**
-  The repository name on GitHub (e.g. ``my-plugin``). If your repository URL
-  follows the standard GitHub format, these fields are pre-filled automatically.
+  The repository name on your chosen platform (e.g. ``my-plugin``). If your
+  repository URL is a standard GitHub or GitLab URL, this field is
+  pre-filled automatically.
+
+**GitLab namespace**
+  Your GitLab group or username (e.g. ``mygroup``). Required when the
+  **GitLab CI** option is checked. Used in the generated
+  ``.qgis-plugin-ci`` configuration file.
+
+Generated files
+~~~~~~~~~~~~~~~
+
+.. list-table::
+   :header-rows: 1
+   :widths: 30 35 35
+
+   * - Option
+     - Files generated
+     - Trigger
+   * - GitHub Actions
+     - ``.github/workflows/release.yml``, ``.qgis-plugin-ci``, ``.gitattributes``
+     - Create a GitHub Release
+   * - GitLab CI
+     - ``.gitlab-ci.yml``, ``.qgis-plugin-ci``, ``.gitattributes``
+     - Push a git tag (e.g. ``git tag v1.0 && git push --tags``)
+   * - Both
+     - All of the above (single ``.qgis-plugin-ci`` with both slugs)
+     - Either trigger above
 
 .. note::
-   After generating your plugin, add ``OSGEO_USER`` and ``OSGEO_PASSWORD`` as
-   repository secrets in GitHub → Settings → Secrets and variables → Actions.
-   These are required by the generated ``.github/workflows/release.yml``
-   workflow to upload your plugin to the QGIS plugin repository.
+   After generating your plugin you must add ``OSGEO_USER`` and
+   ``OSGEO_PASSWORD`` as secrets so the release workflow can upload to the
+   QGIS plugin repository:
+
+   * **GitHub** — Settings → Secrets and variables → Actions → New repository secret
+   * **GitLab** — Settings → CI/CD → Variables → Add variable
 
 Generating
 ==========

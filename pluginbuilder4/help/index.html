@@ -5,10 +5,10 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>QGIS Plugin Builder &#8212; QGIS Plugin Builder 3.4.2 documentation</title>
+    <title>QGIS Plugin Builder &#8212; QGIS Plugin Builder 3.4.4 documentation</title>
     <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="_static/pyramid.css?v=424f8d56" />
-    <script src="_static/documentation_options.js?v=23636ea3"></script>
+    <script src="_static/documentation_options.js?v=4c927a77"></script>
     <script src="_static/doctools.js?v=fd6eb6e6"></script>
     <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
     <link rel="index" title="Index" href="genindex.html" />
@@ -27,7 +27,7 @@
         <li class="right" style="margin-right: 10px">
           <a href="genindex.html" title="General Index"
              accesskey="I">index</a></li>
-        <li class="nav-item nav-item-0"><a href="#">QGIS Plugin Builder 3.4.2 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="#">QGIS Plugin Builder 3.4.4 documentation</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">QGIS Plugin Builder</a></li> 
       </ul>
     </div>  
@@ -195,10 +195,20 @@ See <a class="reference internal" href="#documenting-your-plugin">Documenting yo
 <dt><strong>Makefile</strong></dt><dd><p>Adds a Makefile for building your plugin with GNU make.
 See <a class="reference internal" href="#using-the-makefile">Using the Makefile</a> for more information.</p>
 </dd>
-<dt><strong>pb_tool</strong></dt><dd><p>Genrates a configuration for <em>pb_tool</em>, a Python command line tool for compiling
+<dt><strong>pb_tool</strong></dt><dd><p>Generates a configuration for <em>pb_tool</em>, a Python command line tool for compiling
 and deploying QGIS plugins on Linux, Mac OS X, and Windows.</p>
 <p>It is <strong>strongly recommended</strong> that you use <code class="docutils literal notranslate"><span class="pre">pb_tool</span></code> rather than <code class="docutils literal notranslate"><span class="pre">make</span></code> for building and deploying your plugins.</p>
 <p>See <a class="reference internal" href="#using-pb-tool">Using pb_tool</a> for more information.</p>
+</dd>
+<dt><strong>qgis-plugin-ci (GitHub Actions release workflow)</strong></dt><dd><p>Generates a <code class="docutils literal notranslate"><span class="pre">.github/workflows/release.yml</span></code> that publishes your plugin to the
+QGIS plugin repository automatically when you create a GitHub Release.
+Selecting this option also generates a <code class="docutils literal notranslate"><span class="pre">.qgis-plugin-ci</span></code> configuration file.</p>
+<p>See <a class="reference internal" href="#ci-cd-configuration">CI/CD Configuration</a> for the required setup steps.</p>
+</dd>
+<dt><strong>qgis-plugin-ci (GitLab CI release pipeline)</strong></dt><dd><p>Generates a <code class="docutils literal notranslate"><span class="pre">.gitlab-ci.yml</span></code> that publishes your plugin to the QGIS plugin
+repository automatically when you push a git tag.
+Selecting this option also generates a <code class="docutils literal notranslate"><span class="pre">.qgis-plugin-ci</span></code> configuration file.</p>
+<p>See <a class="reference internal" href="#ci-cd-configuration">CI/CD Configuration</a> for the required setup steps.</p>
 </dd>
 </dl>
 </section>
@@ -242,24 +252,64 @@ they choose not to live on the bleeding edge.</p>
 </section>
 <section id="ci-cd-configuration">
 <h2>CI/CD Configuration<a class="headerlink" href="#ci-cd-configuration" title="Link to this heading">¶</a></h2>
-<p>If you selected <strong>qgis-plugin-ci</strong> on the options page, an additional step
-collects the information needed to generate a GitHub Actions release workflow.</p>
+<p>If you selected either CI/CD option on the additional components page, an extra
+step collects the information needed to configure the release automation.
+You can select GitHub Actions, GitLab CI, or both.</p>
 <img alt="_images/wizard_ci.png" src="_images/wizard_ci.png" />
 <dl class="simple">
-<dt><strong>GitHub organisation</strong></dt><dd><p>Your GitHub organisation or username (e.g. <code class="docutils literal notranslate"><span class="pre">myorg</span></code>). This is used in the
-generated <code class="docutils literal notranslate"><span class="pre">.qgis-plugin-ci</span></code> configuration file.</p>
+<dt><strong>GitHub organisation</strong></dt><dd><p>Your GitHub organisation or username (e.g. <code class="docutils literal notranslate"><span class="pre">myorg</span></code>). Required when the
+<strong>GitHub Actions</strong> option is checked. Used in the generated
+<code class="docutils literal notranslate"><span class="pre">.qgis-plugin-ci</span></code> configuration file.</p>
 </dd>
-<dt><strong>Project slug</strong></dt><dd><p>The repository name on GitHub (e.g. <code class="docutils literal notranslate"><span class="pre">my-plugin</span></code>). If your repository URL
-follows the standard GitHub format, these fields are pre-filled automatically.</p>
+<dt><strong>Project slug</strong></dt><dd><p>The repository name on your chosen platform (e.g. <code class="docutils literal notranslate"><span class="pre">my-plugin</span></code>). If your
+repository URL is a standard GitHub or GitLab URL, this field is
+pre-filled automatically.</p>
+</dd>
+<dt><strong>GitLab namespace</strong></dt><dd><p>Your GitLab group or username (e.g. <code class="docutils literal notranslate"><span class="pre">mygroup</span></code>). Required when the
+<strong>GitLab CI</strong> option is checked. Used in the generated
+<code class="docutils literal notranslate"><span class="pre">.qgis-plugin-ci</span></code> configuration file.</p>
 </dd>
 </dl>
+<section id="generated-files">
+<h3>Generated files<a class="headerlink" href="#generated-files" title="Link to this heading">¶</a></h3>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 30.0%" />
+<col style="width: 35.0%" />
+<col style="width: 35.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Option</p></th>
+<th class="head"><p>Files generated</p></th>
+<th class="head"><p>Trigger</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>GitHub Actions</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">.github/workflows/release.yml</span></code>, <code class="docutils literal notranslate"><span class="pre">.qgis-plugin-ci</span></code>, <code class="docutils literal notranslate"><span class="pre">.gitattributes</span></code></p></td>
+<td><p>Create a GitHub Release</p></td>
+</tr>
+<tr class="row-odd"><td><p>GitLab CI</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">.gitlab-ci.yml</span></code>, <code class="docutils literal notranslate"><span class="pre">.qgis-plugin-ci</span></code>, <code class="docutils literal notranslate"><span class="pre">.gitattributes</span></code></p></td>
+<td><p>Push a git tag (e.g. <code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">tag</span> <span class="pre">v1.0</span> <span class="pre">&amp;&amp;</span> <span class="pre">git</span> <span class="pre">push</span> <span class="pre">--tags</span></code>)</p></td>
+</tr>
+<tr class="row-even"><td><p>Both</p></td>
+<td><p>All of the above (single <code class="docutils literal notranslate"><span class="pre">.qgis-plugin-ci</span></code> with both slugs)</p></td>
+<td><p>Either trigger above</p></td>
+</tr>
+</tbody>
+</table>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>After generating your plugin, add <code class="docutils literal notranslate"><span class="pre">OSGEO_USER</span></code> and <code class="docutils literal notranslate"><span class="pre">OSGEO_PASSWORD</span></code> as
-repository secrets in GitHub → Settings → Secrets and variables → Actions.
-These are required by the generated <code class="docutils literal notranslate"><span class="pre">.github/workflows/release.yml</span></code>
-workflow to upload your plugin to the QGIS plugin repository.</p>
+<p>After generating your plugin you must add <code class="docutils literal notranslate"><span class="pre">OSGEO_USER</span></code> and
+<code class="docutils literal notranslate"><span class="pre">OSGEO_PASSWORD</span></code> as secrets so the release workflow can upload to the
+QGIS plugin repository:</p>
+<ul class="simple">
+<li><p><strong>GitHub</strong> — Settings → Secrets and variables → Actions → New repository secret</p></li>
+<li><p><strong>GitLab</strong> — Settings → CI/CD → Variables → Add variable</p></li>
+</ul>
 </div>
+</section>
 </section>
 </section>
 <section id="generating">
@@ -492,7 +542,10 @@ community.</p>
 <li><a class="reference internal" href="#template-specific-parameters">Template specific parameters</a></li>
 <li><a class="reference internal" href="#additional-components">Additional components</a></li>
 <li><a class="reference internal" href="#publication-information">Publication information</a></li>
-<li><a class="reference internal" href="#ci-cd-configuration">CI/CD Configuration</a></li>
+<li><a class="reference internal" href="#ci-cd-configuration">CI/CD Configuration</a><ul>
+<li><a class="reference internal" href="#generated-files">Generated files</a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li><a class="reference internal" href="#generating">Generating</a></li>
@@ -543,7 +596,7 @@ community.</p>
         <li class="right" style="margin-right: 10px">
           <a href="genindex.html" title="General Index"
              >index</a></li>
-        <li class="nav-item nav-item-0"><a href="#">QGIS Plugin Builder 3.4.2 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="#">QGIS Plugin Builder 3.4.4 documentation</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">QGIS Plugin Builder</a></li> 
       </ul>
     </div>
