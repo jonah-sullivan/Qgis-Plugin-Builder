@@ -662,7 +662,8 @@ class Ui_PluginBuilderDialogBase(object):
         )
         self.tracker.setPlaceholderText(
             _translate(
-                "PluginBuilderDialogBase", "Consider using github or gitlab for tracking"
+                "PluginBuilderDialogBase",
+                "Consider using github or gitlab for tracking",
             )
         )
         self.repository_label.setText(
@@ -689,7 +690,8 @@ class Ui_PluginBuilderDialogBase(object):
         )
         self.homepage.setPlaceholderText(
             _translate(
-                "PluginBuilderDialogBase", "Your GitHub or GitLab repository can be the home page"
+                "PluginBuilderDialogBase",
+                "Your GitHub or GitLab repository can be the home page",
             )
         )
         self.tags_label.setText(_translate("PluginBuilderDialogBase", "Tags"))

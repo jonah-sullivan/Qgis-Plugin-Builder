@@ -177,13 +177,9 @@ class PluginBuilder:
             f"plugin_path: {specification.module_name}",
         ]
         if specification.gen_qgis_plugin_ci:
-            lines.append(
-                f"github_organization_slug: {specification.github_org_slug}"
-            )
+            lines.append(f"github_organization_slug: {specification.github_org_slug}")
         if specification.gen_gitlab_ci:
-            lines.append(
-                f"gitlab_organization_slug: {specification.gitlab_namespace}"
-            )
+            lines.append(f"gitlab_organization_slug: {specification.gitlab_namespace}")
         lines.append(f"project_slug: {specification.project_slug}")
         config_path = os.path.join(self.plugin_path, ".qgis-plugin-ci")
         with open(config_path, "w") as f:
@@ -569,6 +565,11 @@ class PluginBuilder:
 
         if specification.gen_i18n:
             self._prepare_i18n()
+
+        QFile.copy(
+            os.path.join(self.shared_dir, "pre-commit-config.yaml"),
+            os.path.join(self.plugin_path, ".pre-commit-config.yaml"),
+        )
 
         if specification.gen_qgis_plugin_ci:
             self._prepare_qgis_plugin_ci(specification)

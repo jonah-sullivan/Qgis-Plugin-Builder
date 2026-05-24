@@ -1,2 +1,5 @@
 pytest>=7.4
 pytest-qgis>=3.0.0
+pre-commit>=3.0
+black>=25.0
+isort>=5.13

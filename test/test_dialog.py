@@ -79,14 +79,21 @@ def test_specification_qgis_plugin_ci_on(dialog):
 
 
 def test_next_page_skips_ci_when_unchecked(dialog):
-    """_next_page_index skips page_ci (5) when qgis-plugin-ci is not selected."""
+    """_next_page_index skips page_ci (5) when neither CI option is selected."""
     dialog.qgis_plugin_ci_cb.setChecked(False)
+    dialog.gitlab_ci_cb.setChecked(False)
     assert dialog._next_page_index(4) == 6
 
 
 def test_next_page_includes_ci_when_checked(dialog):
-    """_next_page_index goes to page_ci (5) when qgis-plugin-ci is selected."""
+    """_next_page_index goes to page_ci (5) when GitHub CI is selected."""
     dialog.qgis_plugin_ci_cb.setChecked(True)
+    assert dialog._next_page_index(4) == 5
+
+
+def test_next_page_includes_ci_when_gitlab_checked(dialog):
+    """_next_page_index goes to page_ci (5) when GitLab CI is selected."""
+    dialog.gitlab_ci_cb.setChecked(True)
     assert dialog._next_page_index(4) == 5
 
 
@@ -102,14 +109,21 @@ def test_next_page_returns_none_at_last_page(dialog):
 
 
 def test_prev_page_skips_ci_when_unchecked(dialog):
-    """_prev_page_index skips back over page_ci (5) when CI not selected."""
+    """_prev_page_index skips back over page_ci (5) when neither CI option is selected."""
     dialog.qgis_plugin_ci_cb.setChecked(False)
+    dialog.gitlab_ci_cb.setChecked(False)
     assert dialog._prev_page_index(6) == 4
 
 
 def test_prev_page_includes_ci_when_checked(dialog):
-    """_prev_page_index goes to page_ci (5) when CI is selected."""
+    """_prev_page_index goes to page_ci (5) when GitHub CI is selected."""
     dialog.qgis_plugin_ci_cb.setChecked(True)
+    assert dialog._prev_page_index(6) == 5
+
+
+def test_prev_page_includes_ci_when_gitlab_checked(dialog):
+    """_prev_page_index goes to page_ci (5) when GitLab CI is selected."""
+    dialog.gitlab_ci_cb.setChecked(True)
     assert dialog._prev_page_index(6) == 5
 
 
@@ -125,7 +139,8 @@ def test_prev_page_sequential_elsewhere(dialog):
 
 
 def test_validate_ci_page_empty_org(dialog):
-    """validate_ci_page fails when GitHub org slug is empty."""
+    """validate_ci_page fails when GitHub CI is checked but org slug is empty."""
+    dialog.qgis_plugin_ci_cb.setChecked(True)
     dialog.github_org_slug.setText("")
     dialog.project_slug.setText("my-plugin")
     with patch("plugin_builder_dialog.QMessageBox.warning"):
@@ -134,6 +149,7 @@ def test_validate_ci_page_empty_org(dialog):
 
 def test_validate_ci_page_empty_slug(dialog):
     """validate_ci_page fails when project slug is empty."""
+    dialog.qgis_plugin_ci_cb.setChecked(True)
     dialog.github_org_slug.setText("myorg")
     dialog.project_slug.setText("")
     with patch("plugin_builder_dialog.QMessageBox.warning"):
@@ -141,7 +157,8 @@ def test_validate_ci_page_empty_slug(dialog):
 
 
 def test_validate_ci_page_whitespace_only(dialog):
-    """validate_ci_page fails when a field contains only whitespace."""
+    """validate_ci_page fails when GitHub CI is checked and org is whitespace-only."""
+    dialog.qgis_plugin_ci_cb.setChecked(True)
     dialog.github_org_slug.setText("   ")
     dialog.project_slug.setText("my-plugin")
     with patch("plugin_builder_dialog.QMessageBox.warning"):
@@ -149,10 +166,41 @@ def test_validate_ci_page_whitespace_only(dialog):
 
 
 def test_validate_ci_page_valid(dialog):
-    """validate_ci_page passes when both fields are filled."""
+    """validate_ci_page passes when GitHub CI is checked and all fields are filled."""
+    dialog.qgis_plugin_ci_cb.setChecked(True)
     dialog.github_org_slug.setText("myorg")
     dialog.project_slug.setText("my-plugin")
     assert dialog.validate_ci_page() is True
+
+
+def test_validate_ci_page_gitlab_empty_namespace(dialog):
+    """validate_ci_page fails when GitLab CI is checked but namespace is empty."""
+    dialog.gitlab_ci_cb.setChecked(True)
+    dialog.gitlab_namespace.setText("")
+    dialog.project_slug.setText("my-plugin")
+    with patch("plugin_builder_dialog.QMessageBox.warning"):
+        assert dialog.validate_ci_page() is False
+
+
+def test_validate_ci_page_gitlab_valid(dialog):
+    """validate_ci_page passes when GitLab CI is checked and all fields are filled."""
+    dialog.gitlab_ci_cb.setChecked(True)
+    dialog.gitlab_namespace.setText("mygroup")
+    dialog.project_slug.setText("my-plugin")
+    assert dialog.validate_ci_page() is True
+
+
+def test_specification_gitlab_ci_on(dialog):
+    """When gitlab_ci_cb is checked, GitLab fields are read into the spec."""
+    _fill_dialog(dialog)
+    dialog.gitlab_ci_cb.setChecked(True)
+    dialog.gitlab_namespace.setText("mygroup")
+    dialog.project_slug.setText("my-plugin")
+    spec = PluginSpecification(dialog)
+    assert spec.gen_gitlab_ci is True
+    assert spec.gitlab_namespace == "mygroup"
+    assert spec.project_slug == "my-plugin"
+    assert spec.template_map["TemplateGitLabNamespace"] == "mygroup"
 
 
 # ---------------------------------------------------------------------------
@@ -176,11 +224,21 @@ def test_populate_ci_fields_github_url_with_git_suffix(dialog):
     assert dialog.project_slug.text() == "my-plugin"
 
 
-def test_populate_ci_fields_non_github_url(dialog):
-    """Non-GitHub URL leaves CI fields empty."""
-    dialog.repository.setText("https://gitlab.com/myorg/my-plugin")
+def test_populate_ci_fields_gitlab_url(dialog):
+    """GitLab URL populates namespace and project slug, not GitHub org."""
+    dialog.repository.setText("https://gitlab.com/mygroup/my-plugin")
     dialog._populate_ci_fields()
     assert dialog.github_org_slug.text() == ""
+    assert dialog.gitlab_namespace.text() == "mygroup"
+    assert dialog.project_slug.text() == "my-plugin"
+
+
+def test_populate_ci_fields_non_matching_url(dialog):
+    """Unrecognised host leaves all CI fields empty."""
+    dialog.repository.setText("https://bitbucket.org/myorg/my-plugin")
+    dialog._populate_ci_fields()
+    assert dialog.github_org_slug.text() == ""
+    assert dialog.gitlab_namespace.text() == ""
     assert dialog.project_slug.text() == ""
 
 

@@ -3,13 +3,12 @@
 
 import os
 import platform
+from test.utilities import unique_filename
 
 import pytest
 from plugin_builder import PluginBuilder, copy
 from qgis.core import QgsProviderRegistry
 from qgis_dirs import _qgis_dir_location, deployment_dir
-
-from test.utilities import unique_filename
 
 
 class FakePluginSpecification:
@@ -39,6 +38,10 @@ class FakePluginSpecification:
         self.gen_makefile = True
         self.gen_pb_tool = True
         self.gen_qgis_plugin_ci = False
+        self.gen_gitlab_ci = False
+        self.github_org_slug = ""
+        self.gitlab_namespace = ""
+        self.project_slug = ""
         self.deprecated = False
         self.build_year = 2001
         self.build_date = "31-01-2014"
@@ -67,6 +70,7 @@ class FakePluginSpecification:
             "TemplateMenuRemoveMethod": "removePluginMenu",
             "TemplateHasProcessingProvider": False,
             "TemplateGitHubOrg": "",
+            "TemplateGitLabNamespace": "",
             "TemplateProjectSlug": "",
             "TemplateQgisPluginCiSteps": "",
         }
@@ -216,8 +220,9 @@ def test_prepare_help(builder):
 
 def test_prepare_qgis_plugin_ci(builder, spec):
     """_prepare_qgis_plugin_ci writes .qgis-plugin-ci, release.yml, and .gitattributes."""  # noqa: E501
-    spec.template_map["TemplateGitHubOrg"] = "myorg"
-    spec.template_map["TemplateProjectSlug"] = "my-plugin"
+    spec.gen_qgis_plugin_ci = True
+    spec.github_org_slug = "myorg"
+    spec.project_slug = "my-plugin"
     builder._prepare_qgis_plugin_ci(spec)
     assert os.path.exists(os.path.join(builder.plugin_path, ".qgis-plugin-ci"))
     assert os.path.exists(
@@ -237,6 +242,47 @@ def test_prepare_results_html_with_qgis_plugin_ci(builder, spec):
     results_popped, _ = builder._prepare_results_html(spec)
     assert "OSGEO_USER" in results_popped
     assert "GitHub Release" in results_popped
+
+
+def test_prepare_gitlab_ci(builder, spec):
+    """_prepare_gitlab_ci writes .gitlab-ci.yml, .qgis-plugin-ci, and .gitattributes."""
+    spec.gen_gitlab_ci = True
+    spec.gitlab_namespace = "mygroup"
+    spec.project_slug = "my-plugin"
+    builder._prepare_gitlab_ci(spec)
+    assert os.path.exists(os.path.join(builder.plugin_path, ".gitlab-ci.yml"))
+    assert os.path.exists(os.path.join(builder.plugin_path, ".qgis-plugin-ci"))
+    assert os.path.exists(os.path.join(builder.plugin_path, ".gitattributes"))
+    with open(os.path.join(builder.plugin_path, ".qgis-plugin-ci")) as f:
+        content = f.read()
+    assert "mygroup" in content
+    assert "my-plugin" in content
+    assert "fake_module" in content
+
+
+def test_write_qgis_plugin_ci_config_both_platforms(builder, spec):
+    """Config includes both slugs when both GitHub and GitLab CI are enabled."""
+    spec.gen_qgis_plugin_ci = True
+    spec.github_org_slug = "ghorg"
+    spec.gen_gitlab_ci = True
+    spec.gitlab_namespace = "glgroup"
+    spec.project_slug = "my-plugin"
+    builder._write_qgis_plugin_ci_config(spec)
+    with open(os.path.join(builder.plugin_path, ".qgis-plugin-ci")) as f:
+        content = f.read()
+    assert "github_organization_slug: ghorg" in content
+    assert "gitlab_organization_slug: glgroup" in content
+    assert "project_slug: my-plugin" in content
+
+
+def test_prepare_results_html_with_gitlab_ci(builder, spec):
+    """_prepare_results_html includes GitLab steps when gen_gitlab_ci is True."""
+    spec.gen_gitlab_ci = True
+    spec.gitlab_namespace = "mygroup"
+    spec.project_slug = "my-plugin"
+    results_popped, _ = builder._prepare_results_html(spec)
+    assert "OSGEO_USER" in results_popped
+    assert "git tag" in results_popped.lower() or "CI_COMMIT_TAG" in results_popped or "GitLab" in results_popped
 
 
 def test_prepare_specific_files(builder, spec):
