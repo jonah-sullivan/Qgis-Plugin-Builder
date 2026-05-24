@@ -73,14 +73,17 @@ class PluginBuilderDialog(QDialog, FORM_CLASS):
         i = self.stackedWidget.currentIndex()
         self.prev_button.setEnabled(i > 0)
 
+    def _any_ci_checked(self):
+        return self.qgis_plugin_ci_cb.isChecked() or self.gitlab_ci_cb.isChecked()
+
     def _next_page_index(self, i):
         """Return the next stacked-widget index, skipping page_ci if not opted in."""
-        if i == 4 and not self.qgis_plugin_ci_cb.isChecked():
+        if i == 4 and not self._any_ci_checked():
             return 6  # skip CI/CD page (index 5)
         return i + 1 if i < 6 else None  # None → accept()
 
     def _prev_page_index(self, i):
-        if i == 6 and not self.qgis_plugin_ci_cb.isChecked():
+        if i == 6 and not self._any_ci_checked():
             return 4  # skip back over CI/CD page
         return i - 1
 
@@ -123,34 +126,51 @@ class PluginBuilderDialog(QDialog, FORM_CLASS):
             self.next_button.setText("Next>")
 
     def validate_ci_page(self):
-        if not self.github_org_slug.text().strip():
-            QMessageBox.warning(
-                self,
-                "Missing GitHub organisation",
-                "Please enter your GitHub organisation or username.",
-            )
-            return False
+        if self.qgis_plugin_ci_cb.isChecked():
+            if not self.github_org_slug.text().strip():
+                QMessageBox.warning(
+                    self,
+                    "Missing GitHub organisation",
+                    "Please enter your GitHub organisation or username.",
+                )
+                return False
+        if self.gitlab_ci_cb.isChecked():
+            if not self.gitlab_namespace.text().strip():
+                QMessageBox.warning(
+                    self,
+                    "Missing GitLab namespace",
+                    "Please enter your GitLab group or username.",
+                )
+                return False
         if not self.project_slug.text().strip():
             QMessageBox.warning(
                 self,
                 "Missing project slug",
-                "Please enter the project slug (repository name on GitHub).",
+                "Please enter the repository name (project slug).",
             )
             return False
         return True
 
     def _populate_ci_fields(self):
         url = self.repository.text().strip()
-        # Parse https://github.com/org/project or https://github.com/org/project.git
         cleaned = url.replace("https://", "").replace("http://", "").rstrip("/")
         if cleaned.endswith(".git"):
             cleaned = cleaned[:-4]
         parts = cleaned.split("/")
-        if len(parts) == 3 and parts[0] == "github.com":
-            if not self.github_org_slug.text():
-                self.github_org_slug.setText(parts[1])
-            if not self.project_slug.text():
-                self.project_slug.setText(parts[2])
+        if len(parts) >= 3:
+            host = parts[0]
+            slug = parts[-1]
+            namespace = "/".join(parts[1:-1])
+            if host == "github.com":
+                if not self.github_org_slug.text():
+                    self.github_org_slug.setText(namespace)
+                if not self.project_slug.text():
+                    self.project_slug.setText(slug)
+            elif host == "gitlab.com" or host.startswith("gitlab."):
+                if not self.gitlab_namespace.text():
+                    self.gitlab_namespace.setText(namespace)
+                if not self.project_slug.text():
+                    self.project_slug.setText(slug)
 
     def template(self):
         return self.templates[self.template_cbox.currentIndex()]

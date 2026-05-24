@@ -29,7 +29,7 @@
         <translation>选择您的插件的目录</translation>
     </message>
     <message>
-        <location filename="../plugin_builder.py" line="459" />
+        <location filename="../plugin_builder.py" line="504" />
         <source>QGIS Plugin Builder - {}</source>
         <translation>QGIS 插件生成器 - {}</translation>
     </message>
@@ -289,6 +289,11 @@ It should be in CamelCase e.g. PhotoLinker.</source>
     </message>
     <message>
         <location filename="../plugin_builder_dialog_base.ui" line="0" />
+        <source>qgis-plugin-ci (GitLab CI release pipeline)</source>
+        <translation>qgis-plugin-ci（GitLab CI 发布管道）</translation>
+    </message>
+    <message>
+        <location filename="../plugin_builder_dialog_base.ui" line="0" />
         <source>Publication (mandatory Items)</source>
         <translation>出版物（必填项目）</translation>
     </message>
@@ -304,8 +309,8 @@ It should be in CamelCase e.g. PhotoLinker.</source>
     </message>
     <message>
         <location filename="../plugin_builder_dialog_base.ui" line="0" />
-        <source>Consider using github.com for tracking</source>
-        <translation>考虑使用 github.com 进行跟踪</translation>
+        <source>Consider using github or gitlab for tracking</source>
+        <translation>考虑使用 github 或 gitlab 进行跟踪</translation>
     </message>
     <message>
         <location filename="../plugin_builder_dialog_base.ui" line="0" />
@@ -319,8 +324,8 @@ It should be in CamelCase e.g. PhotoLinker.</source>
     </message>
     <message>
         <location filename="../plugin_builder_dialog_base.ui" line="0" />
-        <source>Consider using github.com to store your code</source>
-        <translation>考虑使用 github.com 来存储您的代码</translation>
+        <source>Consider using github or gitlab to store your code</source>
+        <translation>考虑使用 github 或 gitlab 来存储您的代码</translation>
     </message>
     <message>
         <location filename="../plugin_builder_dialog_base.ui" line="0" />
@@ -339,8 +344,8 @@ It should be in CamelCase e.g. PhotoLinker.</source>
     </message>
     <message>
         <location filename="../plugin_builder_dialog_base.ui" line="0" />
-        <source>Your GitHub repository can be the home page</source>
-        <translation>您的 GitHub 存储库可以是主页</translation>
+        <source>Your GitHub or GitLab repository can be the home page</source>
+        <translation>您的 GitHub 或 GitLab 存储库可以是主页</translation>
     </message>
     <message>
         <location filename="../plugin_builder_dialog_base.ui" line="0" />
@@ -405,8 +410,8 @@ It should be in CamelCase e.g. PhotoLinker.</source>
     </message>
     <message>
         <location filename="../plugin_builder_dialog_base.ui" line="0" />
-        <source>The project slug on GitHub (e.g. my-plugin)</source>
-        <translation>GitHub 上的项目 slug（例如 my-plugin）</translation>
+        <source>The repository name on GitHub or GitLab (e.g. my-plugin)</source>
+        <translation>GitHub 或 GitLab 上的存储库名称（例如 my-plugin）</translation>
     </message>
     <message>
         <location filename="../plugin_builder_dialog_base.ui" line="0" />
@@ -415,8 +420,23 @@ It should be in CamelCase e.g. PhotoLinker.</source>
     </message>
     <message>
         <location filename="../plugin_builder_dialog_base.ui" line="0" />
-        <source>Add OSGEO_USER and OSGEO_PASSWORD as repository secrets in GitHub → Settings → Secrets and variables → Actions.</source>
-        <translation>将 OSGEO_USER 和 OSGEO_PASSWORD 添加为 GitHub 中的存储库机密 → 设置 → 机密和变量 → 操作。</translation>
+        <source>GitLab namespace:</source>
+        <translation>亚搏体育appGitLab命名空间：</translation>
+    </message>
+    <message>
+        <location filename="../plugin_builder_dialog_base.ui" line="0" />
+        <source>Your GitLab group or username (e.g. mygroup)</source>
+        <translation>您的 GitLab 组或用户名（例如 mygroup）</translation>
+    </message>
+    <message>
+        <location filename="../plugin_builder_dialog_base.ui" line="0" />
+        <source>mygroup</source>
+        <translation>我的群组</translation>
+    </message>
+    <message>
+        <location filename="../plugin_builder_dialog_base.ui" line="0" />
+        <source>Add OSGEO_USER and OSGEO_PASSWORD as secrets: GitHub → Settings → Secrets and variables → Actions, or GitLab → Settings → CI/CD → Variables.</source>
+        <translation>添加 OSGEO_USER 和 OSGEO_PASSWORD 作为机密：GitHub → 设置 → 机密和变量 → 操作，或 GitLab → 设置 → CI/CD → 变量。</translation>
     </message>
     <message>
         <location filename="../plugin_builder_dialog_base.ui" line="0" />
@@ -434,26 +454,43 @@ It should be in CamelCase e.g. PhotoLinker.</source>
         <translation>您的插件将在选定的位置创建，使用模块名称作为子目录的名称。</translation>
     </message>
     <message>
+        <source>Consider using github.com for tracking</source>
+        <translation type="vanished">考虑使用 github.com 进行跟踪</translation>
+    </message>
+    <message>
+        <source>Consider using github.com to store your code</source>
+        <translation type="vanished">考虑使用 github.com 来存储您的代码</translation>
+    </message>
+    <message>
+        <source>Your GitHub repository can be the home page</source>
+        <translation type="vanished">您的 GitHub 存储库可以是主页</translation>
+    </message>
+    <message>
+        <source>The project slug on GitHub (e.g. my-plugin)</source>
+        <translation type="vanished">GitHub 上的项目 slug（例如 my-plugin）</translation>
+    </message>
+    <message>
+        <source>Add OSGEO_USER and OSGEO_PASSWORD as repository secrets in GitHub → Settings → Secrets and variables → Actions.</source>
+        <translation type="vanished">将 OSGEO_USER 和 OSGEO_PASSWORD 添加为 GitHub 中的存储库机密 → 设置 → 机密和变量 → 操作。</translation>
+    </message>
+    <message>
         <source>Helper scripts</source>
         <translation type="vanished">帮助脚本</translation>
     </message>
 </context><context>
     <name>ResultsDialogBase</name>
     <message>
-        <location filename="../results_dialog_base.ui" line="0" />
         <source>Plugin Builder Results</source>
-        <translation>插件生成器结果</translation>
+        <translation type="vanished">插件生成器结果</translation>
     </message>
 </context><context>
     <name>dlgSelectTags</name>
     <message>
-        <location filename="../select_tags_dialog_base.ui" line="0" />
         <source>Select Tags</source>
-        <translation>选择标签</translation>
+        <translation type="vanished">选择标签</translation>
     </message>
     <message>
-        <location filename="../select_tags_dialog_base.ui" line="0" />
         <source>Select one or more tags</source>
-        <translation>选择一个或多个标签</translation>
+        <translation type="vanished">选择一个或多个标签</translation>
     </message>
 </context></TS>

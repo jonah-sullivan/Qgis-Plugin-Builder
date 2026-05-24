@@ -29,7 +29,7 @@
         <translation>Pasirinkite savo papildinio katalogą</translation>
     </message>
     <message>
-        <location filename="../plugin_builder.py" line="459" />
+        <location filename="../plugin_builder.py" line="504" />
         <source>QGIS Plugin Builder - {}</source>
         <translation>QGIS papildinių kūrimo priemonė – {}</translation>
     </message>
@@ -289,6 +289,11 @@ Tai turėtų būti CamelCase pvz. PhotoLinker.</translation>
     </message>
     <message>
         <location filename="../plugin_builder_dialog_base.ui" line="0" />
+        <source>qgis-plugin-ci (GitLab CI release pipeline)</source>
+        <translation>qgis-plugin-ci („GitLab CI“ išleidimo vamzdynas)</translation>
+    </message>
+    <message>
+        <location filename="../plugin_builder_dialog_base.ui" line="0" />
         <source>Publication (mandatory Items)</source>
         <translation>Publikacija (privalomi elementai)</translation>
     </message>
@@ -304,8 +309,8 @@ Tai turėtų būti CamelCase pvz. PhotoLinker.</translation>
     </message>
     <message>
         <location filename="../plugin_builder_dialog_base.ui" line="0" />
-        <source>Consider using github.com for tracking</source>
-        <translation>Apsvarstykite galimybę naudoti github.com stebėjimui</translation>
+        <source>Consider using github or gitlab for tracking</source>
+        <translation>Apsvarstykite galimybę naudoti „github“ arba „gitlab“ stebėjimui</translation>
     </message>
     <message>
         <location filename="../plugin_builder_dialog_base.ui" line="0" />
@@ -319,8 +324,8 @@ Tai turėtų būti CamelCase pvz. PhotoLinker.</translation>
     </message>
     <message>
         <location filename="../plugin_builder_dialog_base.ui" line="0" />
-        <source>Consider using github.com to store your code</source>
-        <translation>Apsvarstykite galimybę naudoti github.com kodui saugoti</translation>
+        <source>Consider using github or gitlab to store your code</source>
+        <translation>Apsvarstykite galimybę naudoti „github“ arba „gitlab“ kodui saugoti</translation>
     </message>
     <message>
         <location filename="../plugin_builder_dialog_base.ui" line="0" />
@@ -339,8 +344,8 @@ Tai turėtų būti CamelCase pvz. PhotoLinker.</translation>
     </message>
     <message>
         <location filename="../plugin_builder_dialog_base.ui" line="0" />
-        <source>Your GitHub repository can be the home page</source>
-        <translation>Jūsų „GitHub“ saugykla gali būti pagrindinis puslapis</translation>
+        <source>Your GitHub or GitLab repository can be the home page</source>
+        <translation>Pagrindinis puslapis gali būti jūsų „GitHub“ arba „GitLab“ saugykla</translation>
     </message>
     <message>
         <location filename="../plugin_builder_dialog_base.ui" line="0" />
@@ -405,8 +410,8 @@ Tai turėtų būti CamelCase pvz. PhotoLinker.</translation>
     </message>
     <message>
         <location filename="../plugin_builder_dialog_base.ui" line="0" />
-        <source>The project slug on GitHub (e.g. my-plugin)</source>
-        <translation>Projekto šliužas „GitHub“ (pvz., mano papildinys)</translation>
+        <source>The repository name on GitHub or GitLab (e.g. my-plugin)</source>
+        <translation>„GitHub“ arba „GitLab“ saugyklos pavadinimas (pvz., mano papildinys)</translation>
     </message>
     <message>
         <location filename="../plugin_builder_dialog_base.ui" line="0" />
@@ -415,8 +420,23 @@ Tai turėtų būti CamelCase pvz. PhotoLinker.</translation>
     </message>
     <message>
         <location filename="../plugin_builder_dialog_base.ui" line="0" />
-        <source>Add OSGEO_USER and OSGEO_PASSWORD as repository secrets in GitHub → Settings → Secrets and variables → Actions.</source>
-        <translation>Pridėkite OSGEO_USER ir OSGEO_PASSWORD kaip saugyklos paslaptis „GitHub“ → Nustatymai → Paslaptys ir kintamieji → Veiksmai.</translation>
+        <source>GitLab namespace:</source>
+        <translation>„GitLab“ vardų erdvė:</translation>
+    </message>
+    <message>
+        <location filename="../plugin_builder_dialog_base.ui" line="0" />
+        <source>Your GitLab group or username (e.g. mygroup)</source>
+        <translation>Jūsų „GitLab“ grupė arba vartotojo vardas (pvz., mano grupė)</translation>
+    </message>
+    <message>
+        <location filename="../plugin_builder_dialog_base.ui" line="0" />
+        <source>mygroup</source>
+        <translation>mano grupė</translation>
+    </message>
+    <message>
+        <location filename="../plugin_builder_dialog_base.ui" line="0" />
+        <source>Add OSGEO_USER and OSGEO_PASSWORD as secrets: GitHub → Settings → Secrets and variables → Actions, or GitLab → Settings → CI/CD → Variables.</source>
+        <translation>Pridėkite OSGEO_USER ir OSGEO_PASSWORD kaip paslaptis: GitHub → Nustatymai → Paslaptys ir kintamieji → Veiksmai arba GitLab → Nustatymai → CI/CD → Kintamieji.</translation>
     </message>
     <message>
         <location filename="../plugin_builder_dialog_base.ui" line="0" />
@@ -434,26 +454,43 @@ Tai turėtų būti CamelCase pvz. PhotoLinker.</translation>
         <translation>Jūsų papildinys bus sukurtas pasirinktoje vietoje, naudojant modulio pavadinimą pakatalogio pavadinimui.</translation>
     </message>
     <message>
+        <source>Consider using github.com for tracking</source>
+        <translation type="vanished">Apsvarstykite galimybę naudoti github.com stebėjimui</translation>
+    </message>
+    <message>
+        <source>Consider using github.com to store your code</source>
+        <translation type="vanished">Apsvarstykite galimybę naudoti github.com kodui saugoti</translation>
+    </message>
+    <message>
+        <source>Your GitHub repository can be the home page</source>
+        <translation type="vanished">Jūsų „GitHub“ saugykla gali būti pagrindinis puslapis</translation>
+    </message>
+    <message>
+        <source>The project slug on GitHub (e.g. my-plugin)</source>
+        <translation type="vanished">Projekto šliužas „GitHub“ (pvz., mano papildinys)</translation>
+    </message>
+    <message>
+        <source>Add OSGEO_USER and OSGEO_PASSWORD as repository secrets in GitHub → Settings → Secrets and variables → Actions.</source>
+        <translation type="vanished">Pridėkite OSGEO_USER ir OSGEO_PASSWORD kaip saugyklos paslaptis „GitHub“ → Nustatymai → Paslaptys ir kintamieji → Veiksmai.</translation>
+    </message>
+    <message>
         <source>Helper scripts</source>
         <translation type="vanished">Pagalbiniai scenarijai</translation>
     </message>
 </context><context>
     <name>ResultsDialogBase</name>
     <message>
-        <location filename="../results_dialog_base.ui" line="0" />
         <source>Plugin Builder Results</source>
-        <translation>Papildinių kūrimo priemonės rezultatai</translation>
+        <translation type="vanished">Papildinių kūrimo priemonės rezultatai</translation>
     </message>
 </context><context>
     <name>dlgSelectTags</name>
     <message>
-        <location filename="../select_tags_dialog_base.ui" line="0" />
         <source>Select Tags</source>
-        <translation>Pasirinkite Žymos</translation>
+        <translation type="vanished">Pasirinkite Žymos</translation>
     </message>
     <message>
-        <location filename="../select_tags_dialog_base.ui" line="0" />
         <source>Select one or more tags</source>
-        <translation>Pasirinkite vieną ar daugiau žymų</translation>
+        <translation type="vanished">Pasirinkite vieną ar daugiau žymų</translation>
     </message>
 </context></TS>

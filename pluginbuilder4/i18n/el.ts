@@ -29,7 +29,7 @@
         <translation>Επιλέξτε τον Κατάλογο για την προσθήκη σας</translation>
     </message>
     <message>
-        <location filename="../plugin_builder.py" line="459" />
+        <location filename="../plugin_builder.py" line="504" />
         <source>QGIS Plugin Builder - {}</source>
         <translation>Εργαλείο δημιουργίας προσθηκών QGIS - {}</translation>
     </message>
@@ -289,6 +289,11 @@ It should be in CamelCase e.g. PhotoLinker.</source>
     </message>
     <message>
         <location filename="../plugin_builder_dialog_base.ui" line="0" />
+        <source>qgis-plugin-ci (GitLab CI release pipeline)</source>
+        <translation>qgis-plugin-ci (αγωγός έκδοσης GitLab CI)</translation>
+    </message>
+    <message>
+        <location filename="../plugin_builder_dialog_base.ui" line="0" />
         <source>Publication (mandatory Items)</source>
         <translation>Δημοσίευση (υποχρεωτικά στοιχεία)</translation>
     </message>
@@ -304,8 +309,8 @@ It should be in CamelCase e.g. PhotoLinker.</source>
     </message>
     <message>
         <location filename="../plugin_builder_dialog_base.ui" line="0" />
-        <source>Consider using github.com for tracking</source>
-        <translation>Σκεφτείτε να χρησιμοποιήσετε το github.com για παρακολούθηση</translation>
+        <source>Consider using github or gitlab for tracking</source>
+        <translation>Εξετάστε το ενδεχόμενο χρήσης github ή gitlab για παρακολούθηση</translation>
     </message>
     <message>
         <location filename="../plugin_builder_dialog_base.ui" line="0" />
@@ -319,8 +324,8 @@ It should be in CamelCase e.g. PhotoLinker.</source>
     </message>
     <message>
         <location filename="../plugin_builder_dialog_base.ui" line="0" />
-        <source>Consider using github.com to store your code</source>
-        <translation>Σκεφτείτε να χρησιμοποιήσετε το github.com για να αποθηκεύσετε τον κωδικό σας</translation>
+        <source>Consider using github or gitlab to store your code</source>
+        <translation>Σκεφτείτε να χρησιμοποιήσετε το github ή το gitlab για να αποθηκεύσετε τον κώδικά σας</translation>
     </message>
     <message>
         <location filename="../plugin_builder_dialog_base.ui" line="0" />
@@ -339,8 +344,8 @@ It should be in CamelCase e.g. PhotoLinker.</source>
     </message>
     <message>
         <location filename="../plugin_builder_dialog_base.ui" line="0" />
-        <source>Your GitHub repository can be the home page</source>
-        <translation>Το αποθετήριο GitHub μπορεί να είναι η αρχική σελίδα</translation>
+        <source>Your GitHub or GitLab repository can be the home page</source>
+        <translation>Το αποθετήριο GitHub ή GitLab μπορεί να είναι η αρχική σελίδα</translation>
     </message>
     <message>
         <location filename="../plugin_builder_dialog_base.ui" line="0" />
@@ -405,8 +410,8 @@ It should be in CamelCase e.g. PhotoLinker.</source>
     </message>
     <message>
         <location filename="../plugin_builder_dialog_base.ui" line="0" />
-        <source>The project slug on GitHub (e.g. my-plugin)</source>
-        <translation>Το πρόγραμμα γυμνοσάλιαγκας στο GitHub (π.χ. my-plugin)</translation>
+        <source>The repository name on GitHub or GitLab (e.g. my-plugin)</source>
+        <translation>Το όνομα του αποθετηρίου στο GitHub ή στο GitLab (π.χ. my-plugin)</translation>
     </message>
     <message>
         <location filename="../plugin_builder_dialog_base.ui" line="0" />
@@ -415,8 +420,23 @@ It should be in CamelCase e.g. PhotoLinker.</source>
     </message>
     <message>
         <location filename="../plugin_builder_dialog_base.ui" line="0" />
-        <source>Add OSGEO_USER and OSGEO_PASSWORD as repository secrets in GitHub → Settings → Secrets and variables → Actions.</source>
-        <translation>Προσθέστε το OSGEO_USER και το OSGEO_PASSWORD ως μυστικά αποθετηρίου στο GitHub → Ρυθμίσεις → Μυστικά και μεταβλητές → Ενέργειες.</translation>
+        <source>GitLab namespace:</source>
+        <translation>Χώρος ονομάτων GitLab:</translation>
+    </message>
+    <message>
+        <location filename="../plugin_builder_dialog_base.ui" line="0" />
+        <source>Your GitLab group or username (e.g. mygroup)</source>
+        <translation>Η ομάδα GitLab ή το όνομα χρήστη σας (π.χ. mygroup)</translation>
+    </message>
+    <message>
+        <location filename="../plugin_builder_dialog_base.ui" line="0" />
+        <source>mygroup</source>
+        <translation>mygroup</translation>
+    </message>
+    <message>
+        <location filename="../plugin_builder_dialog_base.ui" line="0" />
+        <source>Add OSGEO_USER and OSGEO_PASSWORD as secrets: GitHub → Settings → Secrets and variables → Actions, or GitLab → Settings → CI/CD → Variables.</source>
+        <translation>Προσθέστε το OSGEO_USER και το OSGEO_PASSWORD ως μυστικά: GitHub → Ρυθμίσεις → Μυστικά και μεταβλητές → Ενέργειες ή GitLab → Ρυθμίσεις → CI/CD → Μεταβλητές.</translation>
     </message>
     <message>
         <location filename="../plugin_builder_dialog_base.ui" line="0" />
@@ -434,26 +454,43 @@ It should be in CamelCase e.g. PhotoLinker.</source>
         <translation>Η προσθήκη σας θα δημιουργηθεί στην επιλεγμένη τοποθεσία, χρησιμοποιώντας το όνομα της μονάδας για το όνομα του υποκαταλόγου.</translation>
     </message>
     <message>
+        <source>Consider using github.com for tracking</source>
+        <translation type="vanished">Σκεφτείτε να χρησιμοποιήσετε το github.com για παρακολούθηση</translation>
+    </message>
+    <message>
+        <source>Consider using github.com to store your code</source>
+        <translation type="vanished">Σκεφτείτε να χρησιμοποιήσετε το github.com για να αποθηκεύσετε τον κωδικό σας</translation>
+    </message>
+    <message>
+        <source>Your GitHub repository can be the home page</source>
+        <translation type="vanished">Το αποθετήριο GitHub μπορεί να είναι η αρχική σελίδα</translation>
+    </message>
+    <message>
+        <source>The project slug on GitHub (e.g. my-plugin)</source>
+        <translation type="vanished">Το πρόγραμμα γυμνοσάλιαγκας στο GitHub (π.χ. my-plugin)</translation>
+    </message>
+    <message>
+        <source>Add OSGEO_USER and OSGEO_PASSWORD as repository secrets in GitHub → Settings → Secrets and variables → Actions.</source>
+        <translation type="vanished">Προσθέστε το OSGEO_USER και το OSGEO_PASSWORD ως μυστικά αποθετηρίου στο GitHub → Ρυθμίσεις → Μυστικά και μεταβλητές → Ενέργειες.</translation>
+    </message>
+    <message>
         <source>Helper scripts</source>
         <translation type="vanished">Βοηθητικά σενάρια</translation>
     </message>
 </context><context>
     <name>ResultsDialogBase</name>
     <message>
-        <location filename="../results_dialog_base.ui" line="0" />
         <source>Plugin Builder Results</source>
-        <translation>Αποτελέσματα του Plugin Builder</translation>
+        <translation type="vanished">Αποτελέσματα του Plugin Builder</translation>
     </message>
 </context><context>
     <name>dlgSelectTags</name>
     <message>
-        <location filename="../select_tags_dialog_base.ui" line="0" />
         <source>Select Tags</source>
-        <translation>Επιλέξτε Ετικέτες</translation>
+        <translation type="vanished">Επιλέξτε Ετικέτες</translation>
     </message>
     <message>
-        <location filename="../select_tags_dialog_base.ui" line="0" />
         <source>Select one or more tags</source>
-        <translation>Επιλέξτε μία ή περισσότερες ετικέτες</translation>
+        <translation type="vanished">Επιλέξτε μία ή περισσότερες ετικέτες</translation>
     </message>
 </context></TS>

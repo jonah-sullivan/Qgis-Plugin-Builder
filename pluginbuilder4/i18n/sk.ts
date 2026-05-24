@@ -29,7 +29,7 @@
         <translation>Vyberte adresár pre váš doplnok</translation>
     </message>
     <message>
-        <location filename="../plugin_builder.py" line="459" />
+        <location filename="../plugin_builder.py" line="504" />
         <source>QGIS Plugin Builder - {}</source>
         <translation>Nástroj na tvorbu doplnkov QGIS – {}</translation>
     </message>
@@ -289,6 +289,11 @@ Malo by to byť v CamelCase napr. PhotoLinker.</translation>
     </message>
     <message>
         <location filename="../plugin_builder_dialog_base.ui" line="0" />
+        <source>qgis-plugin-ci (GitLab CI release pipeline)</source>
+        <translation>qgis-plugin-ci (vydanie GitLab CI)</translation>
+    </message>
+    <message>
+        <location filename="../plugin_builder_dialog_base.ui" line="0" />
         <source>Publication (mandatory Items)</source>
         <translation>Publikácia (povinné položky)</translation>
     </message>
@@ -304,8 +309,8 @@ Malo by to byť v CamelCase napr. PhotoLinker.</translation>
     </message>
     <message>
         <location filename="../plugin_builder_dialog_base.ui" line="0" />
-        <source>Consider using github.com for tracking</source>
-        <translation>Zvážte použitie github.com na sledovanie</translation>
+        <source>Consider using github or gitlab for tracking</source>
+        <translation>Zvážte použitie github alebo gitlab na sledovanie</translation>
     </message>
     <message>
         <location filename="../plugin_builder_dialog_base.ui" line="0" />
@@ -319,8 +324,8 @@ Malo by to byť v CamelCase napr. PhotoLinker.</translation>
     </message>
     <message>
         <location filename="../plugin_builder_dialog_base.ui" line="0" />
-        <source>Consider using github.com to store your code</source>
-        <translation>Zvážte použitie github.com na uloženie kódu</translation>
+        <source>Consider using github or gitlab to store your code</source>
+        <translation>Zvážte použitie github alebo gitlab na uloženie kódu</translation>
     </message>
     <message>
         <location filename="../plugin_builder_dialog_base.ui" line="0" />
@@ -339,8 +344,8 @@ Malo by to byť v CamelCase napr. PhotoLinker.</translation>
     </message>
     <message>
         <location filename="../plugin_builder_dialog_base.ui" line="0" />
-        <source>Your GitHub repository can be the home page</source>
-        <translation>Vaše úložisko GitHub môže byť domovskou stránkou</translation>
+        <source>Your GitHub or GitLab repository can be the home page</source>
+        <translation>Domovskou stránkou môže byť vaše úložisko GitHub alebo GitLab</translation>
     </message>
     <message>
         <location filename="../plugin_builder_dialog_base.ui" line="0" />
@@ -405,8 +410,8 @@ Malo by to byť v CamelCase napr. PhotoLinker.</translation>
     </message>
     <message>
         <location filename="../plugin_builder_dialog_base.ui" line="0" />
-        <source>The project slug on GitHub (e.g. my-plugin)</source>
-        <translation>Slug projektu na GitHub (napr. my-plugin)</translation>
+        <source>The repository name on GitHub or GitLab (e.g. my-plugin)</source>
+        <translation>Názov úložiska na GitHub alebo GitLab (napr. my-plugin)</translation>
     </message>
     <message>
         <location filename="../plugin_builder_dialog_base.ui" line="0" />
@@ -415,8 +420,23 @@ Malo by to byť v CamelCase napr. PhotoLinker.</translation>
     </message>
     <message>
         <location filename="../plugin_builder_dialog_base.ui" line="0" />
-        <source>Add OSGEO_USER and OSGEO_PASSWORD as repository secrets in GitHub → Settings → Secrets and variables → Actions.</source>
-        <translation>Pridajte OSGEO_USER a OSGEO_PASSWORD ako tajné kľúče úložiska v GitHub → Nastavenia → Tajomstvá a premenné → Akcie.</translation>
+        <source>GitLab namespace:</source>
+        <translation>Menný priestor GitLab:</translation>
+    </message>
+    <message>
+        <location filename="../plugin_builder_dialog_base.ui" line="0" />
+        <source>Your GitLab group or username (e.g. mygroup)</source>
+        <translation>Vaša skupina GitLab alebo používateľské meno (napr. moja skupina)</translation>
+    </message>
+    <message>
+        <location filename="../plugin_builder_dialog_base.ui" line="0" />
+        <source>mygroup</source>
+        <translation>moja skupina</translation>
+    </message>
+    <message>
+        <location filename="../plugin_builder_dialog_base.ui" line="0" />
+        <source>Add OSGEO_USER and OSGEO_PASSWORD as secrets: GitHub → Settings → Secrets and variables → Actions, or GitLab → Settings → CI/CD → Variables.</source>
+        <translation>Pridajte OSGEO_USER a OSGEO_PASSWORD ako tajné kľúče: GitHub → Nastavenia → Tajomstvá a premenné → Akcie alebo GitLab → Nastavenia → CI/CD → Premenné.</translation>
     </message>
     <message>
         <location filename="../plugin_builder_dialog_base.ui" line="0" />
@@ -434,26 +454,43 @@ Malo by to byť v CamelCase napr. PhotoLinker.</translation>
         <translation>Váš plugin sa vytvorí vo vybranom umiestnení, pričom názov modulu použije ako názov podadresára.</translation>
     </message>
     <message>
+        <source>Consider using github.com for tracking</source>
+        <translation type="vanished">Zvážte použitie github.com na sledovanie</translation>
+    </message>
+    <message>
+        <source>Consider using github.com to store your code</source>
+        <translation type="vanished">Zvážte použitie github.com na uloženie kódu</translation>
+    </message>
+    <message>
+        <source>Your GitHub repository can be the home page</source>
+        <translation type="vanished">Vaše úložisko GitHub môže byť domovskou stránkou</translation>
+    </message>
+    <message>
+        <source>The project slug on GitHub (e.g. my-plugin)</source>
+        <translation type="vanished">Slug projektu na GitHub (napr. my-plugin)</translation>
+    </message>
+    <message>
+        <source>Add OSGEO_USER and OSGEO_PASSWORD as repository secrets in GitHub → Settings → Secrets and variables → Actions.</source>
+        <translation type="vanished">Pridajte OSGEO_USER a OSGEO_PASSWORD ako tajné kľúče úložiska v GitHub → Nastavenia → Tajomstvá a premenné → Akcie.</translation>
+    </message>
+    <message>
         <source>Helper scripts</source>
         <translation type="vanished">Pomocné skripty</translation>
     </message>
 </context><context>
     <name>ResultsDialogBase</name>
     <message>
-        <location filename="../results_dialog_base.ui" line="0" />
         <source>Plugin Builder Results</source>
-        <translation>Výsledky tvorcu doplnkov</translation>
+        <translation type="vanished">Výsledky tvorcu doplnkov</translation>
     </message>
 </context><context>
     <name>dlgSelectTags</name>
     <message>
-        <location filename="../select_tags_dialog_base.ui" line="0" />
         <source>Select Tags</source>
-        <translation>Vyberte položku Značky</translation>
+        <translation type="vanished">Vyberte položku Značky</translation>
     </message>
     <message>
-        <location filename="../select_tags_dialog_base.ui" line="0" />
         <source>Select one or more tags</source>
-        <translation>Vyberte jednu alebo viac značiek</translation>
+        <translation type="vanished">Vyberte jednu alebo viac značiek</translation>
     </message>
 </context></TS>

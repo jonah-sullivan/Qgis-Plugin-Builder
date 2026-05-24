@@ -29,7 +29,7 @@
         <translation>Atlasiet savam spraudņa direktoriju</translation>
     </message>
     <message>
-        <location filename="../plugin_builder.py" line="459" />
+        <location filename="../plugin_builder.py" line="504" />
         <source>QGIS Plugin Builder - {}</source>
         <translation>QGIS spraudņu veidotājs — {}</translation>
     </message>
@@ -289,6 +289,11 @@ Tam vajadzētu būt CamelCase piem. PhotoLinker.</translation>
     </message>
     <message>
         <location filename="../plugin_builder_dialog_base.ui" line="0" />
+        <source>qgis-plugin-ci (GitLab CI release pipeline)</source>
+        <translation>qgis-plugin-ci (GitLab CI izlaišanas cauruļvads)</translation>
+    </message>
+    <message>
+        <location filename="../plugin_builder_dialog_base.ui" line="0" />
         <source>Publication (mandatory Items)</source>
         <translation>Publikācija (obligātie vienumi)</translation>
     </message>
@@ -304,8 +309,8 @@ Tam vajadzētu būt CamelCase piem. PhotoLinker.</translation>
     </message>
     <message>
         <location filename="../plugin_builder_dialog_base.ui" line="0" />
-        <source>Consider using github.com for tracking</source>
-        <translation>Apsveriet iespēju izmantot github.com izsekošanai</translation>
+        <source>Consider using github or gitlab for tracking</source>
+        <translation>Apsveriet iespēju izsekošanai izmantot github vai gitlab</translation>
     </message>
     <message>
         <location filename="../plugin_builder_dialog_base.ui" line="0" />
@@ -319,8 +324,8 @@ Tam vajadzētu būt CamelCase piem. PhotoLinker.</translation>
     </message>
     <message>
         <location filename="../plugin_builder_dialog_base.ui" line="0" />
-        <source>Consider using github.com to store your code</source>
-        <translation>Apsveriet iespēju izmantot vietni github.com, lai saglabātu kodu</translation>
+        <source>Consider using github or gitlab to store your code</source>
+        <translation>Apsveriet iespēju izmantot github vai gitlab, lai saglabātu kodu</translation>
     </message>
     <message>
         <location filename="../plugin_builder_dialog_base.ui" line="0" />
@@ -339,8 +344,8 @@ Tam vajadzētu būt CamelCase piem. PhotoLinker.</translation>
     </message>
     <message>
         <location filename="../plugin_builder_dialog_base.ui" line="0" />
-        <source>Your GitHub repository can be the home page</source>
-        <translation>Jūsu GitHub repozitorijs var būt sākumlapa</translation>
+        <source>Your GitHub or GitLab repository can be the home page</source>
+        <translation>Jūsu GitHub vai GitLab repozitorijs var būt sākumlapa</translation>
     </message>
     <message>
         <location filename="../plugin_builder_dialog_base.ui" line="0" />
@@ -405,8 +410,8 @@ Tam vajadzētu būt CamelCase piem. PhotoLinker.</translation>
     </message>
     <message>
         <location filename="../plugin_builder_dialog_base.ui" line="0" />
-        <source>The project slug on GitHub (e.g. my-plugin)</source>
-        <translation>Projekta kļūda vietnē GitHub (piemēram, mans spraudnis)</translation>
+        <source>The repository name on GitHub or GitLab (e.g. my-plugin)</source>
+        <translation>GitHub vai GitLab repozitorija nosaukums (piemēram, mans spraudnis)</translation>
     </message>
     <message>
         <location filename="../plugin_builder_dialog_base.ui" line="0" />
@@ -415,8 +420,23 @@ Tam vajadzētu būt CamelCase piem. PhotoLinker.</translation>
     </message>
     <message>
         <location filename="../plugin_builder_dialog_base.ui" line="0" />
-        <source>Add OSGEO_USER and OSGEO_PASSWORD as repository secrets in GitHub → Settings → Secrets and variables → Actions.</source>
-        <translation>Pievienojiet OSGEO_USER un OSGEO_PASSWORD kā repozitorija noslēpumus sadaļā GitHub → Iestatījumi → Noslēpumi un mainīgie → Darbības.</translation>
+        <source>GitLab namespace:</source>
+        <translation>GitLab nosaukumvieta:</translation>
+    </message>
+    <message>
+        <location filename="../plugin_builder_dialog_base.ui" line="0" />
+        <source>Your GitLab group or username (e.g. mygroup)</source>
+        <translation>Jūsu GitLab grupa vai lietotājvārds (piemēram, mana grupa)</translation>
+    </message>
+    <message>
+        <location filename="../plugin_builder_dialog_base.ui" line="0" />
+        <source>mygroup</source>
+        <translation>mana grupa</translation>
+    </message>
+    <message>
+        <location filename="../plugin_builder_dialog_base.ui" line="0" />
+        <source>Add OSGEO_USER and OSGEO_PASSWORD as secrets: GitHub → Settings → Secrets and variables → Actions, or GitLab → Settings → CI/CD → Variables.</source>
+        <translation>Pievienojiet OSGEO_USER un OSGEO_PASSWORD kā noslēpumus: GitHub → Iestatījumi → Noslēpumi un mainīgie → Darbības vai GitLab → Iestatījumi → CI/CD → Mainīgie.</translation>
     </message>
     <message>
         <location filename="../plugin_builder_dialog_base.ui" line="0" />
@@ -434,26 +454,43 @@ Tam vajadzētu būt CamelCase piem. PhotoLinker.</translation>
         <translation>Jūsu spraudnis tiks izveidots atlasītajā vietā, apakšdirektorijas nosaukumam izmantojot moduļa nosaukumu.</translation>
     </message>
     <message>
+        <source>Consider using github.com for tracking</source>
+        <translation type="vanished">Apsveriet iespēju izmantot github.com izsekošanai</translation>
+    </message>
+    <message>
+        <source>Consider using github.com to store your code</source>
+        <translation type="vanished">Apsveriet iespēju izmantot vietni github.com, lai saglabātu kodu</translation>
+    </message>
+    <message>
+        <source>Your GitHub repository can be the home page</source>
+        <translation type="vanished">Jūsu GitHub repozitorijs var būt sākumlapa</translation>
+    </message>
+    <message>
+        <source>The project slug on GitHub (e.g. my-plugin)</source>
+        <translation type="vanished">Projekta kļūda vietnē GitHub (piemēram, mans spraudnis)</translation>
+    </message>
+    <message>
+        <source>Add OSGEO_USER and OSGEO_PASSWORD as repository secrets in GitHub → Settings → Secrets and variables → Actions.</source>
+        <translation type="vanished">Pievienojiet OSGEO_USER un OSGEO_PASSWORD kā repozitorija noslēpumus sadaļā GitHub → Iestatījumi → Noslēpumi un mainīgie → Darbības.</translation>
+    </message>
+    <message>
         <source>Helper scripts</source>
         <translation type="vanished">Palīdzības skripti</translation>
     </message>
 </context><context>
     <name>ResultsDialogBase</name>
     <message>
-        <location filename="../results_dialog_base.ui" line="0" />
         <source>Plugin Builder Results</source>
-        <translation>Spraudņu veidotāja rezultāti</translation>
+        <translation type="vanished">Spraudņu veidotāja rezultāti</translation>
     </message>
 </context><context>
     <name>dlgSelectTags</name>
     <message>
-        <location filename="../select_tags_dialog_base.ui" line="0" />
         <source>Select Tags</source>
-        <translation>Atlasiet Tags</translation>
+        <translation type="vanished">Atlasiet Tags</translation>
     </message>
     <message>
-        <location filename="../select_tags_dialog_base.ui" line="0" />
         <source>Select one or more tags</source>
-        <translation>Atlasiet vienu vai vairākas atzīmes</translation>
+        <translation type="vanished">Atlasiet vienu vai vairākas atzīmes</translation>
     </message>
 </context></TS>

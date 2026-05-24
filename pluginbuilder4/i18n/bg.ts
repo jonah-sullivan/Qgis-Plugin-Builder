@@ -29,7 +29,7 @@
         <translation>Изберете директорията за вашия плъгин</translation>
     </message>
     <message>
-        <location filename="../plugin_builder.py" line="459" />
+        <location filename="../plugin_builder.py" line="504" />
         <source>QGIS Plugin Builder - {}</source>
         <translation>QGIS Plugin Builder - {}</translation>
     </message>
@@ -289,6 +289,11 @@ It should be in CamelCase e.g. PhotoLinker.</source>
     </message>
     <message>
         <location filename="../plugin_builder_dialog_base.ui" line="0" />
+        <source>qgis-plugin-ci (GitLab CI release pipeline)</source>
+        <translation>qgis-plugin-ci (тръбопровод за издаване на GitLab CI)</translation>
+    </message>
+    <message>
+        <location filename="../plugin_builder_dialog_base.ui" line="0" />
         <source>Publication (mandatory Items)</source>
         <translation>Публикация (задължителни елементи)</translation>
     </message>
@@ -304,8 +309,8 @@ It should be in CamelCase e.g. PhotoLinker.</source>
     </message>
     <message>
         <location filename="../plugin_builder_dialog_base.ui" line="0" />
-        <source>Consider using github.com for tracking</source>
-        <translation>Обмислете използването на github.com за проследяване</translation>
+        <source>Consider using github or gitlab for tracking</source>
+        <translation>Обмислете използването на github или gitlab за проследяване</translation>
     </message>
     <message>
         <location filename="../plugin_builder_dialog_base.ui" line="0" />
@@ -319,8 +324,8 @@ It should be in CamelCase e.g. PhotoLinker.</source>
     </message>
     <message>
         <location filename="../plugin_builder_dialog_base.ui" line="0" />
-        <source>Consider using github.com to store your code</source>
-        <translation>Помислете дали да не използвате github.com за съхраняване на вашия код</translation>
+        <source>Consider using github or gitlab to store your code</source>
+        <translation>Помислете дали да не използвате github или gitlab за съхраняване на вашия код</translation>
     </message>
     <message>
         <location filename="../plugin_builder_dialog_base.ui" line="0" />
@@ -339,8 +344,8 @@ It should be in CamelCase e.g. PhotoLinker.</source>
     </message>
     <message>
         <location filename="../plugin_builder_dialog_base.ui" line="0" />
-        <source>Your GitHub repository can be the home page</source>
-        <translation>Вашето хранилище на GitHub може да бъде началната страница</translation>
+        <source>Your GitHub or GitLab repository can be the home page</source>
+        <translation>Вашето хранилище на GitHub или GitLab може да бъде началната страница</translation>
     </message>
     <message>
         <location filename="../plugin_builder_dialog_base.ui" line="0" />
@@ -405,8 +410,8 @@ It should be in CamelCase e.g. PhotoLinker.</source>
     </message>
     <message>
         <location filename="../plugin_builder_dialog_base.ui" line="0" />
-        <source>The project slug on GitHub (e.g. my-plugin)</source>
-        <translation>Плъжът на проекта в GitHub (напр. my-plugin)</translation>
+        <source>The repository name on GitHub or GitLab (e.g. my-plugin)</source>
+        <translation>Името на хранилището в GitHub или GitLab (напр. my-plugin)</translation>
     </message>
     <message>
         <location filename="../plugin_builder_dialog_base.ui" line="0" />
@@ -415,8 +420,23 @@ It should be in CamelCase e.g. PhotoLinker.</source>
     </message>
     <message>
         <location filename="../plugin_builder_dialog_base.ui" line="0" />
-        <source>Add OSGEO_USER and OSGEO_PASSWORD as repository secrets in GitHub → Settings → Secrets and variables → Actions.</source>
-        <translation>Добавете OSGEO_USER и OSGEO_PASSWORD като тайни на хранилището в GitHub → Настройки → Тайни и променливи → Действия.</translation>
+        <source>GitLab namespace:</source>
+        <translation>Пространство от имена на GitLab:</translation>
+    </message>
+    <message>
+        <location filename="../plugin_builder_dialog_base.ui" line="0" />
+        <source>Your GitLab group or username (e.g. mygroup)</source>
+        <translation>Вашата група или потребителско име в GitLab (напр. mygroup)</translation>
+    </message>
+    <message>
+        <location filename="../plugin_builder_dialog_base.ui" line="0" />
+        <source>mygroup</source>
+        <translation>моята група</translation>
+    </message>
+    <message>
+        <location filename="../plugin_builder_dialog_base.ui" line="0" />
+        <source>Add OSGEO_USER and OSGEO_PASSWORD as secrets: GitHub → Settings → Secrets and variables → Actions, or GitLab → Settings → CI/CD → Variables.</source>
+        <translation>Добавете OSGEO_USER и OSGEO_PASSWORD като тайни: GitHub → Настройки → Тайни и променливи → Действия или GitLab → Настройки → CI/CD → Променливи.</translation>
     </message>
     <message>
         <location filename="../plugin_builder_dialog_base.ui" line="0" />
@@ -434,26 +454,43 @@ It should be in CamelCase e.g. PhotoLinker.</source>
         <translation>Вашият плъгин ще бъде създаден на избраното място, като се използва името на модула за име на поддиректорията.</translation>
     </message>
     <message>
+        <source>Consider using github.com for tracking</source>
+        <translation type="vanished">Обмислете използването на github.com за проследяване</translation>
+    </message>
+    <message>
+        <source>Consider using github.com to store your code</source>
+        <translation type="vanished">Помислете дали да не използвате github.com за съхраняване на вашия код</translation>
+    </message>
+    <message>
+        <source>Your GitHub repository can be the home page</source>
+        <translation type="vanished">Вашето хранилище на GitHub може да бъде началната страница</translation>
+    </message>
+    <message>
+        <source>The project slug on GitHub (e.g. my-plugin)</source>
+        <translation type="vanished">Плъжът на проекта в GitHub (напр. my-plugin)</translation>
+    </message>
+    <message>
+        <source>Add OSGEO_USER and OSGEO_PASSWORD as repository secrets in GitHub → Settings → Secrets and variables → Actions.</source>
+        <translation type="vanished">Добавете OSGEO_USER и OSGEO_PASSWORD като тайни на хранилището в GitHub → Настройки → Тайни и променливи → Действия.</translation>
+    </message>
+    <message>
         <source>Helper scripts</source>
         <translation type="vanished">Помощни скриптове</translation>
     </message>
 </context><context>
     <name>ResultsDialogBase</name>
     <message>
-        <location filename="../results_dialog_base.ui" line="0" />
         <source>Plugin Builder Results</source>
-        <translation>Резултати от Plugin Builder</translation>
+        <translation type="vanished">Резултати от Plugin Builder</translation>
     </message>
 </context><context>
     <name>dlgSelectTags</name>
     <message>
-        <location filename="../select_tags_dialog_base.ui" line="0" />
         <source>Select Tags</source>
-        <translation>Изберете Етикети</translation>
+        <translation type="vanished">Изберете Етикети</translation>
     </message>
     <message>
-        <location filename="../select_tags_dialog_base.ui" line="0" />
         <source>Select one or more tags</source>
-        <translation>Изберете един или повече тагове</translation>
+        <translation type="vanished">Изберете един или повече тагове</translation>
     </message>
 </context></TS>

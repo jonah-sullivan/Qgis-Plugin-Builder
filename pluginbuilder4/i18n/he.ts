@@ -29,7 +29,7 @@
         <translation>בחר את המדריך עבור הפלאגין שלך</translation>
     </message>
     <message>
-        <location filename="../plugin_builder.py" line="459" />
+        <location filename="../plugin_builder.py" line="504" />
         <source>QGIS Plugin Builder - {}</source>
         <translation>QGIS Plugin Builder - {}</translation>
     </message>
@@ -289,6 +289,11 @@ It should be in CamelCase e.g. PhotoLinker.</source>
     </message>
     <message>
         <location filename="../plugin_builder_dialog_base.ui" line="0" />
+        <source>qgis-plugin-ci (GitLab CI release pipeline)</source>
+        <translation>qgis-plugin-ci (צינור שחרור GitLab CI)</translation>
+    </message>
+    <message>
+        <location filename="../plugin_builder_dialog_base.ui" line="0" />
         <source>Publication (mandatory Items)</source>
         <translation>פרסום (פריטים חובה)</translation>
     </message>
@@ -304,8 +309,8 @@ It should be in CamelCase e.g. PhotoLinker.</source>
     </message>
     <message>
         <location filename="../plugin_builder_dialog_base.ui" line="0" />
-        <source>Consider using github.com for tracking</source>
-        <translation>שקול להשתמש ב-github.com למעקב</translation>
+        <source>Consider using github or gitlab for tracking</source>
+        <translation>שקול להשתמש ב-github או gitlab למעקב</translation>
     </message>
     <message>
         <location filename="../plugin_builder_dialog_base.ui" line="0" />
@@ -319,8 +324,8 @@ It should be in CamelCase e.g. PhotoLinker.</source>
     </message>
     <message>
         <location filename="../plugin_builder_dialog_base.ui" line="0" />
-        <source>Consider using github.com to store your code</source>
-        <translation>שקול להשתמש ב-github.com כדי לאחסן את הקוד שלך</translation>
+        <source>Consider using github or gitlab to store your code</source>
+        <translation>שקול להשתמש ב-github או gitlab כדי לאחסן את הקוד שלך</translation>
     </message>
     <message>
         <location filename="../plugin_builder_dialog_base.ui" line="0" />
@@ -339,8 +344,8 @@ It should be in CamelCase e.g. PhotoLinker.</source>
     </message>
     <message>
         <location filename="../plugin_builder_dialog_base.ui" line="0" />
-        <source>Your GitHub repository can be the home page</source>
-        <translation>מאגר GitHub שלך יכול להיות דף הבית</translation>
+        <source>Your GitHub or GitLab repository can be the home page</source>
+        <translation>מאגר GitHub או GitLab שלך יכול להיות דף הבית</translation>
     </message>
     <message>
         <location filename="../plugin_builder_dialog_base.ui" line="0" />
@@ -405,8 +410,8 @@ It should be in CamelCase e.g. PhotoLinker.</source>
     </message>
     <message>
         <location filename="../plugin_builder_dialog_base.ui" line="0" />
-        <source>The project slug on GitHub (e.g. my-plugin)</source>
-        <translation>שבלול הפרויקט ב-GitHub (למשל, my-plugin)</translation>
+        <source>The repository name on GitHub or GitLab (e.g. my-plugin)</source>
+        <translation>שם המאגר ב-GitHub או GitLab (למשל, my-plugin)</translation>
     </message>
     <message>
         <location filename="../plugin_builder_dialog_base.ui" line="0" />
@@ -415,8 +420,23 @@ It should be in CamelCase e.g. PhotoLinker.</source>
     </message>
     <message>
         <location filename="../plugin_builder_dialog_base.ui" line="0" />
-        <source>Add OSGEO_USER and OSGEO_PASSWORD as repository secrets in GitHub → Settings → Secrets and variables → Actions.</source>
-        <translation>הוסף את OSGEO_USER ו-OSGEO_PASSWORD כסודות מאגר ב- GitHub ← הגדרות ← סודות ומשתנים ← פעולות.</translation>
+        <source>GitLab namespace:</source>
+        <translation>מרחב השמות של GitLab:</translation>
+    </message>
+    <message>
+        <location filename="../plugin_builder_dialog_base.ui" line="0" />
+        <source>Your GitLab group or username (e.g. mygroup)</source>
+        <translation>קבוצת GitLab או שם המשתמש שלך (למשל, mygroup)</translation>
+    </message>
+    <message>
+        <location filename="../plugin_builder_dialog_base.ui" line="0" />
+        <source>mygroup</source>
+        <translation>הקבוצה שלי</translation>
+    </message>
+    <message>
+        <location filename="../plugin_builder_dialog_base.ui" line="0" />
+        <source>Add OSGEO_USER and OSGEO_PASSWORD as secrets: GitHub → Settings → Secrets and variables → Actions, or GitLab → Settings → CI/CD → Variables.</source>
+        <translation>הוסף את OSGEO_USER ו-OSGEO_PASSWORD כסודות: GitHub → הגדרות → סודות ומשתנים → פעולות, או GitLab → הגדרות → CI/CD → משתנים.</translation>
     </message>
     <message>
         <location filename="../plugin_builder_dialog_base.ui" line="0" />
@@ -434,26 +454,43 @@ It should be in CamelCase e.g. PhotoLinker.</source>
         <translation>התוסף שלך ייווצר במיקום הנבחר, תוך שימוש בשם המודול עבור שם ספריית המשנה.</translation>
     </message>
     <message>
+        <source>Consider using github.com for tracking</source>
+        <translation type="vanished">שקול להשתמש ב-github.com למעקב</translation>
+    </message>
+    <message>
+        <source>Consider using github.com to store your code</source>
+        <translation type="vanished">שקול להשתמש ב-github.com כדי לאחסן את הקוד שלך</translation>
+    </message>
+    <message>
+        <source>Your GitHub repository can be the home page</source>
+        <translation type="vanished">מאגר GitHub שלך יכול להיות דף הבית</translation>
+    </message>
+    <message>
+        <source>The project slug on GitHub (e.g. my-plugin)</source>
+        <translation type="vanished">שבלול הפרויקט ב-GitHub (למשל, my-plugin)</translation>
+    </message>
+    <message>
+        <source>Add OSGEO_USER and OSGEO_PASSWORD as repository secrets in GitHub → Settings → Secrets and variables → Actions.</source>
+        <translation type="vanished">הוסף את OSGEO_USER ו-OSGEO_PASSWORD כסודות מאגר ב- GitHub ← הגדרות ← סודות ומשתנים ← פעולות.</translation>
+    </message>
+    <message>
         <source>Helper scripts</source>
         <translation type="vanished">תסריטי עוזר</translation>
     </message>
 </context><context>
     <name>ResultsDialogBase</name>
     <message>
-        <location filename="../results_dialog_base.ui" line="0" />
         <source>Plugin Builder Results</source>
-        <translation>תוצאות בונה תוספים</translation>
+        <translation type="vanished">תוצאות בונה תוספים</translation>
     </message>
 </context><context>
     <name>dlgSelectTags</name>
     <message>
-        <location filename="../select_tags_dialog_base.ui" line="0" />
         <source>Select Tags</source>
-        <translation>בחר תגים</translation>
+        <translation type="vanished">בחר תגים</translation>
     </message>
     <message>
-        <location filename="../select_tags_dialog_base.ui" line="0" />
         <source>Select one or more tags</source>
-        <translation>בחר תג אחד או יותר</translation>
+        <translation type="vanished">בחר תג אחד או יותר</translation>
     </message>
 </context></TS>

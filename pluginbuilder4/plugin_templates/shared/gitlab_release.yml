@@ -1,0 +1,15 @@
+stages:
+  - release
+
+release:
+  stage: release
+  image: python:3
+  before_script:
+    - pip install qgis-plugin-ci
+  script:
+    - >-
+      qgis-plugin-ci release $CI_COMMIT_TAG
+      --osgeo-username $OSGEO_USER
+      --osgeo-password $OSGEO_PASSWORD
+  rules:
+    - if: $CI_COMMIT_TAG

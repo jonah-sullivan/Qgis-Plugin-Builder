@@ -29,7 +29,7 @@
         <translation>Wählen Sie das Verzeichnis für Ihr Plugin aus</translation>
     </message>
     <message>
-        <location filename="../plugin_builder.py" line="459" />
+        <location filename="../plugin_builder.py" line="504" />
         <source>QGIS Plugin Builder - {}</source>
         <translation>QGIS Plugin Builder - {}</translation>
     </message>
@@ -289,6 +289,11 @@ Es sollte in CamelCase sein, z.B. PhotoLinker.</translation>
     </message>
     <message>
         <location filename="../plugin_builder_dialog_base.ui" line="0" />
+        <source>qgis-plugin-ci (GitLab CI release pipeline)</source>
+        <translation type="unfinished" />
+    </message>
+    <message>
+        <location filename="../plugin_builder_dialog_base.ui" line="0" />
         <source>Publication (mandatory Items)</source>
         <translation>Veröffentlichung (Pflichtfelder)</translation>
     </message>
@@ -304,8 +309,8 @@ Es sollte in CamelCase sein, z.B. PhotoLinker.</translation>
     </message>
     <message>
         <location filename="../plugin_builder_dialog_base.ui" line="0" />
-        <source>Consider using github.com for tracking</source>
-        <translation>Erwägen Sie die Verwendung von github.com zur Nachverfolgung</translation>
+        <source>Consider using github or gitlab for tracking</source>
+        <translation type="unfinished" />
     </message>
     <message>
         <location filename="../plugin_builder_dialog_base.ui" line="0" />
@@ -319,8 +324,8 @@ Es sollte in CamelCase sein, z.B. PhotoLinker.</translation>
     </message>
     <message>
         <location filename="../plugin_builder_dialog_base.ui" line="0" />
-        <source>Consider using github.com to store your code</source>
-        <translation>Erwägen Sie die Verwendung von github.com zum Speichern Ihres Codes</translation>
+        <source>Consider using github or gitlab to store your code</source>
+        <translation type="unfinished" />
     </message>
     <message>
         <location filename="../plugin_builder_dialog_base.ui" line="0" />
@@ -339,8 +344,8 @@ Es sollte in CamelCase sein, z.B. PhotoLinker.</translation>
     </message>
     <message>
         <location filename="../plugin_builder_dialog_base.ui" line="0" />
-        <source>Your GitHub repository can be the home page</source>
-        <translation>Ihr GitHub-Repository kann die Startseite sein</translation>
+        <source>Your GitHub or GitLab repository can be the home page</source>
+        <translation type="unfinished" />
     </message>
     <message>
         <location filename="../plugin_builder_dialog_base.ui" line="0" />
@@ -405,7 +410,7 @@ Es sollte in CamelCase sein, z.B. PhotoLinker.</translation>
     </message>
     <message>
         <location filename="../plugin_builder_dialog_base.ui" line="0" />
-        <source>The project slug on GitHub (e.g. my-plugin)</source>
+        <source>The repository name on GitHub or GitLab (e.g. my-plugin)</source>
         <translation type="unfinished" />
     </message>
     <message>
@@ -415,7 +420,22 @@ Es sollte in CamelCase sein, z.B. PhotoLinker.</translation>
     </message>
     <message>
         <location filename="../plugin_builder_dialog_base.ui" line="0" />
-        <source>Add OSGEO_USER and OSGEO_PASSWORD as repository secrets in GitHub → Settings → Secrets and variables → Actions.</source>
+        <source>GitLab namespace:</source>
+        <translation type="unfinished" />
+    </message>
+    <message>
+        <location filename="../plugin_builder_dialog_base.ui" line="0" />
+        <source>Your GitLab group or username (e.g. mygroup)</source>
+        <translation type="unfinished" />
+    </message>
+    <message>
+        <location filename="../plugin_builder_dialog_base.ui" line="0" />
+        <source>mygroup</source>
+        <translation type="unfinished" />
+    </message>
+    <message>
+        <location filename="../plugin_builder_dialog_base.ui" line="0" />
+        <source>Add OSGEO_USER and OSGEO_PASSWORD as secrets: GitHub → Settings → Secrets and variables → Actions, or GitLab → Settings → CI/CD → Variables.</source>
         <translation type="unfinished" />
     </message>
     <message>
@@ -434,26 +454,35 @@ Es sollte in CamelCase sein, z.B. PhotoLinker.</translation>
         <translation>Ihr Plugin wird am ausgewählten Speicherort erstellt, wobei der Modulname als Name des Unterverzeichnisses verwendet wird.</translation>
     </message>
     <message>
+        <source>Consider using github.com for tracking</source>
+        <translation type="vanished">Erwägen Sie die Verwendung von github.com zur Nachverfolgung</translation>
+    </message>
+    <message>
+        <source>Consider using github.com to store your code</source>
+        <translation type="vanished">Erwägen Sie die Verwendung von github.com zum Speichern Ihres Codes</translation>
+    </message>
+    <message>
+        <source>Your GitHub repository can be the home page</source>
+        <translation type="vanished">Ihr GitHub-Repository kann die Startseite sein</translation>
+    </message>
+    <message>
         <source>Helper scripts</source>
         <translation type="vanished">Hilfsskripte</translation>
     </message>
 </context><context>
     <name>ResultsDialogBase</name>
     <message>
-        <location filename="../results_dialog_base.ui" line="0" />
         <source>Plugin Builder Results</source>
-        <translation>Ergebnisse des Plugin-Builders</translation>
+        <translation type="vanished">Ergebnisse des Plugin-Builders</translation>
     </message>
 </context><context>
     <name>dlgSelectTags</name>
     <message>
-        <location filename="../select_tags_dialog_base.ui" line="0" />
         <source>Select Tags</source>
-        <translation>Wählen Sie Tags aus</translation>
+        <translation type="vanished">Wählen Sie Tags aus</translation>
     </message>
     <message>
-        <location filename="../select_tags_dialog_base.ui" line="0" />
         <source>Select one or more tags</source>
-        <translation>Wählen Sie ein oder mehrere Tags aus</translation>
+        <translation type="vanished">Wählen Sie ein oder mehrere Tags aus</translation>
     </message>
 </context></TS>

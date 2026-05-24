@@ -29,7 +29,7 @@
         <translation>Valitse laajennuksen hakemisto</translation>
     </message>
     <message>
-        <location filename="../plugin_builder.py" line="459" />
+        <location filename="../plugin_builder.py" line="504" />
         <source>QGIS Plugin Builder - {}</source>
         <translation>QGIS Plugin Builder - {}</translation>
     </message>
@@ -289,6 +289,11 @@ Sen pitäisi olla CamelCasessa esim. PhotoLinker.</translation>
     </message>
     <message>
         <location filename="../plugin_builder_dialog_base.ui" line="0" />
+        <source>qgis-plugin-ci (GitLab CI release pipeline)</source>
+        <translation>qgis-plugin-ci (GitLab CI:n julkaisuputki)</translation>
+    </message>
+    <message>
+        <location filename="../plugin_builder_dialog_base.ui" line="0" />
         <source>Publication (mandatory Items)</source>
         <translation>Julkaisu (pakolliset kohteet)</translation>
     </message>
@@ -304,8 +309,8 @@ Sen pitäisi olla CamelCasessa esim. PhotoLinker.</translation>
     </message>
     <message>
         <location filename="../plugin_builder_dialog_base.ui" line="0" />
-        <source>Consider using github.com for tracking</source>
-        <translation>Harkitse github.comin käyttöä seurantaan</translation>
+        <source>Consider using github or gitlab for tracking</source>
+        <translation>Harkitse githubin tai gitlabin käyttöä seurantaan</translation>
     </message>
     <message>
         <location filename="../plugin_builder_dialog_base.ui" line="0" />
@@ -319,8 +324,8 @@ Sen pitäisi olla CamelCasessa esim. PhotoLinker.</translation>
     </message>
     <message>
         <location filename="../plugin_builder_dialog_base.ui" line="0" />
-        <source>Consider using github.com to store your code</source>
-        <translation>Harkitse github.comin käyttöä koodin tallentamiseen</translation>
+        <source>Consider using github or gitlab to store your code</source>
+        <translation>Harkitse githubin tai gitlabin käyttöä koodin tallentamiseen</translation>
     </message>
     <message>
         <location filename="../plugin_builder_dialog_base.ui" line="0" />
@@ -339,8 +344,8 @@ Sen pitäisi olla CamelCasessa esim. PhotoLinker.</translation>
     </message>
     <message>
         <location filename="../plugin_builder_dialog_base.ui" line="0" />
-        <source>Your GitHub repository can be the home page</source>
-        <translation>GitHub-tietovarasto voi olla kotisivu</translation>
+        <source>Your GitHub or GitLab repository can be the home page</source>
+        <translation>GitHub- tai GitLab-tietovarasto voi olla kotisivu</translation>
     </message>
     <message>
         <location filename="../plugin_builder_dialog_base.ui" line="0" />
@@ -405,8 +410,8 @@ Sen pitäisi olla CamelCasessa esim. PhotoLinker.</translation>
     </message>
     <message>
         <location filename="../plugin_builder_dialog_base.ui" line="0" />
-        <source>The project slug on GitHub (e.g. my-plugin)</source>
-        <translation>Projektin slug GitHubissa (esim. my-plugin)</translation>
+        <source>The repository name on GitHub or GitLab (e.g. my-plugin)</source>
+        <translation>Arkiston nimi GitHubissa tai GitLabissa (esim. my-plugin)</translation>
     </message>
     <message>
         <location filename="../plugin_builder_dialog_base.ui" line="0" />
@@ -415,8 +420,23 @@ Sen pitäisi olla CamelCasessa esim. PhotoLinker.</translation>
     </message>
     <message>
         <location filename="../plugin_builder_dialog_base.ui" line="0" />
-        <source>Add OSGEO_USER and OSGEO_PASSWORD as repository secrets in GitHub → Settings → Secrets and variables → Actions.</source>
-        <translation>Lisää OSGEO_USER ja OSGEO_PASSWORD arkiston salaisuuksiksi kohdassa GitHub → Asetukset → Salaukset ja muuttujat → Toiminnot.</translation>
+        <source>GitLab namespace:</source>
+        <translation>GitLab-nimiavaruus:</translation>
+    </message>
+    <message>
+        <location filename="../plugin_builder_dialog_base.ui" line="0" />
+        <source>Your GitLab group or username (e.g. mygroup)</source>
+        <translation>GitLab-ryhmäsi tai käyttäjänimesi (esim. mygroup)</translation>
+    </message>
+    <message>
+        <location filename="../plugin_builder_dialog_base.ui" line="0" />
+        <source>mygroup</source>
+        <translation>ryhmäni</translation>
+    </message>
+    <message>
+        <location filename="../plugin_builder_dialog_base.ui" line="0" />
+        <source>Add OSGEO_USER and OSGEO_PASSWORD as secrets: GitHub → Settings → Secrets and variables → Actions, or GitLab → Settings → CI/CD → Variables.</source>
+        <translation>Lisää OSGEO_USER ja OSGEO_PASSWORD salaisuuksiksi: GitHub → Asetukset → Salaukset ja muuttujat → Toiminnot tai GitLab → Asetukset → CI/CD → Muuttujat.</translation>
     </message>
     <message>
         <location filename="../plugin_builder_dialog_base.ui" line="0" />
@@ -434,26 +454,43 @@ Sen pitäisi olla CamelCasessa esim. PhotoLinker.</translation>
         <translation>Laajennuksesi luodaan valittuun paikkaan käyttämällä moduulin nimeä alihakemiston nimenä.</translation>
     </message>
     <message>
+        <source>Consider using github.com for tracking</source>
+        <translation type="vanished">Harkitse github.comin käyttöä seurantaan</translation>
+    </message>
+    <message>
+        <source>Consider using github.com to store your code</source>
+        <translation type="vanished">Harkitse github.comin käyttöä koodin tallentamiseen</translation>
+    </message>
+    <message>
+        <source>Your GitHub repository can be the home page</source>
+        <translation type="vanished">GitHub-tietovarasto voi olla kotisivu</translation>
+    </message>
+    <message>
+        <source>The project slug on GitHub (e.g. my-plugin)</source>
+        <translation type="vanished">Projektin slug GitHubissa (esim. my-plugin)</translation>
+    </message>
+    <message>
+        <source>Add OSGEO_USER and OSGEO_PASSWORD as repository secrets in GitHub → Settings → Secrets and variables → Actions.</source>
+        <translation type="vanished">Lisää OSGEO_USER ja OSGEO_PASSWORD arkiston salaisuuksiksi kohdassa GitHub → Asetukset → Salaukset ja muuttujat → Toiminnot.</translation>
+    </message>
+    <message>
         <source>Helper scripts</source>
         <translation type="vanished">Helper-skriptit</translation>
     </message>
 </context><context>
     <name>ResultsDialogBase</name>
     <message>
-        <location filename="../results_dialog_base.ui" line="0" />
         <source>Plugin Builder Results</source>
-        <translation>Plugin Builder -tulokset</translation>
+        <translation type="vanished">Plugin Builder -tulokset</translation>
     </message>
 </context><context>
     <name>dlgSelectTags</name>
     <message>
-        <location filename="../select_tags_dialog_base.ui" line="0" />
         <source>Select Tags</source>
-        <translation>Valitse Tunnisteet</translation>
+        <translation type="vanished">Valitse Tunnisteet</translation>
     </message>
     <message>
-        <location filename="../select_tags_dialog_base.ui" line="0" />
         <source>Select one or more tags</source>
-        <translation>Valitse yksi tai useampi tunniste</translation>
+        <translation type="vanished">Valitse yksi tai useampi tunniste</translation>
     </message>
 </context></TS>

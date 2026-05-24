@@ -29,7 +29,7 @@
         <translation>プラグインのディレクトリを選択します</translation>
     </message>
     <message>
-        <location filename="../plugin_builder.py" line="459" />
+        <location filename="../plugin_builder.py" line="504" />
         <source>QGIS Plugin Builder - {}</source>
         <translation>QGIS プラグイン ビルダー - {}</translation>
     </message>
@@ -289,6 +289,11 @@ It should be in CamelCase e.g. PhotoLinker.</source>
     </message>
     <message>
         <location filename="../plugin_builder_dialog_base.ui" line="0" />
+        <source>qgis-plugin-ci (GitLab CI release pipeline)</source>
+        <translation>qgis-plugin-ci (GitLab CI リリース パイプライン)</translation>
+    </message>
+    <message>
+        <location filename="../plugin_builder_dialog_base.ui" line="0" />
         <source>Publication (mandatory Items)</source>
         <translation>出版物（必須項目）</translation>
     </message>
@@ -304,8 +309,8 @@ It should be in CamelCase e.g. PhotoLinker.</source>
     </message>
     <message>
         <location filename="../plugin_builder_dialog_base.ui" line="0" />
-        <source>Consider using github.com for tracking</source>
-        <translation>追跡には github.com の使用を検討してください</translation>
+        <source>Consider using github or gitlab for tracking</source>
+        <translation>追跡には github または gitlab の使用を検討してください</translation>
     </message>
     <message>
         <location filename="../plugin_builder_dialog_base.ui" line="0" />
@@ -319,8 +324,8 @@ It should be in CamelCase e.g. PhotoLinker.</source>
     </message>
     <message>
         <location filename="../plugin_builder_dialog_base.ui" line="0" />
-        <source>Consider using github.com to store your code</source>
-        <translation>コードを保存するために github.com の使用を検討してください</translation>
+        <source>Consider using github or gitlab to store your code</source>
+        <translation>コードを保存するために github または gitlab の使用を検討してください</translation>
     </message>
     <message>
         <location filename="../plugin_builder_dialog_base.ui" line="0" />
@@ -339,8 +344,8 @@ It should be in CamelCase e.g. PhotoLinker.</source>
     </message>
     <message>
         <location filename="../plugin_builder_dialog_base.ui" line="0" />
-        <source>Your GitHub repository can be the home page</source>
-        <translation>GitHub リポジトリをホームページにすることができます</translation>
+        <source>Your GitHub or GitLab repository can be the home page</source>
+        <translation>GitHub または GitLab リポジトリをホームページにすることができます</translation>
     </message>
     <message>
         <location filename="../plugin_builder_dialog_base.ui" line="0" />
@@ -405,8 +410,8 @@ It should be in CamelCase e.g. PhotoLinker.</source>
     </message>
     <message>
         <location filename="../plugin_builder_dialog_base.ui" line="0" />
-        <source>The project slug on GitHub (e.g. my-plugin)</source>
-        <translation>GitHub 上のプロジェクトのスラッグ (例: my-plugin)</translation>
+        <source>The repository name on GitHub or GitLab (e.g. my-plugin)</source>
+        <translation>GitHub または GitLab 上のリポジトリ名 (例: my-plugin)</translation>
     </message>
     <message>
         <location filename="../plugin_builder_dialog_base.ui" line="0" />
@@ -415,8 +420,23 @@ It should be in CamelCase e.g. PhotoLinker.</source>
     </message>
     <message>
         <location filename="../plugin_builder_dialog_base.ui" line="0" />
-        <source>Add OSGEO_USER and OSGEO_PASSWORD as repository secrets in GitHub → Settings → Secrets and variables → Actions.</source>
-        <translation>OSGEO_USER と OSGEO_PASSWORD を GitHub → 設定 → シークレットと変数 → アクション のリポジトリ シークレットとして追加します。</translation>
+        <source>GitLab namespace:</source>
+        <translation>GitLab 名前空間:</translation>
+    </message>
+    <message>
+        <location filename="../plugin_builder_dialog_base.ui" line="0" />
+        <source>Your GitLab group or username (e.g. mygroup)</source>
+        <translation>GitLab グループまたはユーザー名 (例: mygroup)</translation>
+    </message>
+    <message>
+        <location filename="../plugin_builder_dialog_base.ui" line="0" />
+        <source>mygroup</source>
+        <translation>私のグループ</translation>
+    </message>
+    <message>
+        <location filename="../plugin_builder_dialog_base.ui" line="0" />
+        <source>Add OSGEO_USER and OSGEO_PASSWORD as secrets: GitHub → Settings → Secrets and variables → Actions, or GitLab → Settings → CI/CD → Variables.</source>
+        <translation>OSGEO_USER と OSGEO_PASSWORD をシークレットとして追加します: GitHub → 設定 → シークレットと変数 → アクション、または GitLab → 設定 → CI/CD → 変数。</translation>
     </message>
     <message>
         <location filename="../plugin_builder_dialog_base.ui" line="0" />
@@ -434,26 +454,43 @@ It should be in CamelCase e.g. PhotoLinker.</source>
         <translation>プラグインは、サブディレクトリの名前にモジュール名を使用して、選択した場所に作成されます。</translation>
     </message>
     <message>
+        <source>Consider using github.com for tracking</source>
+        <translation type="vanished">追跡には github.com の使用を検討してください</translation>
+    </message>
+    <message>
+        <source>Consider using github.com to store your code</source>
+        <translation type="vanished">コードを保存するために github.com の使用を検討してください</translation>
+    </message>
+    <message>
+        <source>Your GitHub repository can be the home page</source>
+        <translation type="vanished">GitHub リポジトリをホームページにすることができます</translation>
+    </message>
+    <message>
+        <source>The project slug on GitHub (e.g. my-plugin)</source>
+        <translation type="vanished">GitHub 上のプロジェクトのスラッグ (例: my-plugin)</translation>
+    </message>
+    <message>
+        <source>Add OSGEO_USER and OSGEO_PASSWORD as repository secrets in GitHub → Settings → Secrets and variables → Actions.</source>
+        <translation type="vanished">OSGEO_USER と OSGEO_PASSWORD を GitHub → 設定 → シークレットと変数 → アクション のリポジトリ シークレットとして追加します。</translation>
+    </message>
+    <message>
         <source>Helper scripts</source>
         <translation type="vanished">ヘルパースクリプト</translation>
     </message>
 </context><context>
     <name>ResultsDialogBase</name>
     <message>
-        <location filename="../results_dialog_base.ui" line="0" />
         <source>Plugin Builder Results</source>
-        <translation>プラグインビルダーの結果</translation>
+        <translation type="vanished">プラグインビルダーの結果</translation>
     </message>
 </context><context>
     <name>dlgSelectTags</name>
     <message>
-        <location filename="../select_tags_dialog_base.ui" line="0" />
         <source>Select Tags</source>
-        <translation>タグの選択</translation>
+        <translation type="vanished">タグの選択</translation>
     </message>
     <message>
-        <location filename="../select_tags_dialog_base.ui" line="0" />
         <source>Select one or more tags</source>
-        <translation>1 つ以上のタグを選択してください</translation>
+        <translation type="vanished">1 つ以上のタグを選択してください</translation>
     </message>
 </context></TS>

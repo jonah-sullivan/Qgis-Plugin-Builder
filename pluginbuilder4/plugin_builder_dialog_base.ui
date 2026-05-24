@@ -766,6 +766,16 @@ It should be in CamelCase e.g. PhotoLinker.</string>
         </widget>
        </item>
        <item row="10" column="0" colspan="2">
+        <widget class="QCheckBox" name="gitlab_ci_cb">
+         <property name="text">
+          <string>qgis-plugin-ci (GitLab CI release pipeline)</string>
+         </property>
+         <property name="checked">
+          <bool>false</bool>
+         </property>
+        </widget>
+       </item>
+       <item row="11" column="0" colspan="2">
         <spacer name="verticalSpacer_3">
          <property name="orientation">
           <enum>Qt::Orientation::Vertical</enum>
@@ -843,7 +853,7 @@ It should be in CamelCase e.g. PhotoLinker.</string>
           <string>Url of your plugin's bug tracker</string>
          </property>
          <property name="placeholderText">
-          <string>Consider using github.com for tracking</string>
+          <string>Consider using github or gitlab for tracking</string>
          </property>
         </widget>
        </item>
@@ -887,7 +897,7 @@ It should be in CamelCase e.g. PhotoLinker.</string>
           <string>Url of your plugin repository (if you have one)</string>
          </property>
          <property name="placeholderText">
-          <string>Consider using github.com to store your code</string>
+          <string>Consider using github or gitlab to store your code</string>
          </property>
         </widget>
        </item>
@@ -946,7 +956,7 @@ It should be in CamelCase e.g. PhotoLinker.</string>
           <string>Url of your plugin's home page</string>
          </property>
          <property name="placeholderText">
-          <string>Your GitHub repository can be the home page</string>
+          <string>Your GitHub or GitLab repository can be the home page</string>
          </property>
         </widget>
        </item>
@@ -1101,10 +1111,30 @@ It should be in CamelCase e.g. PhotoLinker.</string>
          <item row="1" column="1">
           <widget class="QLineEdit" name="project_slug">
            <property name="toolTip">
-            <string>The project slug on GitHub (e.g. my-plugin)</string>
+            <string>The repository name on GitHub or GitLab (e.g. my-plugin)</string>
            </property>
            <property name="placeholderText">
             <string>my-plugin</string>
+           </property>
+          </widget>
+         </item>
+         <item row="2" column="0">
+          <widget class="QLabel" name="gitlab_namespace_label">
+           <property name="text">
+            <string>GitLab namespace:</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
+           </property>
+          </widget>
+         </item>
+         <item row="2" column="1">
+          <widget class="QLineEdit" name="gitlab_namespace">
+           <property name="toolTip">
+            <string>Your GitLab group or username (e.g. mygroup)</string>
+           </property>
+           <property name="placeholderText">
+            <string>mygroup</string>
            </property>
           </widget>
          </item>
@@ -1118,7 +1148,7 @@ It should be in CamelCase e.g. PhotoLinker.</string>
           </font>
          </property>
          <property name="text">
-          <string>Add OSGEO_USER and OSGEO_PASSWORD as repository secrets in GitHub → Settings → Secrets and variables → Actions.</string>
+          <string>Add OSGEO_USER and OSGEO_PASSWORD as secrets: GitHub → Settings → Secrets and variables → Actions, or GitLab → Settings → CI/CD → Variables.</string>
          </property>
          <property name="wordWrap">
           <bool>true</bool>

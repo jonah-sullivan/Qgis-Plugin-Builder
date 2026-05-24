@@ -29,7 +29,7 @@
         <translation>Eklentiniz için Dizini seçin</translation>
     </message>
     <message>
-        <location filename="../plugin_builder.py" line="459" />
+        <location filename="../plugin_builder.py" line="504" />
         <source>QGIS Plugin Builder - {}</source>
         <translation>QGIS Eklenti Oluşturucu - {}</translation>
     </message>
@@ -289,6 +289,11 @@ It should be in CamelCase e.g. PhotoLinker.</source>
     </message>
     <message>
         <location filename="../plugin_builder_dialog_base.ui" line="0" />
+        <source>qgis-plugin-ci (GitLab CI release pipeline)</source>
+        <translation>qgis-plugin-ci (GitLab CI sürüm hattı)</translation>
+    </message>
+    <message>
+        <location filename="../plugin_builder_dialog_base.ui" line="0" />
         <source>Publication (mandatory Items)</source>
         <translation>Yayın (zorunlu Öğeler)</translation>
     </message>
@@ -304,8 +309,8 @@ It should be in CamelCase e.g. PhotoLinker.</source>
     </message>
     <message>
         <location filename="../plugin_builder_dialog_base.ui" line="0" />
-        <source>Consider using github.com for tracking</source>
-        <translation>İzleme için github.com'u kullanmayı düşünün</translation>
+        <source>Consider using github or gitlab for tracking</source>
+        <translation>İzleme için github veya gitlab kullanmayı düşünün</translation>
     </message>
     <message>
         <location filename="../plugin_builder_dialog_base.ui" line="0" />
@@ -319,8 +324,8 @@ It should be in CamelCase e.g. PhotoLinker.</source>
     </message>
     <message>
         <location filename="../plugin_builder_dialog_base.ui" line="0" />
-        <source>Consider using github.com to store your code</source>
-        <translation>Kodunuzu saklamak için github.com'u kullanmayı düşünün</translation>
+        <source>Consider using github or gitlab to store your code</source>
+        <translation>Kodunuzu saklamak için github veya gitlab kullanmayı düşünün</translation>
     </message>
     <message>
         <location filename="../plugin_builder_dialog_base.ui" line="0" />
@@ -339,8 +344,8 @@ It should be in CamelCase e.g. PhotoLinker.</source>
     </message>
     <message>
         <location filename="../plugin_builder_dialog_base.ui" line="0" />
-        <source>Your GitHub repository can be the home page</source>
-        <translation>GitHub deponuz ana sayfa olabilir</translation>
+        <source>Your GitHub or GitLab repository can be the home page</source>
+        <translation>GitHub veya GitLab deponuz ana sayfa olabilir</translation>
     </message>
     <message>
         <location filename="../plugin_builder_dialog_base.ui" line="0" />
@@ -405,8 +410,8 @@ It should be in CamelCase e.g. PhotoLinker.</source>
     </message>
     <message>
         <location filename="../plugin_builder_dialog_base.ui" line="0" />
-        <source>The project slug on GitHub (e.g. my-plugin)</source>
-        <translation>GitHub'daki proje bilgisi (ör. eklentim)</translation>
+        <source>The repository name on GitHub or GitLab (e.g. my-plugin)</source>
+        <translation>GitHub veya GitLab'daki depo adı (ör. eklentim)</translation>
     </message>
     <message>
         <location filename="../plugin_builder_dialog_base.ui" line="0" />
@@ -415,8 +420,23 @@ It should be in CamelCase e.g. PhotoLinker.</source>
     </message>
     <message>
         <location filename="../plugin_builder_dialog_base.ui" line="0" />
-        <source>Add OSGEO_USER and OSGEO_PASSWORD as repository secrets in GitHub → Settings → Secrets and variables → Actions.</source>
-        <translation>GitHub → Ayarlar → Sırlar ve değişkenler → Eylemler'de depo sırları olarak OSGEO_USER ve OSGEO_PASSWORD'u ekleyin.</translation>
+        <source>GitLab namespace:</source>
+        <translation>GitLab ad alanı:</translation>
+    </message>
+    <message>
+        <location filename="../plugin_builder_dialog_base.ui" line="0" />
+        <source>Your GitLab group or username (e.g. mygroup)</source>
+        <translation>GitLab grubunuz veya kullanıcı adınız (ör. grubum)</translation>
+    </message>
+    <message>
+        <location filename="../plugin_builder_dialog_base.ui" line="0" />
+        <source>mygroup</source>
+        <translation>grubum</translation>
+    </message>
+    <message>
+        <location filename="../plugin_builder_dialog_base.ui" line="0" />
+        <source>Add OSGEO_USER and OSGEO_PASSWORD as secrets: GitHub → Settings → Secrets and variables → Actions, or GitLab → Settings → CI/CD → Variables.</source>
+        <translation>OSGEO_USER ve OSGEO_PASSWORD'u gizli dizi olarak ekleyin: GitHub → Ayarlar → Gizli diziler ve değişkenler → Eylemler veya GitLab → Ayarlar → CI/CD → Değişkenler.</translation>
     </message>
     <message>
         <location filename="../plugin_builder_dialog_base.ui" line="0" />
@@ -434,26 +454,43 @@ It should be in CamelCase e.g. PhotoLinker.</source>
         <translation>Eklentiniz, alt dizinin adı için modül adı kullanılarak seçilen konumda oluşturulacaktır.</translation>
     </message>
     <message>
+        <source>Consider using github.com for tracking</source>
+        <translation type="vanished">İzleme için github.com'u kullanmayı düşünün</translation>
+    </message>
+    <message>
+        <source>Consider using github.com to store your code</source>
+        <translation type="vanished">Kodunuzu saklamak için github.com'u kullanmayı düşünün</translation>
+    </message>
+    <message>
+        <source>Your GitHub repository can be the home page</source>
+        <translation type="vanished">GitHub deponuz ana sayfa olabilir</translation>
+    </message>
+    <message>
+        <source>The project slug on GitHub (e.g. my-plugin)</source>
+        <translation type="vanished">GitHub'daki proje bilgisi (ör. eklentim)</translation>
+    </message>
+    <message>
+        <source>Add OSGEO_USER and OSGEO_PASSWORD as repository secrets in GitHub → Settings → Secrets and variables → Actions.</source>
+        <translation type="vanished">GitHub → Ayarlar → Sırlar ve değişkenler → Eylemler'de depo sırları olarak OSGEO_USER ve OSGEO_PASSWORD'u ekleyin.</translation>
+    </message>
+    <message>
         <source>Helper scripts</source>
         <translation type="vanished">Yardımcı komut dosyaları</translation>
     </message>
 </context><context>
     <name>ResultsDialogBase</name>
     <message>
-        <location filename="../results_dialog_base.ui" line="0" />
         <source>Plugin Builder Results</source>
-        <translation>Eklenti Oluşturucu Sonuçları</translation>
+        <translation type="vanished">Eklenti Oluşturucu Sonuçları</translation>
     </message>
 </context><context>
     <name>dlgSelectTags</name>
     <message>
-        <location filename="../select_tags_dialog_base.ui" line="0" />
         <source>Select Tags</source>
-        <translation>Etiketleri Seçin</translation>
+        <translation type="vanished">Etiketleri Seçin</translation>
     </message>
     <message>
-        <location filename="../select_tags_dialog_base.ui" line="0" />
         <source>Select one or more tags</source>
-        <translation>Bir veya daha fazla etiket seçin</translation>
+        <translation type="vanished">Bir veya daha fazla etiket seçin</translation>
     </message>
 </context></TS>

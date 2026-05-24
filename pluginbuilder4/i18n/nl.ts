@@ -29,7 +29,7 @@
         <translation>Selecteer de map voor uw plug-in</translation>
     </message>
     <message>
-        <location filename="../plugin_builder.py" line="459" />
+        <location filename="../plugin_builder.py" line="504" />
         <source>QGIS Plugin Builder - {}</source>
         <translation>Bouwer van plug-ins voor QGIS - {}</translation>
     </message>
@@ -289,6 +289,11 @@ Het zou in CamelCase moeten staan, b.v. FotoLinker.</translation>
     </message>
     <message>
         <location filename="../plugin_builder_dialog_base.ui" line="0" />
+        <source>qgis-plugin-ci (GitLab CI release pipeline)</source>
+        <translation>qgis-plugin-ci (GitLab CI-releasepijplijn)</translation>
+    </message>
+    <message>
+        <location filename="../plugin_builder_dialog_base.ui" line="0" />
         <source>Publication (mandatory Items)</source>
         <translation>Publicatie (verplichte items)</translation>
     </message>
@@ -304,8 +309,8 @@ Het zou in CamelCase moeten staan, b.v. FotoLinker.</translation>
     </message>
     <message>
         <location filename="../plugin_builder_dialog_base.ui" line="0" />
-        <source>Consider using github.com for tracking</source>
-        <translation>Overweeg om github.com te gebruiken voor tracking</translation>
+        <source>Consider using github or gitlab for tracking</source>
+        <translation>Overweeg om github of gitlab te gebruiken voor tracking</translation>
     </message>
     <message>
         <location filename="../plugin_builder_dialog_base.ui" line="0" />
@@ -319,8 +324,8 @@ Het zou in CamelCase moeten staan, b.v. FotoLinker.</translation>
     </message>
     <message>
         <location filename="../plugin_builder_dialog_base.ui" line="0" />
-        <source>Consider using github.com to store your code</source>
-        <translation>Overweeg om github.com te gebruiken om uw code op te slaan</translation>
+        <source>Consider using github or gitlab to store your code</source>
+        <translation>Overweeg om github of gitlab te gebruiken om uw code op te slaan</translation>
     </message>
     <message>
         <location filename="../plugin_builder_dialog_base.ui" line="0" />
@@ -339,8 +344,8 @@ Het zou in CamelCase moeten staan, b.v. FotoLinker.</translation>
     </message>
     <message>
         <location filename="../plugin_builder_dialog_base.ui" line="0" />
-        <source>Your GitHub repository can be the home page</source>
-        <translation>Uw GitHub-repository kan de startpagina zijn</translation>
+        <source>Your GitHub or GitLab repository can be the home page</source>
+        <translation>Uw GitHub- of GitLab-repository kan de startpagina zijn</translation>
     </message>
     <message>
         <location filename="../plugin_builder_dialog_base.ui" line="0" />
@@ -405,8 +410,8 @@ Het zou in CamelCase moeten staan, b.v. FotoLinker.</translation>
     </message>
     <message>
         <location filename="../plugin_builder_dialog_base.ui" line="0" />
-        <source>The project slug on GitHub (e.g. my-plugin)</source>
-        <translation>De projectslug op GitHub (bijvoorbeeld mijn plug-in)</translation>
+        <source>The repository name on GitHub or GitLab (e.g. my-plugin)</source>
+        <translation>De naam van de repository op GitHub of GitLab (bijvoorbeeld mijn-plug-in)</translation>
     </message>
     <message>
         <location filename="../plugin_builder_dialog_base.ui" line="0" />
@@ -415,8 +420,23 @@ Het zou in CamelCase moeten staan, b.v. FotoLinker.</translation>
     </message>
     <message>
         <location filename="../plugin_builder_dialog_base.ui" line="0" />
-        <source>Add OSGEO_USER and OSGEO_PASSWORD as repository secrets in GitHub → Settings → Secrets and variables → Actions.</source>
-        <translation>Voeg OSGEO_USER en OSGEO_PASSWORD toe als repositorygeheimen in GitHub → Instellingen → Geheimen en variabelen → Acties.</translation>
+        <source>GitLab namespace:</source>
+        <translation>GitLab-naamruimte:</translation>
+    </message>
+    <message>
+        <location filename="../plugin_builder_dialog_base.ui" line="0" />
+        <source>Your GitLab group or username (e.g. mygroup)</source>
+        <translation>Uw GitLab-groep of gebruikersnaam (bijvoorbeeld mijngroep)</translation>
+    </message>
+    <message>
+        <location filename="../plugin_builder_dialog_base.ui" line="0" />
+        <source>mygroup</source>
+        <translation>mijngroep</translation>
+    </message>
+    <message>
+        <location filename="../plugin_builder_dialog_base.ui" line="0" />
+        <source>Add OSGEO_USER and OSGEO_PASSWORD as secrets: GitHub → Settings → Secrets and variables → Actions, or GitLab → Settings → CI/CD → Variables.</source>
+        <translation>Voeg OSGEO_USER en OSGEO_PASSWORD toe als geheimen: GitHub → Instellingen → Geheimen en variabelen → Acties, of GitLab → Instellingen → CI/CD → Variabelen.</translation>
     </message>
     <message>
         <location filename="../plugin_builder_dialog_base.ui" line="0" />
@@ -434,26 +454,43 @@ Het zou in CamelCase moeten staan, b.v. FotoLinker.</translation>
         <translation>Uw plug-in wordt op de geselecteerde locatie gemaakt, waarbij de modulenaam wordt gebruikt voor de naam van de submap.</translation>
     </message>
     <message>
+        <source>Consider using github.com for tracking</source>
+        <translation type="vanished">Overweeg om github.com te gebruiken voor tracking</translation>
+    </message>
+    <message>
+        <source>Consider using github.com to store your code</source>
+        <translation type="vanished">Overweeg om github.com te gebruiken om uw code op te slaan</translation>
+    </message>
+    <message>
+        <source>Your GitHub repository can be the home page</source>
+        <translation type="vanished">Uw GitHub-repository kan de startpagina zijn</translation>
+    </message>
+    <message>
+        <source>The project slug on GitHub (e.g. my-plugin)</source>
+        <translation type="vanished">De projectslug op GitHub (bijvoorbeeld mijn plug-in)</translation>
+    </message>
+    <message>
+        <source>Add OSGEO_USER and OSGEO_PASSWORD as repository secrets in GitHub → Settings → Secrets and variables → Actions.</source>
+        <translation type="vanished">Voeg OSGEO_USER en OSGEO_PASSWORD toe als repositorygeheimen in GitHub → Instellingen → Geheimen en variabelen → Acties.</translation>
+    </message>
+    <message>
         <source>Helper scripts</source>
         <translation type="vanished">Helper-scripts</translation>
     </message>
 </context><context>
     <name>ResultsDialogBase</name>
     <message>
-        <location filename="../results_dialog_base.ui" line="0" />
         <source>Plugin Builder Results</source>
-        <translation>Resultaten van plug-inbuilder</translation>
+        <translation type="vanished">Resultaten van plug-inbuilder</translation>
     </message>
 </context><context>
     <name>dlgSelectTags</name>
     <message>
-        <location filename="../select_tags_dialog_base.ui" line="0" />
         <source>Select Tags</source>
-        <translation>Selecteer Labels</translation>
+        <translation type="vanished">Selecteer Labels</translation>
     </message>
     <message>
-        <location filename="../select_tags_dialog_base.ui" line="0" />
         <source>Select one or more tags</source>
-        <translation>Selecteer een of meer tags</translation>
+        <translation type="vanished">Selecteer een of meer tags</translation>
     </message>
 </context></TS>

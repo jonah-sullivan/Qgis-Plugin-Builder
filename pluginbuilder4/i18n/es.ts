@@ -29,7 +29,7 @@
         <translation>Seleccione el directorio para su complemento</translation>
     </message>
     <message>
-        <location filename="../plugin_builder.py" line="459" />
+        <location filename="../plugin_builder.py" line="504" />
         <source>QGIS Plugin Builder - {}</source>
         <translation>Generador de complementos QGIS - {}</translation>
     </message>
@@ -289,6 +289,11 @@ Debería estar en CamelCase, p. Fotoenlazador.</translation>
     </message>
     <message>
         <location filename="../plugin_builder_dialog_base.ui" line="0" />
+        <source>qgis-plugin-ci (GitLab CI release pipeline)</source>
+        <translation>qgis-plugin-ci (canal de lanzamiento de GitLab CI)</translation>
+    </message>
+    <message>
+        <location filename="../plugin_builder_dialog_base.ui" line="0" />
         <source>Publication (mandatory Items)</source>
         <translation>Publicación (elementos obligatorios)</translation>
     </message>
@@ -304,8 +309,8 @@ Debería estar en CamelCase, p. Fotoenlazador.</translation>
     </message>
     <message>
         <location filename="../plugin_builder_dialog_base.ui" line="0" />
-        <source>Consider using github.com for tracking</source>
-        <translation>Considere usar github.com para realizar seguimiento</translation>
+        <source>Consider using github or gitlab for tracking</source>
+        <translation>Considere usar github o gitlab para realizar seguimiento</translation>
     </message>
     <message>
         <location filename="../plugin_builder_dialog_base.ui" line="0" />
@@ -319,8 +324,8 @@ Debería estar en CamelCase, p. Fotoenlazador.</translation>
     </message>
     <message>
         <location filename="../plugin_builder_dialog_base.ui" line="0" />
-        <source>Consider using github.com to store your code</source>
-        <translation>Considere usar github.com para almacenar su código</translation>
+        <source>Consider using github or gitlab to store your code</source>
+        <translation>Considere usar github o gitlab para almacenar su código</translation>
     </message>
     <message>
         <location filename="../plugin_builder_dialog_base.ui" line="0" />
@@ -339,8 +344,8 @@ Debería estar en CamelCase, p. Fotoenlazador.</translation>
     </message>
     <message>
         <location filename="../plugin_builder_dialog_base.ui" line="0" />
-        <source>Your GitHub repository can be the home page</source>
-        <translation>Tu repositorio de GitHub puede ser la página de inicio</translation>
+        <source>Your GitHub or GitLab repository can be the home page</source>
+        <translation>Tu repositorio GitHub o GitLab puede ser la página de inicio</translation>
     </message>
     <message>
         <location filename="../plugin_builder_dialog_base.ui" line="0" />
@@ -405,8 +410,8 @@ Debería estar en CamelCase, p. Fotoenlazador.</translation>
     </message>
     <message>
         <location filename="../plugin_builder_dialog_base.ui" line="0" />
-        <source>The project slug on GitHub (e.g. my-plugin)</source>
-        <translation>El slug del proyecto en GitHub (por ejemplo, my-plugin)</translation>
+        <source>The repository name on GitHub or GitLab (e.g. my-plugin)</source>
+        <translation>El nombre del repositorio en GitHub o GitLab (por ejemplo, my-plugin)</translation>
     </message>
     <message>
         <location filename="../plugin_builder_dialog_base.ui" line="0" />
@@ -415,8 +420,23 @@ Debería estar en CamelCase, p. Fotoenlazador.</translation>
     </message>
     <message>
         <location filename="../plugin_builder_dialog_base.ui" line="0" />
-        <source>Add OSGEO_USER and OSGEO_PASSWORD as repository secrets in GitHub → Settings → Secrets and variables → Actions.</source>
-        <translation>Agregue OSGEO_USER y OSGEO_PASSWORD como secretos del repositorio en GitHub → Configuración → Secretos y variables → Acciones.</translation>
+        <source>GitLab namespace:</source>
+        <translation>Espacio de nombres de GitLab:</translation>
+    </message>
+    <message>
+        <location filename="../plugin_builder_dialog_base.ui" line="0" />
+        <source>Your GitLab group or username (e.g. mygroup)</source>
+        <translation>Su grupo de GitLab o nombre de usuario (por ejemplo, migrupo)</translation>
+    </message>
+    <message>
+        <location filename="../plugin_builder_dialog_base.ui" line="0" />
+        <source>mygroup</source>
+        <translation>mi grupo</translation>
+    </message>
+    <message>
+        <location filename="../plugin_builder_dialog_base.ui" line="0" />
+        <source>Add OSGEO_USER and OSGEO_PASSWORD as secrets: GitHub → Settings → Secrets and variables → Actions, or GitLab → Settings → CI/CD → Variables.</source>
+        <translation>Agregue OSGEO_USER y OSGEO_PASSWORD como secretos: GitHub → Configuración → Secretos y variables → Acciones, o GitLab → Configuración → CI/CD → Variables.</translation>
     </message>
     <message>
         <location filename="../plugin_builder_dialog_base.ui" line="0" />
@@ -434,26 +454,43 @@ Debería estar en CamelCase, p. Fotoenlazador.</translation>
         <translation>Su complemento se creará en la ubicación seleccionada, utilizando el nombre del módulo como nombre del subdirectorio.</translation>
     </message>
     <message>
+        <source>Consider using github.com for tracking</source>
+        <translation type="vanished">Considere usar github.com para realizar seguimiento</translation>
+    </message>
+    <message>
+        <source>Consider using github.com to store your code</source>
+        <translation type="vanished">Considere usar github.com para almacenar su código</translation>
+    </message>
+    <message>
+        <source>Your GitHub repository can be the home page</source>
+        <translation type="vanished">Tu repositorio de GitHub puede ser la página de inicio</translation>
+    </message>
+    <message>
+        <source>The project slug on GitHub (e.g. my-plugin)</source>
+        <translation type="vanished">El slug del proyecto en GitHub (por ejemplo, my-plugin)</translation>
+    </message>
+    <message>
+        <source>Add OSGEO_USER and OSGEO_PASSWORD as repository secrets in GitHub → Settings → Secrets and variables → Actions.</source>
+        <translation type="vanished">Agregue OSGEO_USER y OSGEO_PASSWORD como secretos del repositorio en GitHub → Configuración → Secretos y variables → Acciones.</translation>
+    </message>
+    <message>
         <source>Helper scripts</source>
         <translation type="vanished">Guiones de ayuda</translation>
     </message>
 </context><context>
     <name>ResultsDialogBase</name>
     <message>
-        <location filename="../results_dialog_base.ui" line="0" />
         <source>Plugin Builder Results</source>
-        <translation>Resultados del generador de complementos</translation>
+        <translation type="vanished">Resultados del generador de complementos</translation>
     </message>
 </context><context>
     <name>dlgSelectTags</name>
     <message>
-        <location filename="../select_tags_dialog_base.ui" line="0" />
         <source>Select Tags</source>
-        <translation>Seleccionar etiquetas</translation>
+        <translation type="vanished">Seleccionar etiquetas</translation>
     </message>
     <message>
-        <location filename="../select_tags_dialog_base.ui" line="0" />
         <source>Select one or more tags</source>
-        <translation>Seleccione una o más etiquetas</translation>
+        <translation type="vanished">Seleccione una o más etiquetas</translation>
     </message>
 </context></TS>

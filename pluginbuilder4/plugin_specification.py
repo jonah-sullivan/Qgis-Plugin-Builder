@@ -67,11 +67,17 @@ class PluginSpecification:
         self.gen_makefile = dialog.makefile_cb.isChecked()
         self.gen_pb_tool = dialog.pb_tool_cb.isChecked()
         self.gen_qgis_plugin_ci = dialog.qgis_plugin_ci_cb.isChecked()
+        self.gen_gitlab_ci = dialog.gitlab_ci_cb.isChecked()
         self.github_org_slug = (
             dialog.github_org_slug.text().strip() if self.gen_qgis_plugin_ci else ""
         )
+        self.gitlab_namespace = (
+            dialog.gitlab_namespace.text().strip() if self.gen_gitlab_ci else ""
+        )
         self.project_slug = (
-            dialog.project_slug.text().strip() if self.gen_qgis_plugin_ci else ""
+            dialog.project_slug.text().strip()
+            if (self.gen_qgis_plugin_ci or self.gen_gitlab_ci)
+            else ""
         )
         # Add the date stuff to the template map
         now = datetime.date.today()
@@ -105,6 +111,7 @@ class PluginSpecification:
             "TemplateUiDesignerLine": "",
             # qgis-plugin-ci (populated at generation time)
             "TemplateGitHubOrg": self.github_org_slug,
+            "TemplateGitLabNamespace": self.gitlab_namespace,
             "TemplateProjectSlug": self.project_slug,
             "TemplateQgisPluginCiSteps": "",
         }

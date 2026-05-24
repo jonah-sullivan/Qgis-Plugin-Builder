@@ -169,16 +169,48 @@ class PluginBuilder:
         scripts_source = os.path.join(self.shared_dir, "i18n")
         copy(scripts_source, os.path.join(self.plugin_path, "i18n"))
 
+    def _write_qgis_plugin_ci_config(self, specification):
+        """Write .qgis-plugin-ci, including whichever platform slugs are enabled."""
+        lines = [
+            "# qgis-plugin-ci configuration",
+            "# See https://opengisch.github.io/qgis-plugin-ci/",
+            f"plugin_path: {specification.module_name}",
+        ]
+        if specification.gen_qgis_plugin_ci:
+            lines.append(
+                f"github_organization_slug: {specification.github_org_slug}"
+            )
+        if specification.gen_gitlab_ci:
+            lines.append(
+                f"gitlab_organization_slug: {specification.gitlab_namespace}"
+            )
+        lines.append(f"project_slug: {specification.project_slug}")
+        config_path = os.path.join(self.plugin_path, ".qgis-plugin-ci")
+        with open(config_path, "w") as f:
+            f.write("\n".join(lines) + "\n")
+
     def _prepare_qgis_plugin_ci(self, specification):
         """Generate .qgis-plugin-ci config and GitHub Actions release workflow."""
-        self.populate_template(
-            specification, self.shared_dir, "qgis_plugin_ci.tmpl", ".qgis-plugin-ci"
-        )
+        self._write_qgis_plugin_ci_config(specification)
         workflows_dir = os.path.join(self.plugin_path, ".github", "workflows")
         os.makedirs(workflows_dir, exist_ok=True)
         QFile.copy(
             os.path.join(self.shared_dir, "github_release.yml"),
             os.path.join(workflows_dir, "release.yml"),
+        )
+        QFile.copy(
+            os.path.join(self.shared_dir, "gitattributes"),
+            os.path.join(self.plugin_path, ".gitattributes"),
+        )
+
+    def _prepare_gitlab_ci(self, specification):
+        """Generate .qgis-plugin-ci config and GitLab CI release pipeline."""
+        if not specification.gen_qgis_plugin_ci:
+            # Only write the config if GitHub CI hasn't already written it
+            self._write_qgis_plugin_ci_config(specification)
+        QFile.copy(
+            os.path.join(self.shared_dir, "gitlab_release.yml"),
+            os.path.join(self.plugin_path, ".gitlab-ci.yml"),
         )
         QFile.copy(
             os.path.join(self.shared_dir, "gitattributes"),
@@ -376,8 +408,9 @@ class PluginBuilder:
             if self.template is not None
             else ""
         )
+        qpci_steps = ""
         if specification.gen_qgis_plugin_ci:
-            qpci_steps = (
+            qpci_steps += (
                 "    <li>Initialize a git repository and push to GitHub: "
                 "<code>git init &amp;&amp; git add . &amp;&amp; git commit -m"
                 " 'initial commit' &amp;&amp; git push</code>\n"
@@ -385,10 +418,18 @@ class PluginBuilder:
                 " repository secrets: "
                 "GitHub &rarr; Settings &rarr; Secrets and variables &rarr; Actions\n"
                 "    <li>Create a GitHub Release to trigger the automated"
-                " deployment workflow"
+                " deployment workflow\n"
             )
-        else:
-            qpci_steps = ""
+        if specification.gen_gitlab_ci:
+            qpci_steps += (
+                "    <li>Initialize a git repository and push to GitLab: "
+                "<code>git init &amp;&amp; git add . &amp;&amp; git commit -m"
+                " 'initial commit' &amp;&amp; git push</code>\n"
+                "    <li>Add <b>OSGEO_USER</b> and <b>OSGEO_PASSWORD</b> as"
+                " CI/CD variables: "
+                "GitLab &rarr; Settings &rarr; CI/CD &rarr; Variables\n"
+                "    <li>Push a git tag to trigger the release pipeline\n"
+            )
         result_map = {
             **specification.template_map,
             "PluginDir": self.plugin_path,
@@ -531,6 +572,9 @@ class PluginBuilder:
 
         if specification.gen_qgis_plugin_ci:
             self._prepare_qgis_plugin_ci(specification)
+
+        if specification.gen_gitlab_ci:
+            self._prepare_gitlab_ci(specification)
 
         self._prepare_specific_files(specification)
 

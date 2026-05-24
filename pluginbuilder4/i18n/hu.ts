@@ -29,7 +29,7 @@
         <translation>Válassza ki a beépülő modul könyvtárát</translation>
     </message>
     <message>
-        <location filename="../plugin_builder.py" line="459" />
+        <location filename="../plugin_builder.py" line="504" />
         <source>QGIS Plugin Builder - {}</source>
         <translation>QGIS Plugin Builder – {}</translation>
     </message>
@@ -289,6 +289,11 @@ CamelCase-ben kellene pl. PhotoLinker.</translation>
     </message>
     <message>
         <location filename="../plugin_builder_dialog_base.ui" line="0" />
+        <source>qgis-plugin-ci (GitLab CI release pipeline)</source>
+        <translation>qgis-plugin-ci (GitLab CI kiadási folyamat)</translation>
+    </message>
+    <message>
+        <location filename="../plugin_builder_dialog_base.ui" line="0" />
         <source>Publication (mandatory Items)</source>
         <translation>Kiadvány (kötelező tételek)</translation>
     </message>
@@ -304,8 +309,8 @@ CamelCase-ben kellene pl. PhotoLinker.</translation>
     </message>
     <message>
         <location filename="../plugin_builder_dialog_base.ui" line="0" />
-        <source>Consider using github.com for tracking</source>
-        <translation>Fontolja meg a github.com használatát a követéshez</translation>
+        <source>Consider using github or gitlab for tracking</source>
+        <translation>Fontolja meg a github vagy a gitlab használatát a követéshez</translation>
     </message>
     <message>
         <location filename="../plugin_builder_dialog_base.ui" line="0" />
@@ -319,8 +324,8 @@ CamelCase-ben kellene pl. PhotoLinker.</translation>
     </message>
     <message>
         <location filename="../plugin_builder_dialog_base.ui" line="0" />
-        <source>Consider using github.com to store your code</source>
-        <translation>Fontolja meg a github.com használatát a kód tárolásához</translation>
+        <source>Consider using github or gitlab to store your code</source>
+        <translation>Fontolja meg a github vagy a gitlab használatát a kód tárolásához</translation>
     </message>
     <message>
         <location filename="../plugin_builder_dialog_base.ui" line="0" />
@@ -339,8 +344,8 @@ CamelCase-ben kellene pl. PhotoLinker.</translation>
     </message>
     <message>
         <location filename="../plugin_builder_dialog_base.ui" line="0" />
-        <source>Your GitHub repository can be the home page</source>
-        <translation>Az Ön GitHub-tárháza lehet a kezdőlap</translation>
+        <source>Your GitHub or GitLab repository can be the home page</source>
+        <translation>Az Ön GitHub vagy GitLab tárháza lehet a kezdőlap</translation>
     </message>
     <message>
         <location filename="../plugin_builder_dialog_base.ui" line="0" />
@@ -405,8 +410,8 @@ CamelCase-ben kellene pl. PhotoLinker.</translation>
     </message>
     <message>
         <location filename="../plugin_builder_dialog_base.ui" line="0" />
-        <source>The project slug on GitHub (e.g. my-plugin)</source>
-        <translation>A projekt slug a GitHubon (pl. my-plugin)</translation>
+        <source>The repository name on GitHub or GitLab (e.g. my-plugin)</source>
+        <translation>A lerakat neve a GitHubon vagy a GitLabon (pl. my-plugin)</translation>
     </message>
     <message>
         <location filename="../plugin_builder_dialog_base.ui" line="0" />
@@ -415,8 +420,23 @@ CamelCase-ben kellene pl. PhotoLinker.</translation>
     </message>
     <message>
         <location filename="../plugin_builder_dialog_base.ui" line="0" />
-        <source>Add OSGEO_USER and OSGEO_PASSWORD as repository secrets in GitHub → Settings → Secrets and variables → Actions.</source>
-        <translation>Adja hozzá az OSGEO_USER és OSGEO_PASSWORD tárhelytitkait a GitHub → Beállítások → Titkok és változók → Műveletek menüpontban.</translation>
+        <source>GitLab namespace:</source>
+        <translation>GitLab névtér:</translation>
+    </message>
+    <message>
+        <location filename="../plugin_builder_dialog_base.ui" line="0" />
+        <source>Your GitLab group or username (e.g. mygroup)</source>
+        <translation>Az Ön GitLab-csoportja vagy felhasználóneve (pl. mygroup)</translation>
+    </message>
+    <message>
+        <location filename="../plugin_builder_dialog_base.ui" line="0" />
+        <source>mygroup</source>
+        <translation>csoportom</translation>
+    </message>
+    <message>
+        <location filename="../plugin_builder_dialog_base.ui" line="0" />
+        <source>Add OSGEO_USER and OSGEO_PASSWORD as secrets: GitHub → Settings → Secrets and variables → Actions, or GitLab → Settings → CI/CD → Variables.</source>
+        <translation>Adja hozzá OSGEO_USER és OSGEO_PASSWORD titkokat: GitHub → Beállítások → Titkok és változók → Műveletek vagy GitLab → Beállítások → CI/CD → Változók.</translation>
     </message>
     <message>
         <location filename="../plugin_builder_dialog_base.ui" line="0" />
@@ -434,26 +454,43 @@ CamelCase-ben kellene pl. PhotoLinker.</translation>
         <translation>A beépülő modul a kiválasztott helyen jön létre az alkönyvtár nevének megfelelő modulnévvel.</translation>
     </message>
     <message>
+        <source>Consider using github.com for tracking</source>
+        <translation type="vanished">Fontolja meg a github.com használatát a követéshez</translation>
+    </message>
+    <message>
+        <source>Consider using github.com to store your code</source>
+        <translation type="vanished">Fontolja meg a github.com használatát a kód tárolásához</translation>
+    </message>
+    <message>
+        <source>Your GitHub repository can be the home page</source>
+        <translation type="vanished">Az Ön GitHub-tárháza lehet a kezdőlap</translation>
+    </message>
+    <message>
+        <source>The project slug on GitHub (e.g. my-plugin)</source>
+        <translation type="vanished">A projekt slug a GitHubon (pl. my-plugin)</translation>
+    </message>
+    <message>
+        <source>Add OSGEO_USER and OSGEO_PASSWORD as repository secrets in GitHub → Settings → Secrets and variables → Actions.</source>
+        <translation type="vanished">Adja hozzá az OSGEO_USER és OSGEO_PASSWORD tárhelytitkait a GitHub → Beállítások → Titkok és változók → Műveletek menüpontban.</translation>
+    </message>
+    <message>
         <source>Helper scripts</source>
         <translation type="vanished">Segítő szkriptek</translation>
     </message>
 </context><context>
     <name>ResultsDialogBase</name>
     <message>
-        <location filename="../results_dialog_base.ui" line="0" />
         <source>Plugin Builder Results</source>
-        <translation>A bővítménykészítő eredményei</translation>
+        <translation type="vanished">A bővítménykészítő eredményei</translation>
     </message>
 </context><context>
     <name>dlgSelectTags</name>
     <message>
-        <location filename="../select_tags_dialog_base.ui" line="0" />
         <source>Select Tags</source>
-        <translation>Válassza a Címkék lehetőséget</translation>
+        <translation type="vanished">Válassza a Címkék lehetőséget</translation>
     </message>
     <message>
-        <location filename="../select_tags_dialog_base.ui" line="0" />
         <source>Select one or more tags</source>
-        <translation>Válasszon ki egy vagy több címkét</translation>
+        <translation type="vanished">Válasszon ki egy vagy több címkét</translation>
     </message>
 </context></TS>

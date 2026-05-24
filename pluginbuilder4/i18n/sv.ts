@@ -29,7 +29,7 @@
         <translation>Välj katalogen för din plugin</translation>
     </message>
     <message>
-        <location filename="../plugin_builder.py" line="459" />
+        <location filename="../plugin_builder.py" line="504" />
         <source>QGIS Plugin Builder - {}</source>
         <translation>QGIS Plugin Builder - {}</translation>
     </message>
@@ -289,6 +289,11 @@ Det ska finnas i CamelCase t.ex. PhotoLinker.</translation>
     </message>
     <message>
         <location filename="../plugin_builder_dialog_base.ui" line="0" />
+        <source>qgis-plugin-ci (GitLab CI release pipeline)</source>
+        <translation>qgis-plugin-ci (GitLab CI release pipeline)</translation>
+    </message>
+    <message>
+        <location filename="../plugin_builder_dialog_base.ui" line="0" />
         <source>Publication (mandatory Items)</source>
         <translation>Publicering (obligatoriska artiklar)</translation>
     </message>
@@ -304,8 +309,8 @@ Det ska finnas i CamelCase t.ex. PhotoLinker.</translation>
     </message>
     <message>
         <location filename="../plugin_builder_dialog_base.ui" line="0" />
-        <source>Consider using github.com for tracking</source>
-        <translation>Överväg att använda github.com för spårning</translation>
+        <source>Consider using github or gitlab for tracking</source>
+        <translation>Överväg att använda github eller gitlab för spårning</translation>
     </message>
     <message>
         <location filename="../plugin_builder_dialog_base.ui" line="0" />
@@ -319,8 +324,8 @@ Det ska finnas i CamelCase t.ex. PhotoLinker.</translation>
     </message>
     <message>
         <location filename="../plugin_builder_dialog_base.ui" line="0" />
-        <source>Consider using github.com to store your code</source>
-        <translation>Överväg att använda github.com för att lagra din kod</translation>
+        <source>Consider using github or gitlab to store your code</source>
+        <translation>Överväg att använda github eller gitlab för att lagra din kod</translation>
     </message>
     <message>
         <location filename="../plugin_builder_dialog_base.ui" line="0" />
@@ -339,8 +344,8 @@ Det ska finnas i CamelCase t.ex. PhotoLinker.</translation>
     </message>
     <message>
         <location filename="../plugin_builder_dialog_base.ui" line="0" />
-        <source>Your GitHub repository can be the home page</source>
-        <translation>Ditt GitHub-förråd kan vara startsidan</translation>
+        <source>Your GitHub or GitLab repository can be the home page</source>
+        <translation>Ditt GitHub- eller GitLab-förråd kan vara startsidan</translation>
     </message>
     <message>
         <location filename="../plugin_builder_dialog_base.ui" line="0" />
@@ -405,8 +410,8 @@ Det ska finnas i CamelCase t.ex. PhotoLinker.</translation>
     </message>
     <message>
         <location filename="../plugin_builder_dialog_base.ui" line="0" />
-        <source>The project slug on GitHub (e.g. my-plugin)</source>
-        <translation>Projektsnäckan på GitHub (t.ex. my-plugin)</translation>
+        <source>The repository name on GitHub or GitLab (e.g. my-plugin)</source>
+        <translation>Lagringsnamnet på GitHub eller GitLab (t.ex. my-plugin)</translation>
     </message>
     <message>
         <location filename="../plugin_builder_dialog_base.ui" line="0" />
@@ -415,8 +420,23 @@ Det ska finnas i CamelCase t.ex. PhotoLinker.</translation>
     </message>
     <message>
         <location filename="../plugin_builder_dialog_base.ui" line="0" />
-        <source>Add OSGEO_USER and OSGEO_PASSWORD as repository secrets in GitHub → Settings → Secrets and variables → Actions.</source>
-        <translation>Lägg till OSGEO_USER och OSGEO_PASSWORD som arkivhemligheter i GitHub → Inställningar → Hemligheter och variabler → Åtgärder.</translation>
+        <source>GitLab namespace:</source>
+        <translation>GitLab namnutrymme:</translation>
+    </message>
+    <message>
+        <location filename="../plugin_builder_dialog_base.ui" line="0" />
+        <source>Your GitLab group or username (e.g. mygroup)</source>
+        <translation>Din GitLab-grupp eller användarnamn (t.ex. min grupp)</translation>
+    </message>
+    <message>
+        <location filename="../plugin_builder_dialog_base.ui" line="0" />
+        <source>mygroup</source>
+        <translation>min grupp</translation>
+    </message>
+    <message>
+        <location filename="../plugin_builder_dialog_base.ui" line="0" />
+        <source>Add OSGEO_USER and OSGEO_PASSWORD as secrets: GitHub → Settings → Secrets and variables → Actions, or GitLab → Settings → CI/CD → Variables.</source>
+        <translation>Lägg till OSGEO_USER och OSGEO_PASSWORD som hemligheter: GitHub → Inställningar → Hemligheter och variabler → Åtgärder, eller GitLab → Inställningar → CI/CD → Variabler.</translation>
     </message>
     <message>
         <location filename="../plugin_builder_dialog_base.ui" line="0" />
@@ -434,26 +454,43 @@ Det ska finnas i CamelCase t.ex. PhotoLinker.</translation>
         <translation>Din plugin kommer att skapas på den valda platsen, med modulnamnet för namnet på underkatalogen.</translation>
     </message>
     <message>
+        <source>Consider using github.com for tracking</source>
+        <translation type="vanished">Överväg att använda github.com för spårning</translation>
+    </message>
+    <message>
+        <source>Consider using github.com to store your code</source>
+        <translation type="vanished">Överväg att använda github.com för att lagra din kod</translation>
+    </message>
+    <message>
+        <source>Your GitHub repository can be the home page</source>
+        <translation type="vanished">Ditt GitHub-förråd kan vara startsidan</translation>
+    </message>
+    <message>
+        <source>The project slug on GitHub (e.g. my-plugin)</source>
+        <translation type="vanished">Projektsnäckan på GitHub (t.ex. my-plugin)</translation>
+    </message>
+    <message>
+        <source>Add OSGEO_USER and OSGEO_PASSWORD as repository secrets in GitHub → Settings → Secrets and variables → Actions.</source>
+        <translation type="vanished">Lägg till OSGEO_USER och OSGEO_PASSWORD som arkivhemligheter i GitHub → Inställningar → Hemligheter och variabler → Åtgärder.</translation>
+    </message>
+    <message>
         <source>Helper scripts</source>
         <translation type="vanished">Hjälpmanus</translation>
     </message>
 </context><context>
     <name>ResultsDialogBase</name>
     <message>
-        <location filename="../results_dialog_base.ui" line="0" />
         <source>Plugin Builder Results</source>
-        <translation>Plugin Builder-resultat</translation>
+        <translation type="vanished">Plugin Builder-resultat</translation>
     </message>
 </context><context>
     <name>dlgSelectTags</name>
     <message>
-        <location filename="../select_tags_dialog_base.ui" line="0" />
         <source>Select Tags</source>
-        <translation>Välj Taggar</translation>
+        <translation type="vanished">Välj Taggar</translation>
     </message>
     <message>
-        <location filename="../select_tags_dialog_base.ui" line="0" />
         <source>Select one or more tags</source>
-        <translation>Välj en eller flera taggar</translation>
+        <translation type="vanished">Välj en eller flera taggar</translation>
     </message>
 </context></TS>

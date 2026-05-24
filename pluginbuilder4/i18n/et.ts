@@ -29,7 +29,7 @@
         <translation>Valige oma plugina jaoks kataloog</translation>
     </message>
     <message>
-        <location filename="../plugin_builder.py" line="459" />
+        <location filename="../plugin_builder.py" line="504" />
         <source>QGIS Plugin Builder - {}</source>
         <translation>QGIS-i pistikprogrammi koostaja – {}</translation>
     </message>
@@ -289,6 +289,11 @@ See peaks olema CamelCase'is nt. PhotoLinker.</translation>
     </message>
     <message>
         <location filename="../plugin_builder_dialog_base.ui" line="0" />
+        <source>qgis-plugin-ci (GitLab CI release pipeline)</source>
+        <translation>qgis-plugin-ci (GitLabi CI väljalaskekonveier)</translation>
+    </message>
+    <message>
+        <location filename="../plugin_builder_dialog_base.ui" line="0" />
         <source>Publication (mandatory Items)</source>
         <translation>Väljaanne (kohustuslikud üksused)</translation>
     </message>
@@ -304,8 +309,8 @@ See peaks olema CamelCase'is nt. PhotoLinker.</translation>
     </message>
     <message>
         <location filename="../plugin_builder_dialog_base.ui" line="0" />
-        <source>Consider using github.com for tracking</source>
-        <translation>Kaaluge jälgimiseks github.com kasutamist</translation>
+        <source>Consider using github or gitlab for tracking</source>
+        <translation>Kaaluge jälgimiseks Githubi või Gitlabi kasutamist</translation>
     </message>
     <message>
         <location filename="../plugin_builder_dialog_base.ui" line="0" />
@@ -319,8 +324,8 @@ See peaks olema CamelCase'is nt. PhotoLinker.</translation>
     </message>
     <message>
         <location filename="../plugin_builder_dialog_base.ui" line="0" />
-        <source>Consider using github.com to store your code</source>
-        <translation>Kaaluge koodi salvestamiseks github.com-i kasutamist</translation>
+        <source>Consider using github or gitlab to store your code</source>
+        <translation>Kaaluge koodi salvestamiseks githubi või gitlabi kasutamist</translation>
     </message>
     <message>
         <location filename="../plugin_builder_dialog_base.ui" line="0" />
@@ -339,8 +344,8 @@ See peaks olema CamelCase'is nt. PhotoLinker.</translation>
     </message>
     <message>
         <location filename="../plugin_builder_dialog_base.ui" line="0" />
-        <source>Your GitHub repository can be the home page</source>
-        <translation>Teie GitHubi hoidla võib olla avaleht</translation>
+        <source>Your GitHub or GitLab repository can be the home page</source>
+        <translation>Avaleht võib olla teie GitHubi või GitLabi hoidla</translation>
     </message>
     <message>
         <location filename="../plugin_builder_dialog_base.ui" line="0" />
@@ -405,8 +410,8 @@ See peaks olema CamelCase'is nt. PhotoLinker.</translation>
     </message>
     <message>
         <location filename="../plugin_builder_dialog_base.ui" line="0" />
-        <source>The project slug on GitHub (e.g. my-plugin)</source>
-        <translation>Projekti nälk GitHubis (nt minu pistikprogramm)</translation>
+        <source>The repository name on GitHub or GitLab (e.g. my-plugin)</source>
+        <translation>Hoidla nimi GitHubis või GitLabis (nt minu pistikprogramm)</translation>
     </message>
     <message>
         <location filename="../plugin_builder_dialog_base.ui" line="0" />
@@ -415,8 +420,23 @@ See peaks olema CamelCase'is nt. PhotoLinker.</translation>
     </message>
     <message>
         <location filename="../plugin_builder_dialog_base.ui" line="0" />
-        <source>Add OSGEO_USER and OSGEO_PASSWORD as repository secrets in GitHub → Settings → Secrets and variables → Actions.</source>
-        <translation>Lisage OSGEO_USER ja OSGEO_PASSWORD hoidla saladusteks jaotises GitHub → Seaded → Saladused ja muutujad → Tegevused.</translation>
+        <source>GitLab namespace:</source>
+        <translation>GitLabi nimeruum:</translation>
+    </message>
+    <message>
+        <location filename="../plugin_builder_dialog_base.ui" line="0" />
+        <source>Your GitLab group or username (e.g. mygroup)</source>
+        <translation>Teie GitLabi grupp või kasutajanimi (nt minu grupp)</translation>
+    </message>
+    <message>
+        <location filename="../plugin_builder_dialog_base.ui" line="0" />
+        <source>mygroup</source>
+        <translation>minu grupp</translation>
+    </message>
+    <message>
+        <location filename="../plugin_builder_dialog_base.ui" line="0" />
+        <source>Add OSGEO_USER and OSGEO_PASSWORD as secrets: GitHub → Settings → Secrets and variables → Actions, or GitLab → Settings → CI/CD → Variables.</source>
+        <translation>Lisage saladusteks OSGEO_USER ja OSGEO_PASSWORD: GitHub → Seaded → Saladused ja muutujad → Toimingud või GitLab → Seaded → CI/CD → Muutujad.</translation>
     </message>
     <message>
         <location filename="../plugin_builder_dialog_base.ui" line="0" />
@@ -434,26 +454,43 @@ See peaks olema CamelCase'is nt. PhotoLinker.</translation>
         <translation>Teie pistikprogramm luuakse valitud asukohta, kasutades alamkataloogi nimena mooduli nime.</translation>
     </message>
     <message>
+        <source>Consider using github.com for tracking</source>
+        <translation type="vanished">Kaaluge jälgimiseks github.com kasutamist</translation>
+    </message>
+    <message>
+        <source>Consider using github.com to store your code</source>
+        <translation type="vanished">Kaaluge koodi salvestamiseks github.com-i kasutamist</translation>
+    </message>
+    <message>
+        <source>Your GitHub repository can be the home page</source>
+        <translation type="vanished">Teie GitHubi hoidla võib olla avaleht</translation>
+    </message>
+    <message>
+        <source>The project slug on GitHub (e.g. my-plugin)</source>
+        <translation type="vanished">Projekti nälk GitHubis (nt minu pistikprogramm)</translation>
+    </message>
+    <message>
+        <source>Add OSGEO_USER and OSGEO_PASSWORD as repository secrets in GitHub → Settings → Secrets and variables → Actions.</source>
+        <translation type="vanished">Lisage OSGEO_USER ja OSGEO_PASSWORD hoidla saladusteks jaotises GitHub → Seaded → Saladused ja muutujad → Tegevused.</translation>
+    </message>
+    <message>
         <source>Helper scripts</source>
         <translation type="vanished">Abiskriptid</translation>
     </message>
 </context><context>
     <name>ResultsDialogBase</name>
     <message>
-        <location filename="../results_dialog_base.ui" line="0" />
         <source>Plugin Builder Results</source>
-        <translation>Pluginate koostaja tulemused</translation>
+        <translation type="vanished">Pluginate koostaja tulemused</translation>
     </message>
 </context><context>
     <name>dlgSelectTags</name>
     <message>
-        <location filename="../select_tags_dialog_base.ui" line="0" />
         <source>Select Tags</source>
-        <translation>Valige Sildid</translation>
+        <translation type="vanished">Valige Sildid</translation>
     </message>
     <message>
-        <location filename="../select_tags_dialog_base.ui" line="0" />
         <source>Select one or more tags</source>
-        <translation>Valige üks või mitu silti</translation>
+        <translation type="vanished">Valige üks või mitu silti</translation>
     </message>
 </context></TS>
