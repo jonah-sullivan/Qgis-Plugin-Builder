@@ -6,6 +6,9 @@ on:
   pull_request:
     branches: [QGIS4]
 
+permissions:
+  contents: read
+
 # Windows is not tested: the qgis/qgis Docker image is Linux-only and there
 # is no reliable lightweight alternative for running pytest-qgis on Windows
 # runners. Revisit if a Windows-specific bug surfaces.
@@ -22,8 +25,29 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Install pytest-qgis
-        run: pip3 install pytest-qgis pytest-cov --break-system-packages
+      - name: Install system tools required by Codecov
+        run: |
+          apt-get update
+          apt-get install -y bash curl git gpg
+
+      - name: Install test dependencies
+        run: |
+          pip3 install pytest-qgis pytest-cov --break-system-packages
 
       - name: Run tests
-        run: python3 -m pytest --cov=. --cov-report=term-missing
+        run: |
+          python3 -m pytest \
+            --cov=. \
+            --cov-report=term-missing \
+            --cov-report=xml:coverage.xml
+            
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v5
+        with:
+          files: ./coverage.xml
+          flags: unittests
+          name: qgis-plugin-builder
+          fail_ci_if_error: true
+          verbose: true
+        env:
+          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
