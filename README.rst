@@ -1,24 +1,66 @@
-NOTE
-====
-
-**QGIS 4 development now takes place in master branch.**
-
 QGIS Plugin Builder
 ===================
 
-.. image:: https://github.com/jonah-sullivan/Qgis-Plugin-Builder/workflows/Tests/badge.svg
+.. image:: https://github.com/jonah-sullivan/Qgis-Plugin-Builder/actions/workflows/tests.yml/badge.svg
    :target: https://github.com/jonah-sullivan/Qgis-Plugin-Builder/actions
+   :alt: Tests
+
+.. image:: https://img.shields.io/codecov/c/github/jonah-sullivan/Qgis-Plugin-Builder
+   :target: https://codecov.io/gh/jonah-sullivan/Qgis-Plugin-Builder
+   :alt: Test Coverage
+
+.. image:: https://img.shields.io/github/last-commit/jonah-sullivan/Qgis-Plugin-Builder
+   :target: https://github.com/jonah-sullivan/Qgis-Plugin-Builder/commits
+   :alt: Last commit
+
+.. image:: https://img.shields.io/github/stars/jonah-sullivan/Qgis-Plugin-Builder?style=social
+   :target: https://github.com/jonah-sullivan/Qgis-Plugin-Builder/stargazers
+   :alt: GitHub stars
+
+.. image:: https://img.shields.io/github/issues/jonah-sullivan/Qgis-Plugin-Builder
+   :target: https://github.com/jonah-sullivan/Qgis-Plugin-Builder/issues
+   :alt: Open issues
 
 .. image:: https://img.shields.io/badge/License-GPL_v2-blue.svg
    :target: https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html
+   :alt: License: GPL v2
 
 .. image:: https://img.shields.io/badge/QGIS-Plugin_Repository-brightgreen
-   :target: https://plugins.qgis.org/plugins/plugin_builder/
+   :target: https://plugins.qgis.org/plugins/pluginbuilder4/
+   :alt: QGIS Plugin Repository
+
+.. image:: https://img.shields.io/badge/code%20style-black-000000.svg
+   :target: https://github.com/psf/black
+   :alt: Code style: black
+
+.. image:: https://img.shields.io/badge/imports-isort-ef8336.svg
+   :target: https://pycqa.github.io/isort/
+   :alt: Imports: isort
+
+.. image:: https://img.shields.io/badge/linting-flake8-yellowgreen.svg
+   :target: https://flake8.pycqa.org/
+   :alt: Linting: flake8
+
+.. image:: https://img.shields.io/badge/Python-3.x-blue?logo=python
+   :target: https://www.python.org/
+   :alt: Python
+
+.. image:: https://img.shields.io/badge/QGIS-Plugin-green?logo=qgis
+   :target: https://qgis.org/
+   :alt: QGIS Plugin
+
+QGIS Plugin Builder is a Python-based tool that helps developers quickly scaffold fully structured QGIS plugins. It generates clean boilerplate code, reusable templates, and a best-practice project layout—so you can focus on building geospatial functionality instead of setup.
+Whether you're new to QGIS plugin development or an experienced GIS developer, this tool streamlines the process of creating plugins with a consistent architecture, reducing development time and improving maintainability.
+
+**Key Features**
+
+* Fast plugin scaffolding with minimal setup
+* Pre-built boilerplate following QGIS best practices
+* Template-driven structure for easy customization
+* Built for Python and the QGIS API
+* Ideal for GIS developers, teams, and plugin prototyping
 
 .. figure:: help/source/images/wizard_required_info.png
-
-This is a QGIS plugin that generates a QGIS plugin template for use in
-creating custom plugins.
 
 Walkthrough
 -----------
