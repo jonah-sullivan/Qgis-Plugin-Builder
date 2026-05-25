@@ -5,8 +5,8 @@ QGIS Plugin Builder
    :target: https://github.com/jonah-sullivan/Qgis-Plugin-Builder/actions
    :alt: Tests
 
-.. image:: https://img.shields.io/codecov/c/github/jonah-sullivan/Qgis-Plugin-Builder
-   :target: https://codecov.io/gh/jonah-sullivan/Qgis-Plugin-Builder
+.. image:: https://img.shields.io/codecov/c/github/jonah-sullivan/Qgis-Plugin-Builder/QGIS4
+   :target: https://codecov.io/gh/jonah-sullivan/Qgis-Plugin-Builder?branch=QGIS4
    :alt: Test Coverage
 
 .. image:: https://img.shields.io/github/last-commit/jonah-sullivan/Qgis-Plugin-Builder
