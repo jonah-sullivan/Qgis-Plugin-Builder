@@ -300,17 +300,20 @@ Generated files
      - Either trigger above
 
 .. note::
-   After generating your plugin you must add ``QGIS_PLUGIN_TOKEN`` as a secret
-   so the release workflow can upload to the QGIS plugin repository.
-   Create your token at `plugins.qgis.org/api/tokens/create/
-   <https://plugins.qgis.org/api/tokens/create/>`_.
+   The token API requires your plugin to already exist on plugins.qgis.org.
+   Upload your first release manually using ``OSGEO_USER`` and ``OSGEO_PASSWORD``
+   (see the alternative below), then switch to token auth for subsequent releases.
+
+   Once your plugin is registered, create a plugin-specific token at
+   ``https://plugins.qgis.org/plugins/<package_name>/tokens/create/``
+   and add it as ``QGIS_PLUGIN_TOKEN``:
 
    * **GitHub** — Settings → Secrets and variables → Actions → New repository secret
    * **GitLab** — Settings → CI/CD → Variables → Add variable
 
-   Alternatively, you can use ``OSGEO_USER`` and ``OSGEO_PASSWORD`` (your OSGeo
-   username and password) by replacing ``--qgis-token`` with
-   ``--osgeo-username`` and ``--osgeo-password`` in the generated workflow file.
+   **Alternative:** replace ``--qgis-token $QGIS_PLUGIN_TOKEN`` in the generated
+   workflow file with ``--osgeo-username $OSGEO_USER --osgeo-password $OSGEO_PASSWORD``
+   and add those secrets instead.
 
 Generating
 ==========

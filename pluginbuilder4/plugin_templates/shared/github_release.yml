@@ -21,7 +21,7 @@ jobs:
 
       - name: Deploy plugin
         run: |
-          # Token auth (recommended) — create token at https://plugins.qgis.org/api/tokens/create/
+          # Token auth (recommended) — create token at https://plugins.qgis.org/plugins/<package_name>/tokens/create/
           qgis-plugin-ci release ${{ github.ref_name }} \
             --github-token ${{ secrets.GITHUB_TOKEN }} \
             --qgis-token ${{ secrets.QGIS_PLUGIN_TOKEN }}

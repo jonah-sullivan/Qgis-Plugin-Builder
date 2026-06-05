@@ -410,8 +410,12 @@ class PluginBuilder:
                 "    <li>Initialize a git repository and push to GitHub: "
                 "<code>git init &amp;&amp; git add . &amp;&amp; git commit -m"
                 " 'initial commit' &amp;&amp; git push</code>\n"
+                "    <li>Upload your first release manually using username/password"
+                " (the token API requires the plugin to already exist on plugins.qgis.org)\n"
                 "    <li>Add <b>QGIS_PLUGIN_TOKEN</b> as a repository secret"
-                " (get it at plugins.qgis.org/api/tokens/create/): "
+                " (get it at plugins.qgis.org/plugins/"
+                + template_module_name
+                + "/tokens/create/): "
                 "GitHub &rarr; Settings &rarr; Secrets and variables &rarr; Actions\n"
                 "    <li>Create a GitHub Release to trigger the automated"
                 " deployment workflow\n"
@@ -421,8 +425,12 @@ class PluginBuilder:
                 "    <li>Initialize a git repository and push to GitLab: "
                 "<code>git init &amp;&amp; git add . &amp;&amp; git commit -m"
                 " 'initial commit' &amp;&amp; git push</code>\n"
+                "    <li>Upload your first release manually using username/password"
+                " (the token API requires the plugin to already exist on plugins.qgis.org)\n"
                 "    <li>Add <b>QGIS_PLUGIN_TOKEN</b> as a CI/CD variable"
-                " (get it at plugins.qgis.org/api/tokens/create/): "
+                " (get it at plugins.qgis.org/plugins/"
+                + template_module_name
+                + "/tokens/create/): "
                 "GitLab &rarr; Settings &rarr; CI/CD &rarr; Variables\n"
                 "    <li>Push a git tag to trigger the release pipeline\n"
             )

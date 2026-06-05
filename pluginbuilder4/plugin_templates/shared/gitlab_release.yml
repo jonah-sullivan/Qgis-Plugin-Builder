@@ -8,7 +8,7 @@ release:
     - pip install qgis-plugin-ci
   script:
     - |
-      # Token auth (recommended) — create token at https://plugins.qgis.org/api/tokens/create/
+      # Token auth (recommended) — create token at https://plugins.qgis.org/plugins/<package_name>/tokens/create/
       qgis-plugin-ci release $CI_COMMIT_TAG --qgis-token $QGIS_PLUGIN_TOKEN
       # Alternative: replace the above command with username/password auth:
       # qgis-plugin-ci release $CI_COMMIT_TAG \

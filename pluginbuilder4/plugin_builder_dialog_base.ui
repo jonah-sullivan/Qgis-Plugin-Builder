@@ -1148,7 +1148,7 @@ It should be in CamelCase e.g. PhotoLinker.</string>
           </font>
          </property>
          <property name="text">
-          <string>Add QGIS_PLUGIN_TOKEN as a secret (get it at plugins.qgis.org/api/tokens/create/): GitHub → Settings → Secrets and variables → Actions, or GitLab → Settings → CI/CD → Variables.</string>
+          <string>Add QGIS_PLUGIN_TOKEN as a secret (get it at plugins.qgis.org/plugins/&lt;package_name&gt;/tokens/create/ once your plugin is registered): GitHub → Settings → Secrets and variables → Actions, or GitLab → Settings → CI/CD → Variables.</string>
          </property>
          <property name="wordWrap">
           <bool>true</bool>

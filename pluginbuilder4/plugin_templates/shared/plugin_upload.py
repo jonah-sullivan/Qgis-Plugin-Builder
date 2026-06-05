@@ -22,7 +22,7 @@ PROTOCOL = "https"
 SERVER = "plugins.qgis.org"
 PORT = "443"
 ENDPOINT = "/plugins/RPC2/"
-TOKEN_ENDPOINT = (
+REST_UPLOAD_URL = (
     "https://plugins.qgis.org/plugins/api/{package_name}/version/add/"
 )
 
@@ -35,7 +35,7 @@ def _get_package_name_from_zip(zip_path):
 def _post_upload_token(zip_path, token):
     """Upload plugin via the REST API using a JWT token."""
     package_name = _get_package_name_from_zip(zip_path)
-    url = TOKEN_ENDPOINT.format(package_name=package_name)
+    url = REST_UPLOAD_URL.format(package_name=package_name)
     boundary = uuid.uuid4().hex
     filename = os.path.basename(zip_path)
     with open(zip_path, "rb") as f:
@@ -49,20 +49,19 @@ def _post_upload_token(zip_path, token):
         + file_data
         + ("\r\n--%s--\r\n" % boundary).encode()
     )
+    parsed = urllib.parse.urlparse(url)
+    if parsed.scheme not in ("http", "https"):
+        raise ValueError("URL must use http or https scheme: %s" % url)
     req = urllib.request.Request(
         url,
         data=body,
         headers={
             "Authorization": "Bearer %s" % token,
             "Content-Type": "multipart/form-data; boundary=%s" % boundary,
-            "User-Agent": "python-requests/2.32.3",
-            "Accept": "*/*",
-            "Accept-Encoding": "gzip, deflate",
-            "Connection": "keep-alive",
         },
         method="POST",
     )
-    with urllib.request.urlopen(req) as resp:
+    with urllib.request.urlopen(req) as resp:  # nosec B310
         return resp.status, resp.read()
 
 
