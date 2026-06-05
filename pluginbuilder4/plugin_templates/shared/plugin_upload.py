@@ -58,6 +58,10 @@ def _post_upload_token(zip_path, token):
         headers={
             "Authorization": "Bearer %s" % token,
             "Content-Type": "multipart/form-data; boundary=%s" % boundary,
+            "User-Agent": "python-requests/2.32.3",
+            "Accept": "*/*",
+            "Accept-Encoding": "gzip, deflate",
+            "Connection": "keep-alive",
         },
         method="POST",
     )
