@@ -22,7 +22,9 @@ PROTOCOL = "https"
 SERVER = "plugins.qgis.org"
 PORT = "443"
 ENDPOINT = "/plugins/RPC2/"
-TOKEN_ENDPOINT = "https://plugins.qgis.org/plugins/api/{package_name}/version/add/"
+TOKEN_ENDPOINT = (
+    "https://plugins.qgis.org/plugins/api/{package_name}/version/add/"
+)
 
 
 def _get_package_name_from_zip(zip_path):
@@ -53,6 +55,10 @@ def _post_upload_token(zip_path, token):
         headers={
             "Authorization": "Bearer %s" % token,
             "Content-Type": "multipart/form-data; boundary=%s" % boundary,
+            "User-Agent": "python-requests/2.32.3",
+            "Accept": "*/*",
+            "Accept-Encoding": "gzip, deflate",
+            "Connection": "keep-alive",
         },
         method="POST",
     )
