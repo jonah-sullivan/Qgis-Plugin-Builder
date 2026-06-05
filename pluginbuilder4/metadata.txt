@@ -9,12 +9,14 @@
 name=Plugin Builder 4
 about=Create a template for a QGIS plugin
 description=Creates a QGIS plugin template for use as a starting point in plugin development
-version=3.4.4
+version=3.4.5
 qgisMinimumVersion=4.0
 qgisMaximumVersion=4.99
 license=GNU GPL v2
 
-changelog=3.4.4 2026-05-24
+changelog=3.4.5 2026-06-06
+      * Add token-based authentication for QGIS plugin repository upload
+    3.4.4 2026-05-24
       * add pre-commit hooks and expand test coverage
     3.4.3 2026-05-24
       * add gitlab CI support

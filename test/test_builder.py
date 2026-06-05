@@ -240,7 +240,7 @@ def test_prepare_results_html_with_qgis_plugin_ci(builder, spec):
     """_prepare_results_html includes CI/CD steps when gen_qgis_plugin_ci is True."""
     spec.gen_qgis_plugin_ci = True
     results_popped, _ = builder._prepare_results_html(spec)
-    assert "OSGEO_USER" in results_popped
+    assert "QGIS_PLUGIN_TOKEN" in results_popped
     assert "GitHub Release" in results_popped
 
 
@@ -281,8 +281,12 @@ def test_prepare_results_html_with_gitlab_ci(builder, spec):
     spec.gitlab_namespace = "mygroup"
     spec.project_slug = "my-plugin"
     results_popped, _ = builder._prepare_results_html(spec)
-    assert "OSGEO_USER" in results_popped
-    assert "git tag" in results_popped.lower() or "CI_COMMIT_TAG" in results_popped or "GitLab" in results_popped
+    assert "QGIS_PLUGIN_TOKEN" in results_popped
+    assert (
+        "git tag" in results_popped.lower()
+        or "CI_COMMIT_TAG" in results_popped
+        or "GitLab" in results_popped
+    )
 
 
 def test_prepare_specific_files(builder, spec):

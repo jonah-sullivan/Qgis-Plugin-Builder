@@ -10,6 +10,9 @@ import http.client
 import os
 import sys
 import urllib.parse
+import urllib.request
+import uuid
+import zipfile
 from optparse import OptionParser
 
 import defusedxml.ElementTree as ET  # noqa: N817
@@ -19,6 +22,42 @@ PROTOCOL = "https"
 SERVER = "plugins.qgis.org"
 PORT = "443"
 ENDPOINT = "/plugins/RPC2/"
+TOKEN_ENDPOINT = "https://plugins.qgis.org/plugins/api/{package_name}/version/add/"
+
+
+def _get_package_name_from_zip(zip_path):
+    with zipfile.ZipFile(zip_path) as zf:
+        return zf.namelist()[0].split("/")[0]
+
+
+def _post_upload_token(zip_path, token):
+    """Upload plugin via the REST API using a JWT token."""
+    package_name = _get_package_name_from_zip(zip_path)
+    url = TOKEN_ENDPOINT.format(package_name=package_name)
+    boundary = uuid.uuid4().hex
+    filename = os.path.basename(zip_path)
+    with open(zip_path, "rb") as f:
+        file_data = f.read()
+    body = (
+        (
+            "--%s\r\n"
+            'Content-Disposition: form-data; name="package"; filename="%s"\r\n'
+            "Content-Type: application/zip\r\n\r\n" % (boundary, filename)
+        ).encode()
+        + file_data
+        + ("\r\n--%s--\r\n" % boundary).encode()
+    )
+    req = urllib.request.Request(
+        url,
+        data=body,
+        headers={
+            "Authorization": "Bearer %s" % token,
+            "Content-Type": "multipart/form-data; boundary=%s" % boundary,
+        },
+        method="POST",
+    )
+    with urllib.request.urlopen(req) as resp:
+        return resp.status, resp.read()
 
 
 def _post_upload(address, plugin_data):
@@ -72,6 +111,19 @@ def _parse_response(xml_data):
 
 
 def main(parameters, arguments):
+    if parameters.token:
+        print("Uploading using token authentication...")
+        try:
+            status, body = _post_upload_token(arguments[0], parameters.token)
+            print("HTTP %s: %s" % (status, body.decode()))
+        except urllib.error.HTTPError as err:
+            print("HTTP error %s: %s" % (err.code, err.read().decode()))
+            sys.exit(1)
+        except urllib.error.URLError as err:
+            print("Connection error: %s" % err.reason)
+            sys.exit(1)
+        return
+
     address = ("{protocol}://{username}:{password}@{server}:{port}{endpoint}").format(
         protocol=PROTOCOL,
         username=parameters.username,
@@ -110,6 +162,15 @@ def hide_password(url, start=6):
 if __name__ == "__main__":
     parser = OptionParser(usage="%prog [options] plugin.zip")
     parser.add_option(
+        "-t",
+        "--token",
+        dest="token",
+        help="JWT token for plugin site. "
+        "You can use environment variable 'PLUGIN_UPLOAD_TOKEN'. "
+        "When provided, the token REST API is used instead of XML-RPC.",
+        metavar="TOKEN",
+    )
+    parser.add_option(
         "-w",
         "--password",
         dest="password",
@@ -142,23 +203,27 @@ if __name__ == "__main__":
         print("Please specify zip file.\n")
         parser.print_help()
         sys.exit(1)
-    if not options.server:
-        options.server = SERVER
-    if not options.port:
-        options.port = PORT
-    if not options.username:
-        username = os.environ.get("PLUGIN_UPLOAD_USERNAME")
-        if username:
-            options.username = username
-        else:
-            username = getpass.getuser()
-            print("Please enter user name [%s] :" % username, end=" ")
-            res = input()
-            options.username = res if res != "" else username
-    if not options.password:
-        password = os.environ.get("PLUGIN_UPLOAD_PASSWORD")
-        if password:
-            options.password = password
-        else:
-            options.password = getpass.getpass()
+    if not options.token:
+        options.token = os.environ.get("PLUGIN_UPLOAD_TOKEN")
+    if not options.token:
+        # Fall through to username/password auth
+        if not options.server:
+            options.server = SERVER
+        if not options.port:
+            options.port = PORT
+        if not options.username:
+            username = os.environ.get("PLUGIN_UPLOAD_USERNAME")
+            if username:
+                options.username = username
+            else:
+                username = getpass.getuser()
+                print("Please enter user name [%s] :" % username, end=" ")
+                res = input()
+                options.username = res if res != "" else username
+        if not options.password:
+            password = os.environ.get("PLUGIN_UPLOAD_PASSWORD")
+            if password:
+                options.password = password
+            else:
+                options.password = getpass.getpass()
     main(options, args)

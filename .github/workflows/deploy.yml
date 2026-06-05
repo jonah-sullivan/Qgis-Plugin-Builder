@@ -33,6 +33,7 @@ jobs:
 
       - name: Upload to QGIS plugin repository
         env:
+          PLUGIN_UPLOAD_TOKEN: ${{ secrets.QGIS_PLUGIN_TOKEN }}
           PLUGIN_UPLOAD_USERNAME: ${{ secrets.OSGEO_USERNAME }}
           PLUGIN_UPLOAD_PASSWORD: ${{ secrets.OSGEO_PASSWORD }}
         run: python pluginbuilder4/plugin_templates/shared/plugin_upload.py pluginbuilder4.zip

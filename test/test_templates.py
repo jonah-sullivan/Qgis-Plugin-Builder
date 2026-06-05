@@ -73,7 +73,9 @@ def test_base_copy_files_returns_empty():
 
 
 def test_base_what_next_items_html():
-    html = PluginTemplate().what_next_items_html("/tmp/plugin", "my_plugin", "my_plugin_dialog_base.ui")
+    html = PluginTemplate().what_next_items_html(
+        "/tmp/plugin", "my_plugin", "my_plugin_dialog_base.ui"
+    )
     assert "my_plugin.py" in html
     assert "my_plugin_dialog_base.ui" in html
     assert "icon.png" in html
@@ -110,7 +112,9 @@ def test_dialog_template_subdir_exists():
 
 
 def test_dialog_template_copy_files():
-    assert ToolbuttonWithDialogPluginTemplate().copy_files(FakeSpec()) == {"icon.png": "icon.png"}
+    assert ToolbuttonWithDialogPluginTemplate().copy_files(FakeSpec()) == {
+        "icon.png": "icon.png"
+    }
 
 
 def test_dialog_template_files_without_tests():
@@ -159,7 +163,10 @@ def test_dialog_template_map_ui_file(dialog):
 
 
 def test_dockwidget_template_descr():
-    assert ToolbuttonWithDockWidgetPluginTemplate().descr() == "Tool button with dock widget"
+    assert (
+        ToolbuttonWithDockWidgetPluginTemplate().descr()
+        == "Tool button with dock widget"
+    )
 
 
 def test_dockwidget_template_subdir_exists():
@@ -167,7 +174,9 @@ def test_dockwidget_template_subdir_exists():
 
 
 def test_dockwidget_template_copy_files():
-    assert ToolbuttonWithDockWidgetPluginTemplate().copy_files(FakeSpec()) == {"icon.png": "icon.png"}
+    assert ToolbuttonWithDockWidgetPluginTemplate().copy_files(FakeSpec()) == {
+        "icon.png": "icon.png"
+    }
 
 
 def test_dockwidget_template_files_without_tests():

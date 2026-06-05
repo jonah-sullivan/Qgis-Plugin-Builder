@@ -20,8 +20,13 @@ jobs:
         run: pip install qgis-plugin-ci
 
       - name: Deploy plugin
-        run: >-
-          qgis-plugin-ci release ${{ github.ref_name }}
-          --github-token ${{ secrets.GITHUB_TOKEN }}
-          --osgeo-username ${{ secrets.OSGEO_USER }}
-          --osgeo-password ${{ secrets.OSGEO_PASSWORD }}
+        run: |
+          # Token auth (recommended) — create token at https://plugins.qgis.org/api/tokens/create/
+          qgis-plugin-ci release ${{ github.ref_name }} \
+            --github-token ${{ secrets.GITHUB_TOKEN }} \
+            --qgis-token ${{ secrets.QGIS_PLUGIN_TOKEN }}
+          # Alternative: replace the above command with username/password auth:
+          # qgis-plugin-ci release ${{ github.ref_name }} \
+          #   --github-token ${{ secrets.GITHUB_TOKEN }} \
+          #   --osgeo-username ${{ secrets.OSGEO_USER }} \
+          #   --osgeo-password ${{ secrets.OSGEO_PASSWORD }}

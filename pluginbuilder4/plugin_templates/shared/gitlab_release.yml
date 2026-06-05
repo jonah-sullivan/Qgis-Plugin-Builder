@@ -7,9 +7,12 @@ release:
   before_script:
     - pip install qgis-plugin-ci
   script:
-    - >-
-      qgis-plugin-ci release $CI_COMMIT_TAG
-      --osgeo-username $OSGEO_USER
-      --osgeo-password $OSGEO_PASSWORD
+    - |
+      # Token auth (recommended) — create token at https://plugins.qgis.org/api/tokens/create/
+      qgis-plugin-ci release $CI_COMMIT_TAG --qgis-token $QGIS_PLUGIN_TOKEN
+      # Alternative: replace the above command with username/password auth:
+      # qgis-plugin-ci release $CI_COMMIT_TAG \
+      #   --osgeo-username $OSGEO_USER \
+      #   --osgeo-password $OSGEO_PASSWORD
   rules:
     - if: $CI_COMMIT_TAG
