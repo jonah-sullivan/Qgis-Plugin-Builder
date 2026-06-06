@@ -18,22 +18,15 @@ jobs:
           python-version: "3.x"
 
       - name: Install dependencies
-        run: pip install sphinx defusedxml
+        run: pip install sphinx qgis-plugin-ci
 
       - name: Build Sphinx docs
         run: make html
         working-directory: help
 
-      - name: Build plugin zip
+      - name: Release
         run: |
-          zip -r pluginbuilder4.zip pluginbuilder4 \
-            --exclude "*/doctrees/*" \
-            --exclude "*/.buildinfo" \
-            --exclude "*/.buildinfo.bak"
-
-      - name: Upload to QGIS plugin repository
-        env:
-          PLUGIN_UPLOAD_TOKEN: ${{ secrets.QGIS_PLUGIN_TOKEN }}
-          PLUGIN_UPLOAD_USERNAME: ${{ secrets.OSGEO_USERNAME }}
-          PLUGIN_UPLOAD_PASSWORD: ${{ secrets.OSGEO_PASSWORD }}
-        run: python pluginbuilder4/plugin_templates/shared/plugin_upload.py pluginbuilder4.zip
+          qgis-plugin-ci release ${{ github.ref_name }} \
+            --github-token ${{ secrets.GITHUB_TOKEN }} \
+            --qgis-token ${{ secrets.QGIS_PLUGIN_TOKEN }} \
+            --allow-uncommitted-changes
