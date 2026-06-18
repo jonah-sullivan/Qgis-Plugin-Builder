@@ -421,7 +421,7 @@ It should be in CamelCase e.g. PhotoLinker.</source>
     <message>
         <location filename="../plugin_builder_dialog_base.ui" line="0" />
         <source>GitLab namespace:</source>
-        <translation>亚搏体育appGitLab命名空间：</translation>
+        <translation>GitLab命名空间：</translation>
     </message>
     <message>
         <location filename="../plugin_builder_dialog_base.ui" line="0" />
