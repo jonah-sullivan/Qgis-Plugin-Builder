@@ -7,7 +7,7 @@
 import os
 import sys
 import getpass
-import xmlrpc.client
+from defusedxml.xmlrpc import ServerProxy
 from optparse import OptionParser
 
 # Configuration
@@ -33,24 +33,16 @@ def main(parameters, arguments):
         endpoint=ENDPOINT)
     print("Connecting to: %s" % hide_password(address))
 
-    server = xmlrpc.client.ServerProxy(address, verbose=VERBOSE)
+    server = ServerProxy(address, transport=Transport(), verbose=VERBOSE)
 
     try:
         with open(arguments[0], 'rb') as handle:
-            plugin_id, version_id = server.plugin.upload(
-                xmlrpc.client.Binary(handle.read()))
+            plugin_id, version_id = server.plugin.upload(handle.read())
         print("Plugin ID: %s" % plugin_id)
         print("Version ID: %s" % version_id)
-    except xmlrpc.client.ProtocolError as err:
+    except Exception as err:
         print("A protocol error occurred")
-        print("URL: %s" % hide_password(err.url, 0))
-        print("HTTP/HTTPS headers: %s" % err.headers)
-        print("Error code: %d" % err.errcode)
-        print("Error message: %s" % err.errmsg)
-    except xmlrpc.client.Fault as err:
-        print("A fault occurred")
-        print("Fault code: %d" % err.faultCode)
-        print("Fault string: %s" % err.faultString)
+        print(err)
 
 
 def hide_password(url, start=6):
