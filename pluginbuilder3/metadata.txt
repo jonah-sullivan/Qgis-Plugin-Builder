@@ -9,11 +9,13 @@
 name=Plugin Builder 3
 about=Create a template for a QGIS plugin. NOTE: This version (Plugin Builder 3) is in maintenance mode for QGIS 3. For QGIS 4 / Qt6, install Plugin Builder 4: https://plugins.qgis.org/plugins/pluginbuilder4
 description=Creates a QGIS plugin template for use as a starting point in plugin development. This branch is in maintenance mode — for active development and QGIS 4 support see https://plugins.qgis.org/plugins/pluginbuilder4
-version=3.3.1
+version=3.3.2
 qgisMinimumVersion=3.0
 qgisMaximumVersion=4.99
 
-changelog=3.3.1 2026-06-23
+changelog=3.3.2
+      * reformat for use with qgis-plugin-ci
+    3.3.1 2026-06-23
       * use defusedxml instead of xmlrpc for upload
     3.3.0 2026-04-25
       * Add QGIS 4 compatibility
