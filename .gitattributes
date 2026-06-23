@@ -3,3 +3,4 @@
 .gitignore export-ignore
 .qgis-plugin-ci export-ignore
 pluginbuilder3/pb_tool.cfg export-ignore
+pluginbuilder3/docs/.buildinfo export-ignore
