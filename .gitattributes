@@ -2,15 +2,4 @@
 .gitattributes export-ignore
 .gitignore export-ignore
 .qgis-plugin-ci export-ignore
-Makefile export-ignore
-README.rst export-ignore
-pb_tool.cfg export-ignore
-pylintrc export-ignore
-run-env-linux.sh export-ignore
-icon.xcf export-ignore
-icon.svg export-ignore
-icon.readme export-ignore
-Oxygen480-categories-applications-development.svg export-ignore
-help/ export-ignore
-test/ export-ignore
-.github/ export-ignore
+pluginbuilder3/pb_tool.cfg export-ignore
