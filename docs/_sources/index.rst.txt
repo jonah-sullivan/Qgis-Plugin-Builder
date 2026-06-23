@@ -6,6 +6,11 @@
 QGIS Plugin Builder
 ===============================================
 
+.. note::
+
+   **This version (Plugin Builder 3) is in maintenance mode for QGIS 3.**
+   For QGIS 4 / Qt6, use `Plugin Builder 4 <https://plugins.qgis.org/plugins/pluginbuilder4>`_.
+
 .. toctree::
    :maxdepth: 2
 

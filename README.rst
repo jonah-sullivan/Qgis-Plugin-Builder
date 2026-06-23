@@ -1,11 +1,23 @@
-NOTE
-====
-
-**QGIS 3 development now takes place in master branch.**
-**QGIS 2 version of the plugin is in the LTR_2.x branch**
-
 QGIS Plugin Builder
 ===================
+
+.. note::
+
+   **This branch (QGIS3) is in maintenance mode** — only critical bug fixes will be accepted.
+   Active development has moved to the `QGIS4 branch`_, which supports QGIS 4 and Qt6.
+
+   +-------------------+-------------------------------------------------------+
+   | Branch            | Plugin repository                                     |
+   +===================+=======================================================+
+   | QGIS3 (this)      | https://plugins.qgis.org/plugins/pluginbuilder3       |
+   +-------------------+-------------------------------------------------------+
+   | QGIS4 (active)    | https://plugins.qgis.org/plugins/pluginbuilder4       |
+   +-------------------+-------------------------------------------------------+
+
+   If you are using QGIS 4, please install **Plugin Builder 4** from the QGIS plugin
+   repository and open issues against the `QGIS4 branch`_.
+
+.. _QGIS4 branch: https://github.com/jonah-sullivan/Qgis-Plugin-Builder/tree/QGIS4
 
 .. image:: https://badges.gitter.im/Join%20Chat.svg
    :alt: Join the chat at https://gitter.im/g-sherman/Qgis-Plugin-Builder

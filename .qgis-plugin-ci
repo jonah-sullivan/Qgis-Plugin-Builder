@@ -1,0 +1,6 @@
+# qgis-plugin-ci configuration — Plugin Builder 3
+# See https://opengisch.github.io/qgis-plugin-ci/
+plugin_path: .
+github_organization_slug: jonah-sullivan
+project_slug: Qgis-Plugin-Builder
+use_project_slug_as_plugin_directory: true
