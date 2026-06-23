@@ -11,6 +11,9 @@ nohup.out
 
 # ignore the help build dir
 help/build
+
+# ignore release zips
+*.zip
 .flake8
 .gitignore
 .venv
