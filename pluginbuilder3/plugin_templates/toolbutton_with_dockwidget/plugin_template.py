@@ -24,19 +24,17 @@
 import os
 from ..plugin_template import PluginTemplate
 from ...qgis_dirs import deployment_dir
-
-
 class ToolbuttonWithDockWidgetPluginTemplate(PluginTemplate):
 
     def descr(self):
-        return "Tool button with dock widget"
+        return self.tr("Tool button with dock widget")
 
     def subdir(self):
         return os.path.dirname(__file__)
 
     def template_map(self, specification, dialog):
         menu_text = dialog.template_subframe.menu_text.text()
-        menu = dialog.template_subframe.menu_location.currentText()
+        menu = dialog.template_subframe.menu_location.currentData() or dialog.template_subframe.menu_location.currentText()
         # Munge the plugin menu function based on user choice
         if menu == 'Plugins':
             add_method = 'addPluginToMenu'
@@ -46,7 +44,7 @@ class ToolbuttonWithDockWidgetPluginTemplate(PluginTemplate):
             remove_method = 'removePlugin{}Menu'.format(menu)
         self.category = menu
 
-        dockwidget_area = dialog.template_subframe.dockwidget_area.currentText()
+        dockwidget_area = dialog.template_subframe.dockwidget_area.currentData() or dialog.template_subframe.dockwidget_area.currentText()
 
         return {
             # Makefile

@@ -22,8 +22,12 @@
 """
 
 
+from qgis.PyQt.QtCore import QCoreApplication
 class PluginTemplate:
     """Base class for plugin templates."""
+
+    def tr(self, message):
+        return QCoreApplication.translate(type(self).__name__, message)
 
     def descr(self):
         raise NotImplementedError

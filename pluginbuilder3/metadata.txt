@@ -1,52 +1,86 @@
-# This file contains metadata for your plugin. Beginning
-# with version 1.8 this is the preferred way to supply information about a
-# plugin. The current method of embedding metadata in __init__.py will
-# be supported until version 2.0
-# git sha : $Format:%H$
-# This file should be included when you package your plugin.
-
 [general]
-name=Plugin Builder 3
-about=Create a template for a QGIS plugin. NOTE: This version (Plugin Builder 3) is in maintenance mode for QGIS 3. For QGIS 4 / Qt6, install Plugin Builder 4: https://plugins.qgis.org/plugins/pluginbuilder4
-description=Creates a QGIS plugin template for use as a starting point in plugin development. This branch is in maintenance mode — for active development and QGIS 4 support see https://plugins.qgis.org/plugins/pluginbuilder4
-version=3.3.2
-qgisMinimumVersion=3.0
-qgisMaximumVersion=4.99
+name = Plugin Builder 3
+about = Create a template for a QGIS plugin. NOTE: This version (Plugin Builder 3) is in maintenance mode for QGIS 3. For QGIS 4 / Qt6, install Plugin Builder 4: https://plugins.qgis.org/plugins/pluginbuilder4
+description = Creates a QGIS plugin template for use as a starting point in plugin development. This branch is in maintenance mode — for active development and QGIS 4 support see https://plugins.qgis.org/plugins/pluginbuilder4
+version = 3.4.0
+qgisMinimumVersion = 3.0
+qgisMaximumVersion = 3.99
+changelog = 3.4.0 2026-07-03
+	* Implementation of machine translation and traduce for west europ countries by francois.thevand@gmail.com
+	3.3.2
+	* reformat for use with qgis-plugin-ci
+	3.3.1 2026-06-23
+	* use defusedxml instead of xmlrpc for upload
+	3.3.0 2026-04-25
+	* Remove Qt resource compilation in favour of filesystem paths for icons
+	* Fix QGISDIR path detection
+	* Make Makefile test, deploy help, and translation steps conditional
+	* Various bug fixes and test improvements
+	3.2.1 2019-06-28
+	* Bug fixes
+	3.1 2018-12-31
+	* Fix issue with reload on generated plugins
+	3.0.5 2018-12-31:
+	* Fix issue with reload on generated plugins
+	3.0.4 2018-12-25:
+	* Move dialog creation to run method.
+	* Move help file generation files to proper method
+	* Include missing tags file
+	* Attempt to compile resources.qrc when plugin is generated (requires pyrcc5 in path)
+	* Set deployment directory in Makefile based on user OS (pb_tool is preferred over make)
+	* Check for valid URL format for tracker and repository
+	3.0.3 2018-02-23: Redesign of UI to allow better editing prior to generation.
+homepage = http://jonah-sullivan.github.io/Qgis-Plugin-Builder
+tracker = https://github.com/jonah-sullivan/Qgis-Plugin-Builder/issues
+repository = https://github.com/jonah-sullivan/Qgis-Plugin-Builder
+tags = development
+icon = icon.png
+experimental = False
+deprecated = False
+author = jonah-sullivan
+email = geosull@pm.me
+description[fr] = Crée un modèle de plugin QGIS à utiliser comme point de départ dans le développement du plugin. Cette branche est en mode maintenance — pour le développement actif et la prise en charge de QGIS 4, voir https://plugins.qgis.org/plugins/pluginbuilder4
+tags[fr] = développement
+name[fr] = Générateur de plugins 3
+about[fr] = Créez un modèle pour un plugin QGIS. REMARQUE : Cette version (Plugin Builder 3) est en mode maintenance pour QGIS 3. Pour QGIS 4 / Qt6, installez Plugin Builder 4 : https://plugins.qgis.org/plugins/pluginbuilder4
+description[en] = Creates a QGIS plugin template for use as a starting point in plugin development. This branch is in maintenance mode — for active development and QGIS 4 support see https://plugins.qgis.org/plugins/pluginbuilder4
+tags[en] = development
+name[en] = Plugin Builder 3
+about[en] = Create a template for a QGIS plugin. NOTE: This version (Plugin Builder 3) is in maintenance mode for QGIS 3. For QGIS 4 / Qt6, install Plugin Builder 4: https://plugins.qgis.org/plugins/pluginbuilder4
+description[es] = Crea una plantilla de complemento QGIS para usar como punto de partida en el desarrollo de complementos. Esta rama está en modo de mantenimiento; para desarrollo activo y compatibilidad con QGIS 4, consulte https://plugins.qgis.org/plugins/pluginbuilder4
+tags[es] = desarrollo
+name[es] = Generador de complementos 3
+about[es] = Cree una plantilla para un complemento QGIS. NOTA: Esta versión (Plugin Builder 3) está en modo de mantenimiento para QGIS 3. Para QGIS 4/Qt6, instale Plugin Builder 4: https://plugins.qgis.org/plugins/pluginbuilder4
+description[pt] = Cria um modelo de plugin QGIS para usar como ponto de partida no desenvolvimento de plugins. Este branch está em modo de manutenção — para desenvolvimento ativo e suporte QGIS 4, consulte https://plugins.qgis.org/plugins/pluginbuilder4
+tags[pt] = desenvolvimento
+name[pt] = Construtor de plug-ins 3
+about[pt] = Crie um modelo para um plugin QGIS. NOTA: Esta versão (Plugin Builder 3) está em modo de manutenção para QGIS 3. Para QGIS 4/Qt6, instale o Plugin Builder 4: https://plugins.qgis.org/plugins/pluginbuilder4
+description[it] = Crea un modello di plugin QGIS da utilizzare come punto di partenza nello sviluppo del plugin. Questo ramo è in modalità manutenzione — per lo sviluppo attivo e il supporto QGIS 4 vedi https://plugins.qgis.org/plugins/pluginbuilder4
+tags[it] = sviluppo
+name[it] = Generatore di plugin 3
+about[it] = Crea un modello per un plugin QGIS. NOTA: Questa versione (Plugin Builder 3) è in modalità manutenzione per QGIS 3. Per QGIS 4 / Qt6, installa Plugin Builder 4: https://plugins.qgis.org/plugins/pluginbuilder4
+description[de] = Erstellt eine QGIS-Plugin-Vorlage zur Verwendung als Ausgangspunkt bei der Plugin-Entwicklung. Dieser Zweig befindet sich im Wartungsmodus – Informationen zur aktiven Entwicklung und QGIS 4-Unterstützung finden Sie unter https://plugins.qgis.org/plugins/pluginbuilder4
+tags[de] = Entwicklung
+name[de] = Plugin-Builder 3
+about[de] = Erstellen Sie eine Vorlage für ein QGIS-Plugin. HINWEIS: Diese Version (Plugin Builder 3) befindet sich im Wartungsmodus für QGIS 3. Für QGIS 4 / Qt6 installieren Sie Plugin Builder 4: https://plugins.qgis.org/plugins/pluginbuilder4
+description[nl] = Creëert een sjabloon voor een plug-in voor QGIS voor gebruik als startpunt bij de ontwikkeling van plug-ins. Deze tak bevindt zich in de onderhoudsmodus — voor actieve ontwikkeling en ondersteuning voor QGIS 4 zie https://plugins.qgis.org/plugins/pluginbuilder4
+tags[nl] = ontwikkeling
+name[nl] = Plug-inbouwer 3
+about[nl] = Maak een sjabloon voor een plug-in voor QGIS. OPMERKING: Deze versie (Plugin Builder 3) bevindt zich in de onderhoudsmodus voor QGIS 3. Voor QGIS 4/Qt6 installeert u Plugin Builder 4: https://plugins.qgis.org/plugins/pluginbuilder4
+description[sv] = Skapar en QGIS-pluginmall för användning som utgångspunkt i plugin-utveckling. Den här grenen är i underhållsläge — för aktiv utveckling och QGIS 4-stöd se https://plugins.qgis.org/plugins/pluginbuilder4
+tags[sv] = utveckling
+name[sv] = Plugin Builder 3
+about[sv] = Skapa en mall för ett QGIS-plugin. OBS: Denna version (Plugin Builder 3) är i underhållsläge för QGIS 3. För QGIS 4 / Qt6, installera Plugin Builder 4: https://plugins.qgis.org/plugins/pluginbuilder4
+description[no] = Oppretter en QGIS plugin-mal for bruk som utgangspunkt i plugin-utvikling. Denne grenen er i vedlikeholdsmodus - for aktiv utvikling og QGIS 4-støtte se https://plugins.qgis.org/plugins/pluginbuilder4
+tags[no] = utvikling
+name[no] = Plugin Builder 3
+about[no] = Lag en mal for en QGIS-plugin. MERK: Denne versjonen (Plugin Builder 3) er i vedlikeholdsmodus for QGIS 3. For QGIS 4 / Qt6, installer Plugin Builder 4: https://plugins.qgis.org/plugins/pluginbuilder4
+description[da] = Opretter en QGIS plugin skabelon til brug som udgangspunkt i plugin udvikling. Denne gren er i vedligeholdelsestilstand - for aktiv udvikling og QGIS 4-support se https://plugins.qgis.org/plugins/pluginbuilder4
+tags[da] = udvikling
+name[da] = Plugin Builder 3
+about[da] = Opret en skabelon til et QGIS-plugin. BEMÆRK: Denne version (Plugin Builder 3) er i vedligeholdelsestilstand for QGIS 3. For QGIS 4 / Qt6 skal du installere Plugin Builder 4: https://plugins.qgis.org/plugins/pluginbuilder4
+description[fi] = Luo QGIS-laajennusmallin käytettäväksi laajennuskehityksen lähtökohtana. Tämä haara on ylläpitotilassa – aktiivisen kehityksen ja QGIS 4 -tuen saamiseksi katso https://plugins.qgis.org/plugins/pluginbuilder4
+tags[fi] = kehitystä
+name[fi] = Plugin Builder 3
+about[fi] = Luo malli QGIS-laajennukselle. HUOMAA: Tämä versio (Plugin Builder 3) on ylläpitotilassa QGIS 3:lle. Asenna QGIS 4 / Qt6 varten Plugin Builder 4: https://plugins.qgis.org/plugins/pluginbuilder4
 
-changelog=3.3.2
-      * reformat for use with qgis-plugin-ci
-    3.3.1 2026-06-23
-      * use defusedxml instead of xmlrpc for upload
-    3.3.0 2026-04-25
-      * Add QGIS 4 compatibility
-      * Add Qt6 compatibility
-      * Remove Qt resource compilation in favour of filesystem paths for icons
-      * Fix QGISDIR path detection
-      * Make Makefile test, deploy help, and translation steps conditional
-      * Various bug fixes and test improvements
-    3.2.1 2019-06-28
-      * Bug fixes
-    3.1 2018-12-31
-      * Fix issue with reload on generated plugins
-    3.0.5 2018-12-31:
-      * Fix issue with reload on generated plugins
-    3.0.4 2018-12-25:
-      * Move dialog creation to run method.
-      * Move help file generation files to proper method
-      * Include missing tags file
-      * Attempt to compile resources.qrc when plugin is generated (requires pyrcc5 in path)
-      * Set deployment directory in Makefile based on user OS (pb_tool is preferred over make)
-      * Check for valid URL format for tracker and repository
-    3.0.3 2018-02-23: Redesign of UI to allow better editing prior to generation.
-
-homepage=http://jonah-sullivan.github.io/Qgis-Plugin-Builder
-tracker=https://github.com/jonah-sullivan/Qgis-Plugin-Builder/issues
-repository=https://github.com/jonah-sullivan/Qgis-Plugin-Builder
-tags=development
-icon=icon.png
-
-experimental=False
-deprecated=False
-
-author=jonah-sullivan
-email=geosull@pm.me

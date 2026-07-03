@@ -24,12 +24,10 @@
 import os
 from ..plugin_template import PluginTemplate
 from ...qgis_dirs import deployment_dir
-
-
 class ProcessingProviderPluginTemplate(PluginTemplate):
 
     def descr(self):
-        return "Processing Provider"
+        return self.tr("Processing Provider")
 
     def subdir(self):
         return os.path.dirname(__file__)

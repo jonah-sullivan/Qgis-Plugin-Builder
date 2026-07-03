@@ -28,7 +28,6 @@ from qgis.PyQt import uic
 from qgis.PyQt.QtCore import Qt, QFileInfo
 from qgis.PyQt.QtWidgets import QMessageBox, QFrame, QDialog, QFileDialog
 from .plugin_templates import templates
-
 FORM_CLASS, _ = uic.loadUiType(
     os.path.join(os.path.dirname(__file__), "plugin_builder_dialog_base.ui")
 )
@@ -83,7 +82,7 @@ class PluginBuilderDialog(QDialog, FORM_CLASS):
                 if i < 5:
                     self.stackedWidget.setCurrentIndex(i + 1)
                     if i == 4:
-                        self.next_button.setText("Generate")
+                        self.next_button.setText(self.tr("Generate"))
                         if self.output_directory.text() != "":
                             self.show_output_info(
                                 os.path.join(
@@ -98,7 +97,7 @@ class PluginBuilderDialog(QDialog, FORM_CLASS):
         i = self.stackedWidget.currentIndex()
         self.stackedWidget.setCurrentIndex(i - 1)
         if i - 1 != 5:
-            self.next_button.setText("Next>")
+            self.next_button.setText(self.tr("Next>"))
 
     def template(self):
         return self.templates[self.template_cbox.currentIndex()]
@@ -111,6 +110,21 @@ class PluginBuilderDialog(QDialog, FORM_CLASS):
         self.template_subframe = uic.loadUi(
             os.path.join(self.template().subdir(), "wizard_form_base.ui"), subframe
         )
+        self._set_template_combo_data()
+
+    def _set_template_combo_data(self):
+        """Store untranslated internal values for translated template forms."""
+        frame = self.template_subframe
+        if hasattr(frame, "menu_location"):
+            values = ["Plugins", "Database", "Raster", "Vector", "Web"]
+            for index, value in enumerate(values):
+                if index < frame.menu_location.count():
+                    frame.menu_location.setItemData(index, value)
+        if hasattr(frame, "dockwidget_area"):
+            values = ["Left", "Right", "Top", "Bottom"]
+            for index, value in enumerate(values):
+                if index < frame.dockwidget_area.count():
+                    frame.dockwidget_area.setItemData(index, value)
 
     def validate_entries(self):
         """Check to see that all fields have been entered."""
@@ -125,7 +139,7 @@ class PluginBuilderDialog(QDialog, FORM_CLASS):
             or self.author.text() == ""
             or self.email_address.text() == ""
         ):
-            message = "Some required fields are missing. " "Please complete the form.\n"
+            message = self.tr("Some required fields are missing. Please complete the form.\n")
 
         def is_valid_version(v):
             parts = str(v).split(".")
@@ -134,28 +148,26 @@ class PluginBuilderDialog(QDialog, FORM_CLASS):
         if not is_valid_version(self.plugin_version.text()) or not is_valid_version(
             self.qgis_minimum_version.text()
         ):
-            message += "Version numbers must be numeric.\n"
+            message += self.tr("Version numbers must be numeric.\n")
         # validate plugin name
         # check that we have only ascii char in class name
         if not all(ord(c) < 128 for c in self.class_name.text()):
             self.class_name.setText(
-                str(self.class_name.text()).encode("ascii", "ignore")
+                str(self.class_name.text()).encode("ascii", "ignore").decode("ascii")
             )
             message += (
-                "The Class name must be ASCII characters only, "
-                "the name has been modified for you. \n"
+                self.tr("The Class name must be ASCII characters only, the name has been modified for you. \n")
             )
         # check space and force CamelCase
         if str(self.class_name.text()).find(" ") > -1:
             class_name = capwords(str(self.class_name.text()))
             self.class_name.setText(class_name.replace(" ", ""))
             message += (
-                "The Class name must use CamelCase. "
-                "No spaces are allowed; the name has been modified for you."
+                self.tr("The Class name must use CamelCase. No spaces are allowed; the name has been modified for you.")
             )
         # noinspection PyArgumentList
         if message != "":
-            QMessageBox.warning(self, "Information missing or invalid", message)
+            QMessageBox.warning(self, self.tr("Information missing or invalid"), message)
         else:
             if self.last_path:
                 self.lbl_full_output_path.setText(
@@ -167,11 +179,8 @@ class PluginBuilderDialog(QDialog, FORM_CLASS):
         if len(self.about.toPlainText()) == 0:
             QMessageBox.warning(
                 self,
-                "Missing About",
-                "Please enter a bit of detail about your plugin "
-                "(purpose, function, requirements, etc.).\n\n"
-                "You can modify this later by editing the 'about' tag in the "
-                "generated metadata.txt file.",
+                self.tr("Missing About"),
+                self.tr("Please enter a bit of detail about your plugin (purpose, function, requirements, etc.).\n\nYou can modify this later by editing the 'about' tag in the generated metadata.txt file."),
             )
             return False
         else:
@@ -183,27 +192,25 @@ class PluginBuilderDialog(QDialog, FORM_CLASS):
         if not url_tracker or not url_repo:
             QMessageBox.warning(
                 self,
-                "Missing Tracker/Repository",
-                "A bug tracker and repository entry are now required. "
-                "You may enter placeholders here, but will need valid "
-                "entries prior to submitting your plugin to the QGIS "
-                "plugin repository.",
+                self.tr("Missing Tracker/Repository"),
+                self.tr("A bug tracker and repository entry are now required. You may enter placeholders here, but will need valid entries prior to submitting your plugin to the QGIS plugin repository."),
             )
             return False
         elif url_tracker[0:4] != "http" or url_repo[0:4] != "http":
             QMessageBox.warning(
                 self,
-                "Malformed URL(s)",
-                "Your tracker and repository URLs must begin with http. "
-                "Use a fully qualified URL.",
+                self.tr("Malformed URL(s)"),
+                self.tr("Your tracker and repository URLs must begin with http. Use a fully qualified URL."),
             )
             return False
         return True
 
     def select_directory(self):
         plugin_path = QFileDialog.getExistingDirectory(
-            self, "Select the Directory for your Plugin", self.last_path
+            self, self.tr("Select the Directory for your Plugin"), self.last_path
         )
+        if not plugin_path:
+            return
         self.output_directory.setText(plugin_path)
         full_output = os.path.join(plugin_path, self.module_name.text().lower())
         self.lbl_full_output_path.setText(
@@ -214,7 +221,7 @@ class PluginBuilderDialog(QDialog, FORM_CLASS):
     def show_output_info(self, full_output):
         if QFileInfo(full_output).exists():
             self.lbl_full_output_path.setText(
-                full_output + "\nYour plugin will overwrite the existing contents!"
+                full_output + self.tr("\nYour plugin will overwrite the existing contents!")
             )
             self.lbl_full_output_path.setStyleSheet(
                 "QLabel { color : red;  font-weight : bold;}"
@@ -230,15 +237,15 @@ class PluginBuilderDialog(QDialog, FORM_CLASS):
                 if QFileInfo(self.output_directory.text()).isWritable():
                     good_dir = True
                 else:
-                    msg = "Your output directory is write-protected."
+                    msg = self.tr("Your output directory is write-protected.")
             else:
-                msg = "Your output directory does not exist."
+                msg = self.tr("Your output directory does not exist.")
 
         else:
-            msg = "Please select an output directory."
+            msg = self.tr("Please select an output directory.")
 
         if not good_dir:
-            QMessageBox.warning(None, "Error", msg)
+            QMessageBox.warning(None, self.tr("Error"), msg)
 
         return good_dir
 

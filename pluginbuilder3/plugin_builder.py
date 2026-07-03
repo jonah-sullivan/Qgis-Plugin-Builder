@@ -30,9 +30,21 @@ import codecs
 import configparser
 
 # Import the PyQt and QGIS libraries
-from qgis.PyQt.QtCore import QFileInfo, QUrl, QFile, QDir, QSettings
+from qgis.PyQt.QtCore import (
+    QFileInfo,
+    QUrl,
+    QFile,
+    QDir,
+    QSettings,
+    QTranslator,
+    QCoreApplication,
+    QLocale,
+)
 from qgis.PyQt.QtWidgets import (
-    QAction, QFileDialog, QMessageBox)
+    QAction,
+    QFileDialog,
+    QMessageBox,
+)
 
 from qgis.PyQt.QtGui import (
     QIcon,
@@ -68,6 +80,9 @@ class PluginBuilder:
             '/python/plugins'
         self.plugin_builder_path = os.path.dirname(__file__)
 
+        self.locale = self._user_locale()
+        self.translator = self._install_translator(self.locale)
+
         # class members
         self.action = None
         self.dialog = None
@@ -76,23 +91,58 @@ class PluginBuilder:
         self.shared_dir = None
         self.template_dir = None
 
+    def _user_locale(self):
+        """Return the active QGIS user locale, normalised for .qm lookup."""
+        locale = QSettings().value('locale/userLocale', QLocale.system().name())
+        if isinstance(locale, (list, tuple)):
+            locale = locale[0] if locale else QLocale.system().name()
+        locale = str(locale or QLocale.system().name()).replace('-', '_')
+        return locale
+
+    def _install_translator(self, locale):
+        """Install the plugin translator if an i18n/*.qm file exists.
+
+        Supported names are intentionally broad so automatic translation tools
+        can generate either pluginbuilder3_fr.qm, PluginBuilder_fr.qm,
+        plugin_builder_fr.qm, or their full-locale equivalents.
+        """
+        locale_short = locale.split('_')[0]
+        prefixes = ('pluginbuilder3', 'PluginBuilder', 'plugin_builder')
+        suffixes = tuple(dict.fromkeys((locale, locale_short)))
+        i18n_dir = os.path.join(self.plugin_builder_path, 'i18n')
+        for prefix in prefixes:
+            for suffix in suffixes:
+                locale_path = os.path.join(i18n_dir, f'{prefix}_{suffix}.qm')
+                if os.path.exists(locale_path):
+                    translator = QTranslator()
+                    if translator.load(locale_path):
+                        QCoreApplication.installTranslator(translator)
+                        return translator
+        return None
+
+    def tr(self, message):
+        """Translate a message using Qt translation files."""
+        return QCoreApplication.translate('PluginBuilder', message)
+
     # noinspection PyPep8Naming
     def initGui(self):
         """Create the menu entries and toolbar icons inside the QGIS GUI."""
         # Create action that will start plugin configuration
         self.action = QAction(
             QIcon(os.path.join(self.plugin_builder_path, 'icon.png')),
-            'Plugin Builder', self.iface.mainWindow())
+            self.tr('Plugin Builder'), self.iface.mainWindow())
         # connect the action to the run method
         self.action.triggered.connect(self.run)
 
         # Add toolbar button and menu item
         self.iface.addToolBarIcon(self.action)
-        self.iface.addPluginToMenu('&Plugin Builder', self.action)
+        self.iface.addPluginToMenu(self.tr('&Plugin Builder'), self.action)
 
     def unload(self):
         """Removes the plugin menu item and icon from QGIS GUI."""
-        self.iface.removePluginMenu('&Plugin Builder', self.action)
+        if self.translator:
+            QCoreApplication.removeTranslator(self.translator)
+        self.iface.removePluginMenu(self.tr('&Plugin Builder'), self.action)
         self.iface.removeToolBarIcon(self.action)
 
     def _get_plugin_path(self):
@@ -101,11 +151,11 @@ class PluginBuilder:
         while not QFileInfo(self.plugin_path).isWritable():
             # noinspection PyTypeChecker,PyArgumentList
             QMessageBox.critical(
-                None, 'Error', 'Directory is not writeable')
+                None, self.tr('Error'), self.tr('Directory is not writeable'))
             # noinspection PyCallByClass,PyTypeChecker
             self.plugin_path = QFileDialog.getExistingDirectory(
                 self.dialog,
-                'Select the Directory for your Plugin',
+                self.tr('Select the Directory for your Plugin'),
                 self._last_used_path())
             if self.plugin_path == '':
                 return False
@@ -406,7 +456,7 @@ class PluginBuilder:
         cfg = configparser.ConfigParser()
         cfg.read(os.path.join(self.plugin_builder_path, 'metadata.txt'))
         version = cfg.get('general', 'version')
-        self.dialog.setWindowTitle('QGIS Plugin Builder - {}'.format(version))
+        self.dialog.setWindowTitle(self.tr('QGIS Plugin Builder - {}').format(version))
 
         # connect the ok button to our method
         self.dialog.button_box.helpRequested.connect(self.show_help)
