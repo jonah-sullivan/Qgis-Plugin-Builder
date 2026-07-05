@@ -1,6 +1,2 @@
-# Files to exclude from git archive / qgis-plugin-ci release zip
-.gitattributes export-ignore
-.gitignore export-ignore
-.qgis-plugin-ci export-ignore
-pluginbuilder3/pb_tool.cfg export-ignore
-pluginbuilder3/docs/.buildinfo export-ignore
+pluginbuilder3/docs export-ignore
+pluginbuilder3/i18n/Documents export-ignore
