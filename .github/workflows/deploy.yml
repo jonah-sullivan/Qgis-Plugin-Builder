@@ -27,6 +27,11 @@ jobs:
         run: make html
         working-directory: help
 
+      - name: Create GitHub Release
+        run: gh release create ${{ github.ref_name }} --generate-notes
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
       - name: Release
         run: |
           qgis-plugin-ci release ${{ github.ref_name }} \
