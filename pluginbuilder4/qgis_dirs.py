@@ -10,5 +10,5 @@ _qgis_dir_location = {
 }
 
 deployment_dir = os.path.join(
-    os.path.expanduser("~"), _qgis_dir_location[platform.system()]
-)
+    os.path.expanduser("~"),
+    _qgis_dir_location.get(platform.system(), _qgis_dir_location["Linux"]))

@@ -298,7 +298,9 @@ class PluginBuilder:
         :type template_module_name: str
         """
         # populate the results readme text template
-        template_file = open(os.path.join(self.shared_dir, "readme.tmpl"))
+        template_file = open(
+            os.path.join(self.shared_dir, "readme.tmpl"),
+            encoding="utf-8")
         content = template_file.read()
         template_file.close()
         template = Template(content)
@@ -392,7 +394,9 @@ class PluginBuilder:
         :type specification: PluginSpecification
         """
         template_module_name = specification.template_map["TemplateModuleName"]
-        template_file = open(os.path.join(self.shared_dir, "results.tmpl"))
+        template_file = open(
+            os.path.join(self.shared_dir, "results.tmpl"), encoding="utf-8"
+        )
         content = template_file.read()
         template_file.close()
         template = Template(content)
@@ -411,7 +415,8 @@ class PluginBuilder:
                 "<code>git init &amp;&amp; git add . &amp;&amp; git commit -m"
                 " 'initial commit' &amp;&amp; git push</code>\n"
                 "    <li>Upload your first release manually using username/password"
-                " (the token API requires the plugin to already exist on plugins.qgis.org)\n"
+                " (the token API requires the plugin to already exist on"
+                " plugins.qgis.org)\n"
                 "    <li>Add <b>QGIS_PLUGIN_TOKEN</b> as a repository secret"
                 " (get it at plugins.qgis.org/plugins/"
                 + template_module_name
@@ -426,7 +431,8 @@ class PluginBuilder:
                 "<code>git init &amp;&amp; git add . &amp;&amp; git commit -m"
                 " 'initial commit' &amp;&amp; git push</code>\n"
                 "    <li>Upload your first release manually using username/password"
-                " (the token API requires the plugin to already exist on plugins.qgis.org)\n"
+                " (the token API requires the plugin to already exist on"
+                " plugins.qgis.org)\n"
                 "    <li>Add <b>QGIS_PLUGIN_TOKEN</b> as a CI/CD variable"
                 " (get it at plugins.qgis.org/plugins/"
                 + template_module_name
@@ -453,10 +459,18 @@ class PluginBuilder:
 
     def _create_plugin_directory(self):
         """Create the plugin directory using the module name."""
+        raw_name = self.dialog.module_name.text().lower()
+        module_name = "".join(c for c in raw_name if c.isalnum() or c == "_")
         self.plugin_path = os.path.join(
-            str(self.plugin_path), str(self.dialog.module_name.text().lower())
-        )
-        QDir().mkdir(self.plugin_path)
+            str(self.plugin_path), module_name)
+        if not QDir().mkdir(self.plugin_path):
+            QMessageBox.critical(
+                None,
+                self.tr("Error"),
+                self.tr(f"Could not create plugin directory:\n{self.plugin_path}"),
+            )
+            return False
+        return True
 
     def _last_used_path(self):
         """Return the last used plugin path from settings"""
@@ -482,7 +496,7 @@ class PluginBuilder:
         model = QStandardItemModel()
 
         for tag in tags:
-            item = QStandardItem(tag[:-1])
+            item = QStandardItem(tag.rstrip("\n"))
             model.appendRow(item)
 
         tag_dialog.listView.setModel(model)
@@ -524,7 +538,8 @@ class PluginBuilder:
         self.plugin_path = self.dialog.output_directory.text()
 
         self._set_last_used_path(self.plugin_path)
-        self._create_plugin_directory()
+        if not self._create_plugin_directory():
+            return
         self.template = self.dialog.template()
         self.template_dir = os.path.join(self.template.subdir(), "template")
         self.shared_dir = os.path.join(
@@ -619,7 +634,7 @@ class PluginBuilder:
         template_file_path = os.path.join(template_dir, template_name)
         output_name_path = os.path.join(self.plugin_path, output_name)
 
-        template_file = open(template_file_path)
+        template_file = open(template_file_path, encoding="utf-8")
         content = template_file.read()
         template_file.close()
         template = Template(content)

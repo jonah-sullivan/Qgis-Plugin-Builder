@@ -230,7 +230,7 @@ class PluginBuilderDialog(QDialog, FORM_CLASS):
         # check that we have only ascii char in class name
         if not all(ord(c) < 128 for c in self.class_name.text()):
             self.class_name.setText(
-                str(self.class_name.text()).encode("ascii", "ignore")
+                self.class_name.text().encode("ascii", "ignore").decode("ascii")
             )
             message += (
                 "The Class name must be ASCII characters only, "
@@ -244,6 +244,17 @@ class PluginBuilderDialog(QDialog, FORM_CLASS):
                 "The Class name must use CamelCase. "
                 "No spaces are allowed; the name has been modified for you."
             )
+        # validate module name
+        mod_name = str(self.module_name.text())
+        cleaned_module_name = "".join(
+            c for c in mod_name.lower() if c.isalnum() or c == "_"
+        )
+        if cleaned_module_name != mod_name.lower():
+            self.module_name.setText(cleaned_module_name)
+            message += (
+                "The module name must contain only letters, numbers, and "
+                "underscores; the name has been modified for you.\n")
+
         if message != "":
             QMessageBox.warning(self, "Information missing or invalid", message)
         else:
