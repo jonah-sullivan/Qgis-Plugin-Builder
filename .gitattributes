@@ -5,3 +5,4 @@ plugin_templates/processing_provider/plugin_template.py export-subst
 plugin_templates/toolbutton_with_dialog/plugin_template.py export-subst
 plugin_templates/toolbutton_with_dockwidget/plugin_template.py export-subst
 plugin_templates/shared/test/qgis_interface.py export-subst
+pluginbuilder4/help/.nojekyll export-ignore

@@ -141,7 +141,25 @@ Use ``pb_tool`` to deploy the generated plugin to your QGIS plugin directory::
 Then open QGIS, enable the plugin in **Plugins → Manage and Install Plugins**,
 and run it to confirm it loads correctly.
 
-**9. Start developing**
+**9. Running the generated tests**
+
+If you included the "Unit tests" component, the plugin ships with a
+``pytest``/``pytest-qgis`` suite in ``test/``. These tests import the real
+``qgis`` Python bindings, so they must run against a Python environment that
+can see your QGIS install:
+
+- Create a virtual environment that inherits the system's site-packages so it
+  picks up the ``qgis`` bindings, e.g. ``python3 -m venv --system-site-packages
+  .venv`` (or ``uv venv --system-site-packages``), then activate it.
+- Set ``QGIS_PREFIX_PATH`` so ``pytest-qgis`` can locate your QGIS
+  installation: ``export QGIS_PREFIX_PATH=/usr`` on most Linux systems,
+  ``/usr/local`` on macOS with Homebrew, or the QGIS install directory on
+  Windows.
+- Install the test dependencies: ``pip install -r requirements-dev.txt``
+  (or ``uv add --dev -r requirements-dev.txt``).
+- Run the suite with ``pytest`` or ``make test`` from the plugin directory.
+
+**10. Start developing**
 
 The generated plugin is a working stub. Open the source files in your editor,
 implement your logic, and use ``pb_tool deploy -q`` to redeploy quickly as you

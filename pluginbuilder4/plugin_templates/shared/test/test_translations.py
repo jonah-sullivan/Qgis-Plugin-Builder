@@ -15,6 +15,9 @@ def test_qgis_translations(qgis_app):
     if not os.path.isfile(file_path):
         pytest.skip('af.qm not found — run "make transcompile" first')
     translator = QTranslator()
-    assert translator.load(file_path), "Failed to load af.qm"
+    if not translator.load(file_path):
+        pytest.fail("Failed to load af.qm")
     QCoreApplication.installTranslator(translator)
-    assert QCoreApplication.translate("@default", "Good morning") == "Goeie more"
+    translated = QCoreApplication.translate("@default", "Good morning")
+    if translated != "Goeie more":
+        pytest.fail(f"Expected 'Goeie more', got {translated!r}")

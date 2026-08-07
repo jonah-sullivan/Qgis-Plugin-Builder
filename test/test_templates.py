@@ -74,7 +74,7 @@ def test_base_copy_files_returns_empty():
 
 def test_base_what_next_items_html():
     html = PluginTemplate().what_next_items_html(
-        "/tmp/plugin", "my_plugin", "my_plugin_dialog_base.ui"
+        "/home/user/my_plugin", "my_plugin", "my_plugin_dialog_base.ui"
     )
     assert "my_plugin.py" in html
     assert "my_plugin_dialog_base.ui" in html
@@ -261,7 +261,7 @@ def test_processing_template_files_with_tests():
 
 def test_processing_template_what_next_html():
     html = ProcessingProviderPluginTemplate().what_next_items_html(
-        "/tmp/plugin", "my_plugin", ""
+        "/home/user/my_plugin", "my_plugin", ""
     )
     assert "my_plugin_algorithm.py" in html
     assert "Processing" in html
