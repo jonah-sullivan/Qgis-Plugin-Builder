@@ -225,8 +225,8 @@ class PluginBuilder:
         # copy doc makefiles
         # noinspection PyCallByClass,PyTypeChecker
         QFile.copy(
-            os.path.join(self.shared_dir, "help/make.bat"),
-            os.path.join(self.plugin_path, "help/make.bat"),
+            os.path.join(self.shared_dir, "help/make.py"),
+            os.path.join(self.plugin_path, "help/make.py"),
         )
         # noinspection PyCallByClass,PyTypeChecker
         QFile.copy(

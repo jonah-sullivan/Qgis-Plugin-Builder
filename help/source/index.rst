@@ -544,9 +544,9 @@ Documenting your Plugin
 Plugin Builder optionally creates a `Sphinx <http://sphinx-doc.org>`_ project for you in
 the ``help`` subdirectory of your plugin. To build the documentation you will
 need to install Sphinx using `pip <https://pypi.org/project/Sphinx/>`_.
-Once installed, you can build the documentation using ``make doc``
-or change to the ``help`` subdirectory and use ``make html``
-(this works on any platform).
+Once installed, you can build the documentation using ``make doc``, or change
+to the ``help`` subdirectory and use ``make html`` on Linux/macOS, or
+``python make.py html`` on Windows (or anywhere without GNU make installed).
 
 Sphinx supports building other formats, including latex, text, qthelp, and epub.
 
