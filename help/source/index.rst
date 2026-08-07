@@ -185,6 +185,7 @@ recommended, but not strictly required.
 
 **Unit tests**
   Creates a basic set of unit tests for your plugin.
+  See `Running the Unit Tests`_ for more information.
 
 **Makefile**
   Adds a Makefile for building your plugin with GNU make.
@@ -445,6 +446,49 @@ before deploying and testing.
 
 Once the generated plugin is working it's your turn to customize the user
 interface and add the needed code to make it do something useful.
+
+.. index:: testing; unit tests
+.. index:: pytest
+.. index:: pytest-qgis
+
+Running the Unit Tests
+=======================
+
+If you included the "Unit tests" component, your plugin ships with a
+``pytest``/``pytest-qgis`` suite in the ``test`` directory. These tests
+import the real ``qgis`` Python bindings, so they need to run against a
+Python environment that can see your QGIS installation:
+
+#. Create a virtual environment that inherits the system's site-packages so
+   it can see the ``qgis`` bindings::
+
+    python3 -m venv --system-site-packages .venv
+
+   or with `uv <https://docs.astral.sh/uv/>`_::
+
+    uv venv --system-site-packages
+
+#. Set ``QGIS_PREFIX_PATH`` so ``pytest-qgis`` can locate your QGIS
+   installation:
+
+   *   Linux:
+           ``export QGIS_PREFIX_PATH=/usr``
+   *   Mac OS X (Homebrew):
+           ``export QGIS_PREFIX_PATH=/usr/local``
+   *   Windows:
+           set it to your QGIS install directory before running pytest
+
+#. Install the test dependencies::
+
+    pip install -r requirements-dev.txt
+
+#. Run the suite from the plugin directory::
+
+    pytest
+
+   or, if you generated a Makefile::
+
+    make test
 
 .. index:: Makefile
    double: Makefile; using
