@@ -490,6 +490,25 @@ Python environment that can see your QGIS installation:
 
     make test
 
+.. note::
+   Editors backed by Pyright/Pylance (VS Code) or PyCharm won't resolve
+   imports like ``photo_linker.photo_linker_dialog`` the same way pytest
+   does, because they don't add the plugin's parent directory to the import
+   path automatically:
+
+   *   VS Code (Pylance): add the parent directory to
+       ``.vscode/settings.json``::
+
+           {
+             "python.analysis.extraPaths": [".."]
+           }
+
+   *   PyCharm: right-click the plugin's parent directory in the project
+       tree and choose **Mark Directory as → Sources Root**.
+
+   Jedi-backed editors (e.g. jedi-language-server, python-lsp-server)
+   resolve this automatically and don't need either fix.
+
 .. index:: Makefile
    double: Makefile; using
 

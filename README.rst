@@ -158,6 +158,13 @@ can see your QGIS install:
 - Install the test dependencies: ``pip install -r requirements-dev.txt``
   (or ``uv add --dev -r requirements-dev.txt``).
 - Run the suite with ``pytest`` or ``make test`` from the plugin directory.
+- Editors backed by Pyright/Pylance (VS Code) or PyCharm may flag imports like
+  ``photo_linker.photo_linker_dialog`` as unresolved, because they don't add
+  the plugin's parent directory to the import path automatically. Fix it by
+  adding ``"python.analysis.extraPaths": [".."]`` to ``.vscode/settings.json``
+  (VS Code), or by marking the plugin's parent directory as a **Sources
+  Root** in PyCharm. Jedi-backed editors (e.g. jedi-language-server,
+  python-lsp-server) resolve this automatically and don't need either fix.
 
 **10. Start developing**
 
