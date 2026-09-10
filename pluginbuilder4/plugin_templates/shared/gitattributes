@@ -3,3 +3,9 @@
 # which are incompatible with PyQt6. Compile resources locally with pyrcc6 and
 # commit the output before releasing.
 *.qrc export-ignore
+
+# Tests use plain `assert` (pytest best practice) which trips Bandit's B101 rule.
+# The QGIS Plugins website's upload scanner treats any B101 finding as
+# critical, so keep the test suite out of the released zip via export-ignore
+# rather than avoiding assert in tests.
+test/ export-ignore

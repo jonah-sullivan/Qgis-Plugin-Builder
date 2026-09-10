@@ -3,12 +3,13 @@
 
 import os
 import platform
-from test.utilities import unique_filename
 
 import pytest
 from plugin_builder import PluginBuilder, copy
 from qgis.core import QgsProviderRegistry
 from qgis_dirs import _qgis_dir_location, deployment_dir
+
+from test.utilities import unique_filename
 
 
 class FakePluginSpecification:
@@ -125,9 +126,9 @@ def test_prepare_code(builder, spec):
     """_prepare_code writes the expected output files."""
     builder._prepare_code(spec)
     for expected in ["Makefile", "pb_tool.cfg", "__init__.py", "fake_module.py"]:
-        assert os.path.exists(
-            os.path.join(builder.plugin_path, expected)
-        ), f"{expected} was not created"
+        assert os.path.exists(os.path.join(builder.plugin_path, expected)), (
+            f"{expected} was not created"
+        )
 
 
 def test_prepare_results_html(builder, spec):
@@ -202,6 +203,10 @@ def test_prepare_tests(builder, spec):
         os.path.join(builder.plugin_path, "test", "test_plugin_lifecycle.py")
     )
     assert os.path.exists(os.path.join(builder.plugin_path, "pyproject.toml"))
+    gitattributes_path = os.path.join(builder.plugin_path, ".gitattributes")
+    assert os.path.exists(gitattributes_path)
+    with open(gitattributes_path) as f:
+        assert "test/ export-ignore" in f.read()
 
 
 def test_prepare_help(builder):

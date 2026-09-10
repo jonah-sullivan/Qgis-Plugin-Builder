@@ -16,3 +16,4 @@ repos:
     rev: 1.9.4
     hooks:
       - id: bandit
+        exclude: ^(test/|pluginbuilder4/plugin_templates/)

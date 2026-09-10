@@ -108,7 +108,9 @@ Check the components you want included:
 
 - **Internationalization** — stub i18n setup for adding translated strings
 - **Help** — a Sphinx documentation project in ``help/``
-- **Unit tests** — a pytest test suite wired to ``pytest-qgis``
+- **Unit tests** — a pytest test suite wired to ``pytest-qgis``; tests use
+  plain ``assert`` and are excluded from the packaged plugin via
+  ``.gitattributes`` so they never reach QGIS's upload scanner
 - **Helper scripts** — scripts for publishing to plugins.qgis.org and managing translations
 - **Makefile** — a GNU Makefile for building and deploying
 - **pb_tool** — a ``pb_tool.cfg`` for the ``pb_tool`` command-line deploy tool
@@ -165,6 +167,25 @@ can see your QGIS install:
   (VS Code), or by marking the plugin's parent directory as a **Sources
   Root** in PyCharm. Jedi-backed editors (e.g. jedi-language-server,
   python-lsp-server) resolve this automatically and don't need either fix.
+
+**Before publishing**
+
+The QGIS Plugins website runs Bandit on every upload as a part of security 
+scanning and treats any ``B101`` (``assert_used``) finding as critical, 
+blocking the upload outright.
+
+Generated tests use the pytest best-practice ``assert``. The
+plugin's ``.gitattributes`` excludes ``test/`` via ``export-ignore``, so any
+packaging that goes through ``git archive`` (what ``qgis-plugin-ci``
+and the generated GitHub/GitLab release workflows use) never includes the
+test suite in the uploaded zip. 
+
+This protection only holds if you package through git. If you zip the
+plugin directory by hand, use a custom build script, or remove/edit
+``.gitattributes``, the ``test/`` directory (with its ``assert`` statements)
+can end up in the zip and get your upload rejected. Before uploading
+anywhere other than through the generated release workflow, confirm
+``test/`` isn't included.
 
 **10. Start developing**
 

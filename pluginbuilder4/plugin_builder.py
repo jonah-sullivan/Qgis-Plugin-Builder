@@ -141,6 +141,14 @@ class PluginBuilder:
         test_destination = os.path.join(self.plugin_path, "test")
         copy(test_source, test_destination)
 
+        # Exclude test/ from packaged zips (tests use assert, which trips
+        # Bandit's B101 rule on the QGIS Plugins website's upload scanner).
+        # No-op if a CI step already wrote this file first.
+        QFile.copy(
+            os.path.join(self.shared_dir, "gitattributes"),
+            os.path.join(self.plugin_path, ".gitattributes"),
+        )
+
         # Render lifecycle test for iface-based plugin types
         is_processing = specification.template_map.get(
             "TemplateHasProcessingProvider", False
@@ -299,8 +307,8 @@ class PluginBuilder:
         """
         # populate the results readme text template
         template_file = open(
-            os.path.join(self.shared_dir, "readme.tmpl"),
-            encoding="utf-8")
+            os.path.join(self.shared_dir, "readme.tmpl"), encoding="utf-8"
+        )
         content = template_file.read()
         template_file.close()
         template = Template(content)
@@ -373,7 +381,7 @@ class PluginBuilder:
         )
         metadata_file.write("deprecated=%s\n\n" % specification.deprecated)
         metadata_file.write(
-            "# Since QGIS 3.8, a comma separated list of plugins to be " "installed\n"
+            "# Since QGIS 3.8, a comma separated list of plugins to be installed\n"
         )
         metadata_file.write("# (or upgraded) can be specified.\n")
         metadata_file.write("# Check the documentation for more information.\n")
@@ -461,8 +469,7 @@ class PluginBuilder:
         """Create the plugin directory using the module name."""
         raw_name = self.dialog.module_name.text().lower()
         module_name = "".join(c for c in raw_name if c.isalnum() or c == "_")
-        self.plugin_path = os.path.join(
-            str(self.plugin_path), module_name)
+        self.plugin_path = os.path.join(str(self.plugin_path), module_name)
         if not QDir().mkdir(self.plugin_path):
             QMessageBox.critical(
                 None,
