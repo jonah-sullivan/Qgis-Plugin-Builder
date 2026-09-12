@@ -202,7 +202,7 @@ class PluginBuilderDialog(QDialog, FORM_CLASS):
             or self.author.text() == ""
             or self.email_address.text() == ""
         ):
-            message = "Some required fields are missing. " "Please complete the form.\n"
+            message = "Some required fields are missing. Please complete the form.\n"
 
         def is_valid_version(v):
             parts = str(v).strip().split(".")
@@ -253,7 +253,8 @@ class PluginBuilderDialog(QDialog, FORM_CLASS):
             self.module_name.setText(cleaned_module_name)
             message += (
                 "The module name must contain only letters, numbers, and "
-                "underscores; the name has been modified for you.\n")
+                "underscores; the name has been modified for you.\n"
+            )
 
         if message != "":
             QMessageBox.warning(self, "Information missing or invalid", message)
@@ -329,7 +330,6 @@ class PluginBuilderDialog(QDialog, FORM_CLASS):
         good_dir = False
         if len(self.output_directory.text()) > 0:
             if QFileInfo(self.output_directory.text()).exists():
-
                 if QFileInfo(self.output_directory.text()).isWritable():
                     good_dir = True
                 else:

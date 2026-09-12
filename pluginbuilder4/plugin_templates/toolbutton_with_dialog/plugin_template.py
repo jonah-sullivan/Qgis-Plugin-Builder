@@ -28,7 +28,6 @@ from ..plugin_template import PluginTemplate
 
 
 class ToolbuttonWithDialogPluginTemplate(PluginTemplate):
-
     def descr(self):
         return "Tool button with dialog"
 

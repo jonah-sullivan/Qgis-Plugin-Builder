@@ -81,7 +81,7 @@ Plugin name and required information
   displayed in both the Plugin Manager and Plugin Installer. Keep it short
   yet descriptive so the purpose of the plugin can be easily determined.
 
-**Version number** 
+**Version number**
   This is the version number of your plugin. Plugin Builder
   suggests 0.1, but you can start with any number. The Plugin Installer uses the
   version number to identify which plugins you have installed are upgradeable so
@@ -158,14 +158,14 @@ parameter fields:
   Choose an appropriate location for your plugin's menu based on its main
   functionality. This will place your menu under one of the following main
   menus:
-  
+
    * Plugins
    * Database
    * Raster
    * Vector
    * Web
-     
-  If none of the specific categories apply (Database, Raster, Vector, Web), choose *Plugins*. 
+
+  If none of the specific categories apply (Database, Raster, Vector, Web), choose *Plugins*.
   Your choice is also written to the *category* field in metadata.txt.
 
 Additional components
@@ -237,7 +237,7 @@ plugin is accepted and users can be successful using it.
   with the benefit of source code control. Consider using `GitHub <https://github.com>`_
   or `GitLab <https://gitlab.com>`_ to store your code.
 
-**Tags** 
+**Tags**
   Tags are a comma separated list of keywords describing the function(s)
   of your plugin. You can enter your own or select from a list of tags by
   clicking the button to the right of the "Tags" field.
@@ -644,4 +644,3 @@ community.
 .. * :ref:`modindex`
 
 .. * :ref:`search`
-

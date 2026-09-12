@@ -170,15 +170,15 @@ can see your QGIS install:
 
 **Before publishing**
 
-The QGIS Plugins website runs Bandit on every upload as a part of security 
-scanning and treats any ``B101`` (``assert_used``) finding as critical, 
+The QGIS Plugins website runs Bandit on every upload as a part of security
+scanning and treats any ``B101`` (``assert_used``) finding as critical,
 blocking the upload outright.
 
 Generated tests use the pytest best-practice ``assert``. The
 plugin's ``.gitattributes`` excludes ``test/`` via ``export-ignore``, so any
 packaging that goes through ``git archive`` (what ``qgis-plugin-ci``
 and the generated GitHub/GitLab release workflows use) never includes the
-test suite in the uploaded zip. 
+test suite in the uploaded zip.
 
 This protection only holds if you package through git. If you zip the
 plugin directory by hand, use a custom build script, or remove/edit

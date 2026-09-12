@@ -28,7 +28,6 @@ from ..plugin_template import PluginTemplate
 
 
 class ProcessingProviderPluginTemplate(PluginTemplate):
-
     def descr(self):
         return "Processing Provider"
 
