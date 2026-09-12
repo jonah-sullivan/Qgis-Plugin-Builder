@@ -34,6 +34,14 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Remove stale release assets from a previous failed run
+        run: |
+          for asset in $(gh release view ${{ github.ref_name }} --json assets --jq '.assets[].name'); do
+            gh release delete-asset ${{ github.ref_name }} "$asset" -y
+          done
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
       - name: Release
         run: |
           qgis-plugin-ci release ${{ github.ref_name }} \
