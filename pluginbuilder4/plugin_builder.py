@@ -141,6 +141,16 @@ class PluginBuilder:
         test_destination = os.path.join(self.plugin_path, "test")
         copy(test_source, test_destination)
 
+        # Templates that use `assert` are stored as .tmpl so Bandit's B101
+        # rule doesn't flag Plugin Builder's own packaged .py files when it
+        # is scanned for upload; restore the .py extension here.
+        for entry in os.listdir(test_destination):
+            if entry.endswith(".tmpl"):
+                os.replace(
+                    os.path.join(test_destination, entry),
+                    os.path.join(test_destination, entry[: -len(".tmpl")]),
+                )
+
         # Exclude test/ from packaged zips (tests use assert, which trips
         # Bandit's B101 rule on the QGIS Plugins website's upload scanner).
         # No-op if a CI step already wrote this file first.

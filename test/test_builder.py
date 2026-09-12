@@ -119,7 +119,7 @@ def test_dir_copy(builder):
     """Copying a template sub-directory produces the expected files."""
     dest = unique_filename(prefix="plugin_builder_")
     copy(os.path.join(builder.shared_dir, "test"), dest)
-    assert os.path.exists(os.path.join(dest, "test_init.py"))
+    assert os.path.exists(os.path.join(dest, "test_init.py.tmpl"))
 
 
 def test_prepare_code(builder, spec):
