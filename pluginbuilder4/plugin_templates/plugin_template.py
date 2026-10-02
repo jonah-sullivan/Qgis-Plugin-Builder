@@ -25,6 +25,9 @@
 class PluginTemplate:
     """Base class for plugin templates."""
 
+    # Plugin category for metadata.txt; set by template_map()
+    category: str
+
     def descr(self):
         raise NotImplementedError
 

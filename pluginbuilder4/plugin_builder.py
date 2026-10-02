@@ -29,6 +29,7 @@ import shutil
 from string import Template
 
 from qgis.core import QgsApplication
+from qgis.gui import QgisInterface
 
 # Import the PyQt and QGIS libraries
 from qgis.PyQt.QtCore import (
@@ -47,11 +48,12 @@ from qgis.PyQt.QtGui import (
     QStandardItem,
     QStandardItemModel,
 )
-from qgis.PyQt.QtWidgets import QAction, QFileDialog, QMessageBox
+from qgis.PyQt.QtWidgets import QAction, QFileDialog, QMenu, QMessageBox
 
 # Import the code for the dialog
 from .plugin_builder_dialog import PluginBuilderDialog
 from .plugin_specification import PluginSpecification
+from .plugin_templates.plugin_template import PluginTemplate
 from .result_dialog import ResultDialog
 from .select_tags_dialog import SelectTagsDialog
 
@@ -59,16 +61,20 @@ from .select_tags_dialog import SelectTagsDialog
 class PluginBuilder:
     """A QGIS plugin that allows you to build QGIS plugins."""
 
-    def tr(self, message):
-        return QCoreApplication.translate("PluginBuilder", message)
+    # Set by run() before any of the _prepare_* methods are called
+    plugin_path: str
+    template_dir: str
 
-    def __init__(self, iface):
+    def tr(self, message: str) -> str:
+        return str(QCoreApplication.translate("PluginBuilder", message))
+
+    def __init__(self, iface: QgisInterface) -> None:
         """Constructor
 
         :param iface: An interface instance that will be passed to this class
             which provides the hook by which you can manipulate the QGIS
             application at run time.
-        :type iface: QgsInterface
+        :type iface: QgisInterface
 
         """
         # Save reference to the QGIS interface
@@ -92,34 +98,56 @@ class PluginBuilder:
             QCoreApplication.installTranslator(self.translator)
 
         # class members
-        self.action = None
-        self.menu = None
-        self.dialog = None
-        self.plugin_path = None
-        self.template = None
-        self.shared_dir = None
-        self.template_dir = None
+        self.action: QAction | None = None
+        self.menu: QMenu | None = None
+        self.dialog: PluginBuilderDialog | None = None
+        self.template: PluginTemplate | None = None
+        self.shared_dir = os.path.join(
+            self.plugin_builder_path, "plugin_templates", "shared"
+        )
 
-    def initGui(self):  # QGIS API override - camelCase required
+    def initGui(self) -> None:  # QGIS API override - camelCase required
         """Create the menu entries and toolbar icons inside the QGIS GUI."""
         icon = QIcon(os.path.join(self.plugin_builder_path, "icon.png"))
-        self.menu = self.iface.pluginMenu().addMenu(icon, self.tr("&Plugin Builder"))
-        self.action = QAction(
+        plugin_menu = self.iface.pluginMenu()
+        if plugin_menu is None:
+            raise RuntimeError("QGIS plugin menu is not available")
+        menu = plugin_menu.addMenu(icon, self.tr("&Plugin Builder"))
+        if menu is None:
+            raise RuntimeError("Could not create the Plugin Builder menu")
+        action = QAction(
             icon,
             self.tr("Plugin Builder"),
             self.iface.mainWindow(),
         )
-        self.action.triggered.connect(self.run)
-        self.menu.addAction(self.action)
+        action.triggered.connect(self.run)
+        menu.addAction(action)
 
-        self.iface.addToolBarIcon(self.action)
+        self.iface.addToolBarIcon(action)
+        self.menu = menu
+        self.action = action
 
-    def unload(self):
+    def unload(self) -> None:
         """Removes the plugin menu item and icon from QGIS GUI."""
-        self.iface.pluginMenu().removeAction(self.menu.menuAction())
-        self.iface.removeToolBarIcon(self.action)
+        plugin_menu = self.iface.pluginMenu()
+        if self.menu is not None and plugin_menu is not None:
+            plugin_menu.removeAction(self.menu.menuAction())
+        if self.action is not None:
+            self.iface.removeToolBarIcon(self.action)
 
-    def _get_plugin_path(self):
+    def _require_dialog(self) -> PluginBuilderDialog:
+        """Return the builder dialog, which run() creates."""
+        if self.dialog is None:
+            raise RuntimeError("Plugin Builder dialog has not been created")
+        return self.dialog
+
+    def _require_template(self) -> PluginTemplate:
+        """Return the selected plugin template, which run() sets."""
+        if self.template is None:
+            raise RuntimeError("No plugin template has been selected")
+        return self.template
+
+    def _get_plugin_path(self) -> bool:
         """Prompt the user for the path where the plugin should be written to."""
         while not QFileInfo(self.plugin_path).isWritable():
             # noinspection PyTypeChecker,PyArgumentList
@@ -135,7 +163,7 @@ class PluginBuilder:
                 return False
         return True
 
-    def _prepare_tests(self, specification):
+    def _prepare_tests(self, specification: PluginSpecification) -> None:
         """Populate and write test files."""
         test_source = os.path.join(self.shared_dir, "test")
         test_destination = os.path.join(self.plugin_path, "test")
@@ -182,12 +210,12 @@ class PluginBuilder:
             os.path.join(self.plugin_path, "requirements-dev.txt"),
         )
 
-    def _prepare_i18n(self):
+    def _prepare_i18n(self) -> None:
         """Copy the i18n folder."""
         scripts_source = os.path.join(self.shared_dir, "i18n")
         copy(scripts_source, os.path.join(self.plugin_path, "i18n"))
 
-    def _write_qgis_plugin_ci_config(self, specification):
+    def _write_qgis_plugin_ci_config(self, specification: PluginSpecification) -> None:
         """Write .qgis-plugin-ci, including whichever platform slugs are enabled."""
         lines = [
             "# qgis-plugin-ci configuration",
@@ -203,7 +231,7 @@ class PluginBuilder:
         with open(config_path, "w") as f:
             f.write("\n".join(lines) + "\n")
 
-    def _prepare_qgis_plugin_ci(self, specification):
+    def _prepare_qgis_plugin_ci(self, specification: PluginSpecification) -> None:
         """Generate .qgis-plugin-ci config and GitHub Actions release workflow."""
         self._write_qgis_plugin_ci_config(specification)
         workflows_dir = os.path.join(self.plugin_path, ".github", "workflows")
@@ -217,7 +245,7 @@ class PluginBuilder:
             os.path.join(self.plugin_path, ".gitattributes"),
         )
 
-    def _prepare_gitlab_ci(self, specification):
+    def _prepare_gitlab_ci(self, specification: PluginSpecification) -> None:
         """Generate .qgis-plugin-ci config and GitLab CI release pipeline."""
         if not specification.gen_qgis_plugin_ci:
             # Only write the config if GitHub CI hasn't already written it
@@ -231,7 +259,7 @@ class PluginBuilder:
             os.path.join(self.plugin_path, ".gitattributes"),
         )
 
-    def _prepare_help(self):
+    def _prepare_help(self) -> None:
         """Prepare the help directory."""
         # Create sphinx default project for help
         QDir().mkdir(self.plugin_path + "/help")
@@ -252,7 +280,7 @@ class PluginBuilder:
             os.path.join(self.plugin_path, "help/Makefile"),
         )
 
-    def _prepare_code(self, specification):
+    def _prepare_code(self, specification: PluginSpecification) -> None:
         """Prepare the code turning templates into python.
 
         :param specification: Specification instance containing template
@@ -278,14 +306,15 @@ class PluginBuilder:
             "%s.py" % specification.module_name,
         )
 
-    def _prepare_specific_files(self, specification):
+    def _prepare_specific_files(self, specification: PluginSpecification) -> None:
         """Prepare specific templates and files.
 
         :param specification: Specification instance containing template
             replacement keys/values.
         :type specification: PluginSpecification
         """
-        for template_name, output_name in self.template.template_files(
+        template = self._require_template()
+        for template_name, output_name in template.template_files(
             specification
         ).items():
             self.populate_template(
@@ -293,9 +322,7 @@ class PluginBuilder:
             )
 
         # copy the non-generated files to the new plugin dir
-        for template_file, output_name in self.template.copy_files(
-            specification
-        ).items():
+        for template_file, output_name in template.copy_files(specification).items():
             t_file = QFile(os.path.join(self.template_dir, template_file))
             t_file.copy(os.path.join(self.plugin_path, output_name))
 
@@ -304,7 +331,9 @@ class PluginBuilder:
             os.path.join(self.plugin_path, "LICENSE"),
         )
 
-    def _prepare_readme(self, specification, template_module_name):
+    def _prepare_readme(
+        self, specification: PluginSpecification, template_module_name: str
+    ) -> None:
         """Prepare the README file.
 
         :param specification: Specification instance containing template
@@ -336,13 +365,14 @@ class PluginBuilder:
         readme_txt.write(popped)
         readme_txt.close()
 
-    def _prepare_metadata(self, specification):
+    def _prepare_metadata(self, specification: PluginSpecification) -> None:
         """Prepare metadata file.
 
         :param specification: Specification instance containing template
             replacement keys/values.
         :type specification: PluginSpecification
         """
+        template = self._require_template()
         processing_provider = specification.template_map[
             "TemplateHasProcessingProvider"
         ]
@@ -381,7 +411,7 @@ class PluginBuilder:
         metadata_file.write("# Tags are comma separated with spaces allowed\n")
         metadata_file.write("tags=%s\n\n" % specification.tags)
         metadata_file.write("homepage=%s\n" % specification.homepage)
-        metadata_file.write("category=%s\n" % self.template.category)
+        metadata_file.write("category=%s\n" % template.category)
         metadata_file.write("icon=%s\n" % specification.icon)
         metadata_file.write("# experimental flag\n")
         metadata_file.write("experimental=%s\n\n" % specification.experimental)
@@ -404,14 +434,16 @@ class PluginBuilder:
         metadata_file.write("server=False\n\n")
         metadata_file.close()
 
-    def _prepare_results_html(self, specification):
+    def _prepare_results_html(
+        self, specification: PluginSpecification
+    ) -> tuple[str, str]:
         """Prepare results README.html file.
 
         :param specification: Specification instance containing template
             replacement keys/values.
         :type specification: PluginSpecification
         """
-        template_module_name = specification.template_map["TemplateModuleName"]
+        template_module_name = str(specification.template_map["TemplateModuleName"])
         template_file = open(
             os.path.join(self.shared_dir, "results.tmpl"), encoding="utf-8"
         )
@@ -475,9 +507,9 @@ class PluginBuilder:
         readme.close()
         return results_popped, template_module_name
 
-    def _create_plugin_directory(self):
+    def _create_plugin_directory(self) -> bool:
         """Create the plugin directory using the module name."""
-        raw_name = self.dialog.module_name.text().lower()
+        raw_name = self._require_dialog().module_name.text().lower()
         module_name = "".join(c for c in raw_name if c.isalnum() or c == "_")
         self.plugin_path = os.path.join(str(self.plugin_path), module_name)
         if not QDir().mkdir(self.plugin_path):
@@ -489,15 +521,15 @@ class PluginBuilder:
             return False
         return True
 
-    def _last_used_path(self):
+    def _last_used_path(self) -> str:
         """Return the last used plugin path from settings"""
-        return QSettings().value("PluginBuilder/last_path", ".")
+        return str(QSettings().value("PluginBuilder/last_path", "."))
 
-    def _set_last_used_path(self, value):
+    def _set_last_used_path(self, value: str) -> None:
         """Set the last used plugin path for future use"""
         QSettings().setValue("PluginBuilder/last_path", value)
 
-    def _select_tags(self):
+    def _select_tags(self) -> None:
         """Select tags for the new plugin from the tags dialog"""
         tag_dialog = SelectTagsDialog()
         # if the user has their own taglist, use it
@@ -525,45 +557,44 @@ class PluginBuilder:
             for tag in selected:
                 seltags.append(tag.data())
             taglist = ", ".join(seltags)
-            self.dialog.tags.setText(taglist)
+            self._require_dialog().tags.setText(taglist)
 
-    def run(self):
+    def run(self) -> None:
         """Run method that performs all the real work"""
         # create and show the dialog
-        self.dialog = PluginBuilderDialog(stored_output_path=self._last_used_path())
+        dialog = PluginBuilderDialog(stored_output_path=self._last_used_path())
+        self.dialog = dialog
 
         # get version
         cfg = configparser.ConfigParser()
         cfg.read(os.path.join(self.plugin_builder_path, "metadata.txt"))
         version = cfg.get("general", "version")
-        self.dialog.setWindowTitle(self.tr("QGIS Plugin Builder - {}").format(version))
+        dialog.setWindowTitle(self.tr("QGIS Plugin Builder - {}").format(version))
 
         # connect the ok button to our method
-        self.dialog.button_box.helpRequested.connect(self.show_help)
-        self.dialog.select_tags.clicked.connect(self._select_tags)
+        dialog.button_box.helpRequested.connect(self.show_help)
+        dialog.select_tags.clicked.connect(self._select_tags)
 
         # show the dialog
-        self.dialog.show()
-        self.dialog.adjustSize()
-        result = self.dialog.exec()
+        dialog.show()
+        dialog.adjustSize()
+        result = dialog.exec()
         if not result:
             return
 
-        specification = PluginSpecification(self.dialog)
+        specification = PluginSpecification(dialog)
         # get the location for the plugin
         # noinspection PyCallByClass,PyTypeChecker
-        self.plugin_path = self.dialog.output_directory.text()
+        self.plugin_path = dialog.output_directory.text()
 
         self._set_last_used_path(self.plugin_path)
         if not self._create_plugin_directory():
             return
-        self.template = self.dialog.template()
-        self.template_dir = os.path.join(self.template.subdir(), "template")
-        self.shared_dir = os.path.join(
-            str(self.plugin_builder_path), "plugin_templates", "shared"
-        )
+        template = dialog.template()
+        self.template = template
+        self.template_dir = os.path.join(template.subdir(), "template")
 
-        template_map = self.template.template_map(specification, self.dialog)
+        template_map = template.template_map(specification, dialog)
         specification.template_map.update(template_map)
 
         deps = []
@@ -631,8 +662,12 @@ class PluginBuilder:
         results_dialog.exec()
 
     def populate_template(
-        self, specification, template_dir, template_name, output_name
-    ):
+        self,
+        specification: PluginSpecification,
+        template_dir: str,
+        template_name: str,
+        output_name: str,
+    ) -> None:
         """Populate the template based on user data.
 
         :param specification: Descriptive data that will be used to create
@@ -660,7 +695,7 @@ class PluginBuilder:
         plugin_file.write(popped)
         plugin_file.close()
 
-    def show_help(self):
+    def show_help(self) -> None:
         """Display application help to the user."""
         help_file = os.path.join(self.plugin_builder_path, "help", "index.html")
         if os.path.exists(help_file):
@@ -671,7 +706,7 @@ class PluginBuilder:
             )
 
 
-def copy(source, destination):
+def copy(source: str, destination: str) -> None:
     """Copy files recursively.
 
     Taken from: http://www.pythoncentral.io/
