@@ -22,9 +22,11 @@
 """
 
 import os
+from typing import Any
 
 from qgis.PyQt import QtWidgets, uic
 
+FORM_CLASS: Any
 FORM_CLASS, _ = uic.loadUiType(
     os.path.join(os.path.dirname(__file__), "select_tags_dialog_base.ui")
 )

@@ -22,11 +22,13 @@
 """
 
 import os
+from typing import Any
 
 from qgis.PyQt import QtWidgets, uic
 from qgis.PyQt.QtCore import QUrl
 from qgis.PyQt.QtGui import QDesktopServices
 
+FORM_CLASS: Any
 FORM_CLASS, _ = uic.loadUiType(
     os.path.join(os.path.dirname(__file__), "results_dialog_base.ui")
 )

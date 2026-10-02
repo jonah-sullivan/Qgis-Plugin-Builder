@@ -109,7 +109,8 @@ def test_next_page_returns_none_at_last_page(dialog):
 
 
 def test_prev_page_skips_ci_when_unchecked(dialog):
-    """_prev_page_index skips back over page_ci (5) when neither CI option is selected."""
+    """_prev_page_index skips back over page_ci (5)
+    when neither CI option is selected."""
     dialog.qgis_plugin_ci_cb.setChecked(False)
     dialog.gitlab_ci_cb.setChecked(False)
     assert dialog._prev_page_index(6) == 4

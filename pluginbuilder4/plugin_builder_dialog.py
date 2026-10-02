@@ -23,6 +23,7 @@
 
 import os
 from string import capwords
+from typing import Any
 
 from qgis.PyQt import uic
 from qgis.PyQt.QtCore import QFileInfo, Qt
@@ -30,6 +31,7 @@ from qgis.PyQt.QtWidgets import QDialog, QFileDialog, QFrame, QMessageBox
 
 from .plugin_templates import templates
 
+FORM_CLASS: Any
 FORM_CLASS, _ = uic.loadUiType(
     os.path.join(os.path.dirname(__file__), "plugin_builder_dialog_base.ui")
 )
