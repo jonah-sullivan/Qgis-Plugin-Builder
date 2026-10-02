@@ -205,3 +205,28 @@ Contributing
 ------------
 
 New plugin templates can be added by creating a subdirectory below ``plugin_templates`` and registering the template in ``plugin_templates/__init__.py``
+
+Type checking
+~~~~~~~~~~~~~
+
+The ``pluginbuilder4`` package is type-checked with `mypy <https://mypy-lang.org/>`_
+in strict mode (configured in ``mypy.ini``). To run it:
+
+- Create a virtual environment that inherits the system's site-packages so it
+  picks up the ``qgis`` bindings, e.g. ``python3 -m venv --system-site-packages
+  .venv``, then activate it.
+- Install mypy and the type stubs::
+
+    pip install "mypy>=2.4" "qgis-stubs==1.0.0.dev0" types-defusedxml
+
+  ``qgis-stubs`` 1.x targets QGIS 4 / Qt6 and is currently a pre-release, so
+  it is pinned to an exact version; the 0.x releases target QGIS 3 / Qt5 and
+  won't work. mypy 2.4 or newer is needed to read the ``PyQt6-stubs`` it
+  depends on.
+- Run ``make typecheck`` from the repository root. The same check runs as a
+  ``pre-commit`` hook, which installs its own copies of mypy and the stubs.
+
+``qgis-stubs`` doesn't cover the ``qgis.PyQt`` imports, so the ``stubs/``
+directory provides small local stubs that re-export the PyQt6 types for
+``qgis.PyQt.QtCore``, ``QtGui``, ``QtWidgets`` and ``uic``. They are only used
+by mypy and are not packaged with the plugin.

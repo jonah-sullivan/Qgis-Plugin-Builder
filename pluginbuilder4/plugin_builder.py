@@ -48,7 +48,7 @@ from qgis.PyQt.QtGui import (
     QStandardItem,
     QStandardItemModel,
 )
-from qgis.PyQt.QtWidgets import QAction, QFileDialog, QMenu, QMessageBox
+from qgis.PyQt.QtWidgets import QAction, QMenu, QMessageBox
 
 # Import the code for the dialog
 from .plugin_builder_dialog import PluginBuilderDialog
@@ -66,7 +66,7 @@ class PluginBuilder:
     template_dir: str
 
     def tr(self, message: str) -> str:
-        return str(QCoreApplication.translate("PluginBuilder", message))
+        return QCoreApplication.translate("PluginBuilder", message)
 
     def __init__(self, iface: QgisInterface) -> None:
         """Constructor
@@ -146,22 +146,6 @@ class PluginBuilder:
         if self.template is None:
             raise RuntimeError("No plugin template has been selected")
         return self.template
-
-    def _get_plugin_path(self) -> bool:
-        """Prompt the user for the path where the plugin should be written to."""
-        while not QFileInfo(self.plugin_path).isWritable():
-            # noinspection PyTypeChecker,PyArgumentList
-            QMessageBox.critical(
-                None, self.tr("Error"), self.tr("Directory is not writeable")
-            )
-            self.plugin_path = QFileDialog.getExistingDirectory(
-                self.dialog,
-                self.tr("Select the Directory for your Plugin"),
-                self._last_used_path(),
-            )
-            if self.plugin_path == "":
-                return False
-        return True
 
     def _prepare_tests(self, specification: PluginSpecification) -> None:
         """Populate and write test files."""
@@ -450,7 +434,7 @@ class PluginBuilder:
         content = template_file.read()
         template_file.close()
         template = Template(content)
-        ui_file = specification.template_map.get("TemplateUiFiles", "")
+        ui_file = str(specification.template_map.get("TemplateUiFiles", ""))
         what_next = (
             self.template.what_next_items_html(
                 self.plugin_path, template_module_name, ui_file
@@ -554,8 +538,8 @@ class PluginBuilder:
         if ok:
             selected = tag_dialog.listView.selectedIndexes()
             seltags = []
-            for tag in selected:
-                seltags.append(tag.data())
+            for index in selected:
+                seltags.append(index.data())
             taglist = ", ".join(seltags)
             self._require_dialog().tags.setText(taglist)
 

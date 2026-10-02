@@ -1,4 +1,10 @@
-def templates():
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from .plugin_template import PluginTemplate
+
+
+def templates() -> list["PluginTemplate"]:
     from .processing_provider.plugin_template import ProcessingProviderPluginTemplate
     from .toolbutton_with_dialog.plugin_template import (
         ToolbuttonWithDialogPluginTemplate,

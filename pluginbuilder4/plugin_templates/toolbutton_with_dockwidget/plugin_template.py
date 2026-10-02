@@ -22,21 +22,29 @@
 """
 
 import os
+from typing import TYPE_CHECKING
 
 from ...qgis_dirs import deployment_dir
 from ..plugin_template import PluginTemplate
 
+if TYPE_CHECKING:
+    from ...plugin_builder_dialog import PluginBuilderDialog
+    from ...plugin_specification import PluginSpecification, TemplateMap
+
 
 class ToolbuttonWithDockWidgetPluginTemplate(PluginTemplate):
-    def descr(self):
+    def descr(self) -> str:
         return "Tool button with dock widget"
 
-    def subdir(self):
+    def subdir(self) -> str:
         return os.path.dirname(__file__)
 
-    def template_map(self, specification, dialog):
-        menu_text = dialog.template_subframe.menu_text.text()
-        menu = dialog.template_subframe.menu_location.currentText()
+    def template_map(
+        self, specification: "PluginSpecification", dialog: "PluginBuilderDialog"
+    ) -> "TemplateMap":
+        # template_subframe is built from this template's wizard_form_base.ui
+        menu_text: str = dialog.template_subframe.menu_text.text()
+        menu: str = dialog.template_subframe.menu_location.currentText()
         # Munge the plugin menu function based on user choice
         if menu == "Plugins":
             add_method = "addPluginToMenu"
@@ -46,7 +54,7 @@ class ToolbuttonWithDockWidgetPluginTemplate(PluginTemplate):
             remove_method = "removePlugin{}Menu".format(menu)
         self.category = menu
 
-        dockwidget_area = dialog.template_subframe.dockwidget_area.currentText()
+        dockwidget_area: str = dialog.template_subframe.dockwidget_area.currentText()
 
         dock_area_map = {
             "Left": "Qt.DockWidgetArea.LeftDockWidgetArea",
@@ -89,7 +97,7 @@ class ToolbuttonWithDockWidgetPluginTemplate(PluginTemplate):
             ),
         }
 
-    def template_files(self, specification):
+    def template_files(self, specification: "PluginSpecification") -> dict[str, str]:
         result = {
             "module_name_dockwidget.tmpl": "%s_dockwidget.py"
             % specification.module_name,
@@ -111,5 +119,5 @@ class ToolbuttonWithDockWidgetPluginTemplate(PluginTemplate):
             )
         return result
 
-    def copy_files(self, specification):
+    def copy_files(self, specification: "PluginSpecification") -> dict[str, str]:
         return {"icon.png": "icon.png"}

@@ -25,6 +25,7 @@ import os
 from typing import Any
 
 from qgis.PyQt import QtWidgets, uic
+from qgis.PyQt.QtWidgets import QListView, QWidget
 
 FORM_CLASS: Any
 FORM_CLASS, _ = uic.loadUiType(
@@ -35,7 +36,10 @@ FORM_CLASS, _ = uic.loadUiType(
 class SelectTagsDialog(QtWidgets.QDialog, FORM_CLASS):
     """Dialog for selecting one or more tags for the plugin."""
 
-    def __init__(self, parent=None):
+    # Widgets created by setupUi() from select_tags_dialog_base.ui
+    listView: QListView  # noqa: N815 - name set in the .ui file
+
+    def __init__(self, parent: QWidget | None = None) -> None:
         super(SelectTagsDialog, self).__init__(parent)
         # Set up the user interface from Designer.
         self.setupUi(self)

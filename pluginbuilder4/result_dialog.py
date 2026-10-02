@@ -27,6 +27,7 @@ from typing import Any
 from qgis.PyQt import QtWidgets, uic
 from qgis.PyQt.QtCore import QUrl
 from qgis.PyQt.QtGui import QDesktopServices
+from qgis.PyQt.QtWidgets import QTextBrowser, QWidget
 
 FORM_CLASS: Any
 FORM_CLASS, _ = uic.loadUiType(
@@ -37,7 +38,10 @@ FORM_CLASS, _ = uic.loadUiType(
 class ResultDialog(QtWidgets.QDialog, FORM_CLASS):
     """Dialog for showing the results of the plugin creation process."""
 
-    def __init__(self, parent=None):
+    # Widgets created by setupUi() from results_dialog_base.ui
+    web_view: QTextBrowser
+
+    def __init__(self, parent: QWidget | None = None) -> None:
         super(ResultDialog, self).__init__(parent)
         # Set up the user interface from Designer.
         self.setupUi(self)
@@ -47,5 +51,5 @@ class ResultDialog(QtWidgets.QDialog, FORM_CLASS):
         # Open all clicked links via the OS (file explorer, browser, etc.)
         self.web_view.anchorClicked.connect(self._open_url)
 
-    def _open_url(self, url: QUrl):
+    def _open_url(self, url: QUrl) -> None:
         QDesktopServices.openUrl(url)

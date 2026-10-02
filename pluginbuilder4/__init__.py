@@ -22,8 +22,15 @@
  This script initializes the plugin, making it known to QGIS.
 """
 
+from typing import TYPE_CHECKING
 
-def classFactory(iface):
+if TYPE_CHECKING:
+    from qgis.gui import QgisInterface
+
+    from .plugin_builder import PluginBuilder
+
+
+def classFactory(iface: "QgisInterface") -> "PluginBuilder":
     """Load PluginBuilder class from file PluginBuilder.
 
     :param iface: A QGIS interface instance.

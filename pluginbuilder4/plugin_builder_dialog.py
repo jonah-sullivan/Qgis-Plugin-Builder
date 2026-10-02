@@ -27,9 +27,27 @@ from typing import Any
 
 from qgis.PyQt import uic
 from qgis.PyQt.QtCore import QFileInfo, Qt
-from qgis.PyQt.QtWidgets import QDialog, QFileDialog, QFrame, QMessageBox
+from qgis.PyQt.QtGui import QKeyEvent
+from qgis.PyQt.QtWidgets import (
+    QCheckBox,
+    QComboBox,
+    QDialog,
+    QDialogButtonBox,
+    QFileDialog,
+    QFrame,
+    QGridLayout,
+    QLabel,
+    QLineEdit,
+    QMessageBox,
+    QPlainTextEdit,
+    QPushButton,
+    QStackedWidget,
+    QToolButton,
+    QWidget,
+)
 
 from .plugin_templates import templates
+from .plugin_templates.plugin_template import PluginTemplate
 
 FORM_CLASS: Any
 FORM_CLASS, _ = uic.loadUiType(
@@ -46,13 +64,56 @@ class PluginBuilderDialog(QDialog, FORM_CLASS):
 
     """
 
-    def __init__(self, parent=None, stored_output_path=""):
+    # Widgets created by setupUi() from plugin_builder_dialog_base.ui
+    about: QPlainTextEdit
+    author: QLineEdit
+    btn_select_output: QToolButton
+    button_box: QDialogButtonBox
+    class_name: QLineEdit
+    description: QLineEdit
+    email_address: QLineEdit
+    experimental: QCheckBox
+    frame_layout: QGridLayout
+    github_org_slug: QLineEdit
+    gitlab_ci_cb: QCheckBox
+    gitlab_namespace: QLineEdit
+    help_cb: QCheckBox
+    homepage: QLineEdit
+    i18n_cb: QCheckBox
+    lbl_full_output_path: QLabel
+    makefile_cb: QCheckBox
+    module_name: QLineEdit
+    next_button: QPushButton
+    output_directory: QLineEdit
+    pb_tool_cb: QCheckBox
+    plugin_version: QLineEdit
+    prev_button: QPushButton
+    project_slug: QLineEdit
+    qgis_maximum_version: QLineEdit
+    qgis_minimum_version: QLineEdit
+    qgis_plugin_ci_cb: QCheckBox
+    repository: QLineEdit
+    select_tags: QToolButton
+    stackedWidget: QStackedWidget  # noqa: N815 - name set in the .ui file
+    tabify_dockwidget: QCheckBox
+    tags: QLineEdit
+    template_cbox: QComboBox
+    template_frame: QFrame
+    tests_cb: QCheckBox
+    title: QLineEdit
+    tracker: QLineEdit
+
+    def __init__(
+        self, parent: QWidget | None = None, stored_output_path: str = ""
+    ) -> None:
         """Constructor."""
         super(PluginBuilderDialog, self).__init__(parent)
         # Set up the user interface from Designer.
         self.setupUi(self)
-        self.template_subframe = None
-        self.templates = templates()
+        # Built by update_template() from the selected template's own .ui
+        # file, so its child widgets are only known at runtime
+        self.template_subframe: Any = None
+        self.templates: list[PluginTemplate] = templates()
         for templ in self.templates:
             self.template_cbox.addItem(templ.descr())
         self.update_prev_next_buttons()
@@ -66,25 +127,25 @@ class PluginBuilderDialog(QDialog, FORM_CLASS):
         self.output_directory.setText(stored_output_path)
         self.last_path = stored_output_path
 
-    def update_prev_next_buttons(self):
+    def update_prev_next_buttons(self) -> None:
         i = self.stackedWidget.currentIndex()
         self.prev_button.setEnabled(i > 0)
 
-    def _any_ci_checked(self):
+    def _any_ci_checked(self) -> bool:
         return self.qgis_plugin_ci_cb.isChecked() or self.gitlab_ci_cb.isChecked()
 
-    def _next_page_index(self, i):
+    def _next_page_index(self, i: int) -> int | None:
         """Return the next stacked-widget index, skipping page_ci if not opted in."""
         if i == 4 and not self._any_ci_checked():
             return 6  # skip CI/CD page (index 5)
         return i + 1 if i < 6 else None  # None → accept()
 
-    def _prev_page_index(self, i):
+    def _prev_page_index(self, i: int) -> int:
         if i == 6 and not self._any_ci_checked():
             return 4  # skip back over CI/CD page
         return i - 1
 
-    def __next__(self):
+    def __next__(self) -> None:
         i = self.stackedWidget.currentIndex()
         ok = True
         if i == 0:
@@ -115,14 +176,14 @@ class PluginBuilderDialog(QDialog, FORM_CLASS):
             else:
                 self.accept()
 
-    def prev(self):
+    def prev(self) -> None:
         i = self.stackedWidget.currentIndex()
         prev_i = self._prev_page_index(i)
         self.stackedWidget.setCurrentIndex(prev_i)
         if prev_i != 6:
             self.next_button.setText("Next>")
 
-    def validate_ci_page(self):
+    def validate_ci_page(self) -> bool:
         if self.qgis_plugin_ci_cb.isChecked():
             if not self.github_org_slug.text().strip():
                 QMessageBox.warning(
@@ -148,7 +209,7 @@ class PluginBuilderDialog(QDialog, FORM_CLASS):
             return False
         return True
 
-    def _populate_ci_fields(self):
+    def _populate_ci_fields(self) -> None:
         url = self.repository.text().strip()
         cleaned = url.replace("https://", "").replace("http://", "").rstrip("/")
         if cleaned.endswith(".git"):
@@ -169,10 +230,10 @@ class PluginBuilderDialog(QDialog, FORM_CLASS):
                 if not self.project_slug.text():
                     self.project_slug.setText(slug)
 
-    def template(self):
+    def template(self) -> PluginTemplate:
         return self.templates[self.template_cbox.currentIndex()]
 
-    def update_template(self):
+    def update_template(self) -> None:
         if self.template_subframe is not None:
             self.template_subframe.setParent(None)
         subframe = QFrame(self.template_frame)
@@ -185,7 +246,7 @@ class PluginBuilderDialog(QDialog, FORM_CLASS):
         if not is_dockwidget:
             self.tabify_dockwidget.setChecked(False)
 
-    def validate_entries(self):
+    def validate_entries(self) -> bool:
         """Check to see that all fields have been entered."""
         message = ""
         if (
@@ -201,11 +262,11 @@ class PluginBuilderDialog(QDialog, FORM_CLASS):
         ):
             message = "Some required fields are missing. Please complete the form.\n"
 
-        def is_valid_version(v):
+        def is_valid_version(v: str) -> bool:
             parts = str(v).strip().split(".")
             return len(parts) >= 2 and all(p.isdigit() for p in parts)
 
-        def version_tuple(v):
+        def version_tuple(v: str) -> tuple[int, ...]:
             return tuple(int(p) for p in str(v).strip().split("."))
 
         min_ver = self.qgis_minimum_version.text()
@@ -255,6 +316,7 @@ class PluginBuilderDialog(QDialog, FORM_CLASS):
 
         if message != "":
             QMessageBox.warning(self, "Information missing or invalid", message)
+            return False
         else:
             if self.last_path:
                 self.lbl_full_output_path.setText(
@@ -262,7 +324,7 @@ class PluginBuilderDialog(QDialog, FORM_CLASS):
                 )
             return True
 
-    def validate_about(self):
+    def validate_about(self) -> bool:
         if len(self.about.toPlainText()) == 0:
             QMessageBox.warning(
                 self,
@@ -276,7 +338,7 @@ class PluginBuilderDialog(QDialog, FORM_CLASS):
         else:
             return True
 
-    def validate_publication(self):
+    def validate_publication(self) -> bool:
         url_tracker = self.tracker.text()
         url_repo = self.repository.text()
         if not url_tracker or not url_repo:
@@ -301,7 +363,7 @@ class PluginBuilderDialog(QDialog, FORM_CLASS):
             return False
         return True
 
-    def select_directory(self):
+    def select_directory(self) -> None:
         plugin_path = QFileDialog.getExistingDirectory(
             self, "Select the Directory for your Plugin", self.last_path
         )
@@ -312,7 +374,7 @@ class PluginBuilderDialog(QDialog, FORM_CLASS):
         )
         self.show_output_info(full_output)
 
-    def show_output_info(self, full_output):
+    def show_output_info(self, full_output: str) -> None:
         if QFileInfo(full_output).exists():
             self.lbl_full_output_path.setText(
                 full_output + "\nYour plugin will overwrite the existing contents!"
@@ -323,7 +385,7 @@ class PluginBuilderDialog(QDialog, FORM_CLASS):
         else:
             self.lbl_full_output_path.setStyleSheet("QLabel { color : black; }")
 
-    def validate_output_directory(self):
+    def validate_output_directory(self) -> bool:
         good_dir = False
         if len(self.output_directory.text()) > 0:
             if QFileInfo(self.output_directory.text()).exists():
@@ -342,8 +404,8 @@ class PluginBuilderDialog(QDialog, FORM_CLASS):
 
         return good_dir
 
-    def keyPressEvent(self, event):  # Qt override - camelCase required
-        # prevent escape from closing the dialog
-        if event.key() == Qt.Key.Key_Escape:
-            # QDialog.keyPressEvent(event)
-            pass
+    def keyPressEvent(self, event: QKeyEvent | None) -> None:  # Qt override
+        # Don't let Escape close the wizard and discard the user's entries
+        if event is not None and event.key() == Qt.Key.Key_Escape:
+            return
+        super().keyPressEvent(event)
