@@ -1,7 +1,7 @@
 # coding=utf-8
 """Tests for the plugin builder."""
 
-import os
+from pathlib import Path
 import platform
 
 import pytest
@@ -61,8 +61,8 @@ class FakePluginSpecification:
             "TemplateBuildDate": self.build_date,
             "TemplateYear": self.build_year,
             "TemplateVCSFormat": self.vcs_format,
-            "TemplatePyFiles": "%s_dialog.py" % self.module_name,
-            "TemplateUiFiles": "%s_dialog_base.ui" % self.module_name,
+            "TemplatePyFiles": f"{self.module_name}_dialog.py",
+            "TemplateUiFiles": f"{self.module_name}_dialog_base.ui",
             "TemplateExtraFiles": "icon.png",
             "TemplateQrcFiles": "resources.qrc",
             "TemplateRcFiles": "resources.py",
@@ -85,25 +85,8 @@ def spec():
 @pytest.fixture
 def builder(qgis_app, qgis_iface, tmp_path):
     b = PluginBuilder(qgis_iface)
-    b.shared_dir = os.path.abspath(
-        os.path.join(
-            os.path.dirname(__file__),
-            "..",
-            "pluginbuilder4",
-            "plugin_templates",
-            "shared",
-        )
-    )
-    b.template_dir = os.path.abspath(
-        os.path.join(
-            os.path.dirname(__file__),
-            "..",
-            "pluginbuilder4",
-            "plugin_templates",
-            "toolbutton_with_dialog",
-            "template",
-        )
-    )
+    b.shared_dir = str(Path(__file__).parent / ".." / "pluginbuilder4" / "plugin_templates" / "shared")
+    b.template_dir = str(Path(__file__).parent / ".." / "pluginbuilder4" / "plugin_templates" / "toolbutton_with_dialog" / "template")
     b.plugin_path = str(tmp_path)
     return b
 
@@ -118,15 +101,15 @@ def test_qgis_environment(qgis_app):
 def test_dir_copy(builder):
     """Copying a template sub-directory produces the expected files."""
     dest = unique_filename(prefix="plugin_builder_")
-    copy(os.path.join(builder.shared_dir, "test"), dest)
-    assert os.path.exists(os.path.join(dest, "test_init.py.tmpl"))
+    copy(Path(builder.shared_dir) / "test", dest)
+    assert (Path(dest) / "test_init.py.tmpl").exists()
 
 
 def test_prepare_code(builder, spec):
     """_prepare_code writes the expected output files."""
     builder._prepare_code(spec)
     for expected in ["Makefile", "pb_tool.cfg", "__init__.py", "fake_module.py"]:
-        assert os.path.exists(os.path.join(builder.plugin_path, expected)), (
+        assert (Path(builder.plugin_path) / expected).exists(), (
             f"{expected} was not created"
         )
 
@@ -141,10 +124,9 @@ def test_prepare_results_html(builder, spec):
 def test_prepare_readme(builder, spec):
     """_prepare_readme writes README.txt with substituted plugin names."""
     builder._prepare_readme(spec, "fake_module")
-    readme_path = os.path.join(builder.plugin_path, "README.txt")
-    assert os.path.exists(readme_path)
-    with open(readme_path) as f:
-        content = f.read()
+    readme_path = Path(builder.plugin_path) / "README.txt"
+    assert readme_path.exists()
+    content = Path(readme_path).read_text()
     assert "FakePlugin" in content
     assert "fake_module" in content
 
@@ -157,10 +139,9 @@ def test_prepare_metadata(builder, spec):
 
     builder.template = FakeTemplate()
     builder._prepare_metadata(spec)
-    metadata_path = os.path.join(builder.plugin_path, "metadata.txt")
-    assert os.path.exists(metadata_path)
-    with open(metadata_path) as f:
-        content = f.read()
+    metadata_path = Path(builder.plugin_path) / "metadata.txt"
+    assert metadata_path.exists()
+    content = Path(metadata_path).read_text()
     assert "name=A fake plugin" in content
     assert "author=Fake Author" in content
     assert "email=fake@mail.com" in content
@@ -174,7 +155,7 @@ def test_deployment_dir():
     expected_suffix = _qgis_dir_location[platform.system()]
     assert deployment_dir.endswith(expected_suffix)
     assert "QGIS4" in deployment_dir
-    assert os.path.isabs(deployment_dir)
+    assert Path(deployment_dir).is_absolute()
 
 
 def test_copy_single_file(tmp_path):
@@ -183,28 +164,26 @@ def test_copy_single_file(tmp_path):
     src.write_text("hello")
     dest = str(tmp_path / "dest.txt")
     copy(str(src), dest)
-    assert os.path.exists(dest)
-    with open(dest) as f:
-        assert f.read() == "hello"
+    assert Path(dest).exists()
+    assert Path(dest).read_text() == "hello"
+
 
 
 def test_prepare_i18n(builder):
     """_prepare_i18n copies the i18n directory into plugin_path."""
     builder._prepare_i18n()
-    assert os.path.isdir(os.path.join(builder.plugin_path, "i18n"))
+    assert (Path(builder.plugin_path) / "i18n").is_dir()
 
 
 def test_prepare_tests(builder, spec):
     """_prepare_tests copies test files and renders lifecycle and pyproject
     templates."""
     builder._prepare_tests(spec)
-    assert os.path.isdir(os.path.join(builder.plugin_path, "test"))
-    assert os.path.exists(
-        os.path.join(builder.plugin_path, "test", "test_plugin_lifecycle.py")
-    )
-    assert os.path.exists(os.path.join(builder.plugin_path, "pyproject.toml"))
-    gitattributes_path = os.path.join(builder.plugin_path, ".gitattributes")
-    assert os.path.exists(gitattributes_path)
+    assert (Path(builder.plugin_path) / "test").is_dir()
+    assert (Path(builder.plugin_path) / "test" / "test_plugin_lifecycle.py").exists()
+    assert (Path(builder.plugin_path) / "pyproject.toml").exists()
+    gitattributes_path = Path(builder.plugin_path) / ".gitattributes"
+    assert gitattributes_path.exists()
     with open(gitattributes_path) as f:
         assert "test/ export-ignore" in f.read()
 
@@ -214,13 +193,13 @@ def test_prepare_help(builder):
     builder._prepare_help()
     for subdir in [
         "help",
-        os.path.join("help", "build"),
-        os.path.join("help", "build", "html"),
-        os.path.join("help", "source"),
-        os.path.join("help", "source", "_static"),
-        os.path.join("help", "source", "_templates"),
+        Path("help") / "build",
+        Path("help") / "build" / "html",
+        Path("help") / "source",
+        Path("help") / "source" / "_static",
+        Path("help") / "source" / "_templates",
     ]:
-        assert os.path.isdir(os.path.join(builder.plugin_path, subdir))
+        assert (Path(builder.plugin_path) / subdir).is_dir()
 
 
 def test_prepare_qgis_plugin_ci(builder, spec):
@@ -229,13 +208,10 @@ def test_prepare_qgis_plugin_ci(builder, spec):
     spec.github_org_slug = "myorg"
     spec.project_slug = "my-plugin"
     builder._prepare_qgis_plugin_ci(spec)
-    assert os.path.exists(os.path.join(builder.plugin_path, ".qgis-plugin-ci"))
-    assert os.path.exists(
-        os.path.join(builder.plugin_path, ".github", "workflows", "release.yml")
-    )
-    assert os.path.exists(os.path.join(builder.plugin_path, ".gitattributes"))
-    with open(os.path.join(builder.plugin_path, ".qgis-plugin-ci")) as f:
-        content = f.read()
+    assert Path(builder.plugin_path / ".qgis-plugin-ci").exists()
+    assert Path(builder.plugin_path / ".github" / "workflows" / "release.yml").exists()
+    assert Path(builder.plugin_path / ".gitattributes").exists()
+    content = Path(builder.plugin_path / ".qgis-plugin-ci").read_text()
     assert "myorg" in content
     assert "my-plugin" in content
     assert "fake_module" in content
@@ -255,11 +231,10 @@ def test_prepare_gitlab_ci(builder, spec):
     spec.gitlab_namespace = "mygroup"
     spec.project_slug = "my-plugin"
     builder._prepare_gitlab_ci(spec)
-    assert os.path.exists(os.path.join(builder.plugin_path, ".gitlab-ci.yml"))
-    assert os.path.exists(os.path.join(builder.plugin_path, ".qgis-plugin-ci"))
-    assert os.path.exists(os.path.join(builder.plugin_path, ".gitattributes"))
-    with open(os.path.join(builder.plugin_path, ".qgis-plugin-ci")) as f:
-        content = f.read()
+    assert Path(builder.plugin_path / ".gitlab-ci.yml").exists()
+    assert Path(builder.plugin_path / ".qgis-plugin-ci").exists()
+    assert Path(builder.plugin_path / ".gitattributes").exists()
+    content = Path(Path(builder.plugin_path / ".qgis-plugin-ci")).read_text()
     assert "mygroup" in content
     assert "my-plugin" in content
     assert "fake_module" in content
@@ -273,8 +248,7 @@ def test_write_qgis_plugin_ci_config_both_platforms(builder, spec):
     spec.gitlab_namespace = "glgroup"
     spec.project_slug = "my-plugin"
     builder._write_qgis_plugin_ci_config(spec)
-    with open(os.path.join(builder.plugin_path, ".qgis-plugin-ci")) as f:
-        content = f.read()
+    content = Path(Path(builder.plugin_path / ".qgis-plugin-ci")).read_text()
     assert "github_organization_slug: ghorg" in content
     assert "gitlab_organization_slug: glgroup" in content
     assert "project_slug: my-plugin" in content
@@ -300,10 +274,8 @@ def test_prepare_specific_files(builder, spec):
     class FakeTemplate:
         def template_files(self, specification):
             return {
-                "module_name_dialog.tmpl": ("%s_dialog.py" % specification.module_name),
-                "module_name_dialog_base.ui.tmpl": (
-                    "%s_dialog_base.ui" % specification.module_name
-                ),
+                "module_name_dialog.tmpl": f"{specification.module_name}_dialog.py",
+                "module_name_dialog_base.ui.tmpl": f"{specification.module_name}_dialog_base.ui",
             }
 
         def copy_files(self, specification):
@@ -311,8 +283,6 @@ def test_prepare_specific_files(builder, spec):
 
     builder.template = FakeTemplate()
     builder._prepare_specific_files(spec)
-    assert os.path.exists(os.path.join(builder.plugin_path, "fake_module_dialog.py"))
-    assert os.path.exists(
-        os.path.join(builder.plugin_path, "fake_module_dialog_base.ui")
-    )
-    assert os.path.exists(os.path.join(builder.plugin_path, "icon.png"))
+    assert Path(builder.plugin_path / "fake_module_dialog.py").exists()
+    assert Path(builder.plugin_path / "fake_module_dialog_base.ui").exists()
+    assert Path(builder.plugin_path / "icon.png").exists()

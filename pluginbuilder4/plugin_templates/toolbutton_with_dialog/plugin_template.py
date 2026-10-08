@@ -21,7 +21,7 @@
  ***************************************************************************/
 """
 
-import os
+from pathlib import Path
 
 from ...qgis_dirs import deployment_dir
 from ..plugin_template import PluginTemplate
@@ -32,7 +32,7 @@ class ToolbuttonWithDialogPluginTemplate(PluginTemplate):
         return "Tool button with dialog"
 
     def subdir(self):
-        return os.path.dirname(__file__)
+        return Path(__file__).parent
 
     def template_map(self, specification, dialog):
         menu_text = dialog.template_subframe.menu_text.text()
@@ -42,8 +42,8 @@ class ToolbuttonWithDialogPluginTemplate(PluginTemplate):
             add_method = "addPluginToMenu"
             remove_method = "removePluginMenu"
         else:
-            add_method = "addPluginTo{}Menu".format(menu)
-            remove_method = "removePlugin{}Menu".format(menu)
+            add_method = f"addPluginTo{menu}Menu"
+            remove_method = f"removePlugin{menu}Menu"
         self.category = menu
         m = specification.module_name
         ui_file = f"{m}_dialog_base.ui"
@@ -71,19 +71,14 @@ class ToolbuttonWithDialogPluginTemplate(PluginTemplate):
 
     def template_files(self, specification):
         result = {
-            "module_name_dialog.tmpl": "%s_dialog.py" % specification.module_name,
-            "module_name_dialog_base.ui.tmpl": "%s_dialog_base.ui"
-            % specification.module_name,
+            "module_name_dialog.tmpl": f"{specification.module_name}_dialog.py",
+            "module_name_dialog_base.ui.tmpl": f"{specification.module_name}_dialog_base.ui",
         }
         if specification.gen_tests:
             result.update(
                 {
-                    os.path.join("test", "test_module_name_dialog.templ"): os.path.join(
-                        "test", "test_%s_dialog.py" % specification.module_name
-                    ),
-                    os.path.join("test", "test_resources.templ"): os.path.join(
-                        "test", "test_resources.py"
-                    ),
+                    str(Path("test") / "test_module_name_dialog.templ"): str(Path("test") / "test_%s_dialog.py" % specification.module_name),
+                    str(Path("test") / "test_resources.templ"): str(Path("test") / "test_resources.py"),
                 }
             )
         return result

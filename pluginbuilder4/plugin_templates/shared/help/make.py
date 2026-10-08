@@ -8,6 +8,7 @@ platform-specific shell script — useful on Windows, where `make` isn't
 available out of the box.
 """
 
+from pathlib import Path
 import os
 import sys
 
@@ -36,8 +37,8 @@ TARGETS = [
 
 
 def build(target):
-    out_dir = os.path.join(BUILDDIR, target)
-    doctrees_dir = os.path.join(BUILDDIR, "doctrees")
+    out_dir = Path(BUILDDIR) / target
+    doctrees_dir = Path(BUILDDIR) / "doctrees"
     argv = ["-b", target, "-d", doctrees_dir]
     sphinx_opts = os.environ.get("SPHINXOPTS")
     if sphinx_opts:

@@ -21,7 +21,7 @@
  ***************************************************************************/
 """
 
-import os
+from pathlib import Path
 
 from ...qgis_dirs import deployment_dir
 from ..plugin_template import PluginTemplate
@@ -32,7 +32,7 @@ class ProcessingProviderPluginTemplate(PluginTemplate):
         return "Processing Provider"
 
     def subdir(self):
-        return os.path.dirname(__file__)
+        return Path(__file__).parent
 
     def template_map(self, specification, dialog):
         self.category = "Analysis"
@@ -66,7 +66,5 @@ class ProcessingProviderPluginTemplate(PluginTemplate):
             "module_name_provider.tmpl": "%s_provider.py" % specification.module_name,
         }
         if specification.gen_tests:
-            files[os.path.join("test", "test_plugin_lifecycle.templ")] = os.path.join(
-                "test", "test_plugin_lifecycle.py"
-            )
+            files[str(Path("test") / "test_plugin_lifecycle.templ")] = str(Path("test") / "test_plugin_lifecycle.py")
         return files

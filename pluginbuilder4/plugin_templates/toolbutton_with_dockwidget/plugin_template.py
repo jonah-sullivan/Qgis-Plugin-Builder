@@ -21,7 +21,7 @@
  ***************************************************************************/
 """
 
-import os
+from pathlib import Path
 
 from ...qgis_dirs import deployment_dir
 from ..plugin_template import PluginTemplate
@@ -32,7 +32,7 @@ class ToolbuttonWithDockWidgetPluginTemplate(PluginTemplate):
         return "Tool button with dock widget"
 
     def subdir(self):
-        return os.path.dirname(__file__)
+        return Path(__file__).parent
 
     def template_map(self, specification, dialog):
         menu_text = dialog.template_subframe.menu_text.text()
@@ -42,8 +42,8 @@ class ToolbuttonWithDockWidgetPluginTemplate(PluginTemplate):
             add_method = "addPluginToMenu"
             remove_method = "removePluginMenu"
         else:
-            add_method = "addPluginTo{}Menu".format(menu)
-            remove_method = "removePlugin{}Menu".format(menu)
+            add_method = f"addPluginTo{menu}Menu"
+            remove_method = f"removePlugin{menu}Menu"
         self.category = menu
 
         dockwidget_area = dialog.template_subframe.dockwidget_area.currentText()
@@ -91,21 +91,18 @@ class ToolbuttonWithDockWidgetPluginTemplate(PluginTemplate):
 
     def template_files(self, specification):
         result = {
-            "module_name_dockwidget.tmpl": "%s_dockwidget.py"
-            % specification.module_name,
-            "module_name_dockwidget_base.ui.tmpl": "%s_dockwidget_base.ui"
-            % specification.module_name,
+            "module_name_dockwidget.tmpl": f"{specification.module_name}_dockwidget.py",
+            "module_name_dockwidget_base.ui.tmpl": f"{specification.module_name}_dockwidget_base.ui",
         }
         if specification.gen_tests:
             result.update(
                 {
-                    os.path.join("test", "test_module_name_dockwidget.templ"): (
-                        os.path.join(
-                            "test", "test_%s_dockwidget.py" % specification.module_name
+                    str(Path("test") / Path("test_module_name_dockwidget.templ")): 
+                        str(Path("test") / Path(f"test_{specification.module_name}_dockwidget.py"
                         )
                     ),
-                    os.path.join("test", "test_resources.templ"): os.path.join(
-                        "test", "test_resources.py"
+                    str(Path("test") / Path("test_resources.templ")): 
+                        str(Path("test") / Path("test_resources.py")
                     ),
                 }
             )

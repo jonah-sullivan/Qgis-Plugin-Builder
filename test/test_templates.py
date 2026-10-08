@@ -1,7 +1,7 @@
 # coding=utf-8
 """Tests for the three plugin template classes and the base PluginTemplate."""
 
-import os
+from pathlib import Path
 
 import pytest
 from plugin_builder_dialog import PluginBuilderDialog
@@ -108,7 +108,7 @@ def test_dialog_template_descr():
 
 def test_dialog_template_subdir_exists():
     path = ToolbuttonWithDialogPluginTemplate().subdir()
-    assert os.path.isdir(path)
+    assert Path(path).is_dir()
 
 
 def test_dialog_template_copy_files():
@@ -121,7 +121,7 @@ def test_dialog_template_files_without_tests():
     files = ToolbuttonWithDialogPluginTemplate().template_files(FakeSpec())
     assert "my_plugin_dialog.py" in files.values()
     assert "my_plugin_dialog_base.ui" in files.values()
-    assert not any("test_" in v for v in files.values())
+    assert all("test_" not in v for v in files.values())
 
 
 def test_dialog_template_files_with_tests():
@@ -170,7 +170,7 @@ def test_dockwidget_template_descr():
 
 
 def test_dockwidget_template_subdir_exists():
-    assert os.path.isdir(ToolbuttonWithDockWidgetPluginTemplate().subdir())
+    assert Path(ToolbuttonWithDockWidgetPluginTemplate().subdir()).is_dir()
 
 
 def test_dockwidget_template_copy_files():
@@ -183,7 +183,7 @@ def test_dockwidget_template_files_without_tests():
     files = ToolbuttonWithDockWidgetPluginTemplate().template_files(FakeSpec())
     assert "my_plugin_dockwidget.py" in files.values()
     assert "my_plugin_dockwidget_base.ui" in files.values()
-    assert not any("test_" in v for v in files.values())
+    assert all("test_" not in v for v in files.values())
 
 
 def test_dockwidget_template_files_with_tests():
@@ -244,14 +244,14 @@ def test_processing_template_descr():
 
 
 def test_processing_template_subdir_exists():
-    assert os.path.isdir(ProcessingProviderPluginTemplate().subdir())
+    assert Path(ProcessingProviderPluginTemplate().subdir()).is_dir()
 
 
 def test_processing_template_files_without_tests():
     files = ProcessingProviderPluginTemplate().template_files(FakeSpec())
     assert "my_plugin_algorithm.py" in files.values()
     assert "my_plugin_provider.py" in files.values()
-    assert not any("test_" in v for v in files.values())
+    assert all("test_" not in v for v in files.values())
 
 
 def test_processing_template_files_with_tests():

@@ -30,7 +30,7 @@ __copyright__ = '(C) $TemplateYear by $TemplateAuthor'
 
 __revision__ = '$TemplateVCSFormat'
 
-import os
+from pathlib import Path
 import sys
 import inspect
 
@@ -38,10 +38,10 @@ from qgis.core import QgsProcessingAlgorithm, QgsApplication
 from qgis.PyQt.QtCore import QCoreApplication, QLocale, QTranslator
 from .${TemplateModuleName}_provider import ${TemplateClass}Provider
 
-cmd_folder = os.path.split(inspect.getfile(inspect.currentframe()))[0]
+cmd_folder = Path(inspect.getfile(inspect.currentframe())).parent
 
 if cmd_folder not in sys.path:
-    sys.path.insert(0, cmd_folder)
+    sys.path.insert(0, str(cmd_folder))
 
 
 class ${TemplateClass}Plugin(object):
@@ -50,12 +50,8 @@ class ${TemplateClass}Plugin(object):
         self.provider = None
 
         locale = QLocale(QgsApplication.locale())
-        locale_path = os.path.join(
-            os.path.dirname(__file__),
-            "i18n",
-            "${TemplateModuleName}_{}.qm".format(locale.name()),
-        )
-        if os.path.exists(locale_path):
+        locale_path = Path(__file__).parent / "i18n" / "${TemplateModuleName}_{}.qm".format(locale.name())
+        if locale_path.exists():
             self.translator = QTranslator()
             self.translator.load(locale_path)
             QCoreApplication.installTranslator(self.translator)

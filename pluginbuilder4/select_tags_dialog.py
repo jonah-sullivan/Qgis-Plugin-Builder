@@ -21,13 +21,13 @@
  ***************************************************************************/
 """
 
-import os
+from pathlib import Path
 
 from qgis.PyQt import QtWidgets, uic
 
 FORM_CLASS, _ = uic.loadUiType(
-    os.path.join(os.path.dirname(__file__), "select_tags_dialog_base.ui")
-)
+    Path(__file__).parent / "select_tags_dialog_base.ui"
+    )
 
 
 class SelectTagsDialog(QtWidgets.QDialog, FORM_CLASS):

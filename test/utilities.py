@@ -9,10 +9,10 @@ Tim Sutton
 
 import getpass
 import logging
-import os
+from pathlib import Path
 import sys
 from datetime import date
-from tempfile import mkstemp
+from tempfile import mkdtemp
 
 LOGGER = logging.getLogger("QGIS")
 QGIS_APP = None  # Static variable used to hold hand to running QGIS app
@@ -100,21 +100,18 @@ def temp_dir(sub_dir="work"):
     date_string = current_date.isoformat()
 
     # Following 4 lines are a workaround for tempfile.tempdir() unreliabilty
-    handle, filename = mkstemp()
-    os.close(handle)
-    new_directory = os.path.dirname(filename)
-    os.remove(filename)
+    new_directory = mkdtemp()
 
-    path = os.path.join(new_directory, "pluginbuilder", date_string, user, sub_dir)
+    path = Path(new_directory) / "pluginbuilder" / date_string / user / sub_dir
 
-    if not os.path.exists(path):
+    if not path.exists():
         # Ensure that the dir is world writable
         # Umask sets the new mask and returns the old
         old_mask = os.umask(0000)
-        os.makedirs(path, 0o777)
+        path.mkdir(parents=True, mode=0o777)
         # Reinstate the old mask for tmp
         os.umask(old_mask)
-    return path
+    return str(path)
 
 
 def unique_filename(**kwargs):
@@ -147,18 +144,14 @@ def unique_filename(**kwargs):
 
     """
 
-    if "dir" not in kwargs:
-        path = temp_dir("impacts")
-        kwargs["dir"] = path
-    else:
-        path = temp_dir(kwargs["dir"])
-        kwargs["dir"] = path
-    if not os.path.exists(kwargs["dir"]):
+    path = temp_dir("impacts") if "dir" not in kwargs else temp_dir(kwargs["dir"])
+    kwargs["dir"] = path
+    if not Path(kwargs["dir"]).exists():
         # Ensure that the dir mask won't conflict with the mode
         # Umask sets the new mask and returns the old
         umask = os.umask(0000)
         # Ensure that the dir is world writable by explicitly setting mode
-        os.makedirs(kwargs["dir"], 0o777)
+        Path(kwargs["dir"]).mkdir(parents=True, mode=0o777)
         # Reinstate the old mask for tmp dir
         os.umask(umask)
     # Now we have the working dir set up go on and return the filename

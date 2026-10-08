@@ -25,6 +25,7 @@
 import configparser
 import errno
 from pathlib import Path
+from pathlib import Path
 import shutil
 from string import Template
 
@@ -79,11 +80,13 @@ class PluginBuilder:
             + "/python/plugins"
         )
         self.plugin_builder_path = Path(__file__).parent
+        self.plugin_builder_path = Path(__file__).parent
 
         locale = QLocale(QgsApplication.locale())
         locale_path = self.plugin_builder_path / "i18n" / "{}.qm".format(locale.name()[:2])
         if locale_path.exists():
             self.translator = QTranslator()
+            self.translator.load(str(locale_path))
             self.translator.load(str(locale_path))
             QCoreApplication.installTranslator(self.translator)
 
@@ -91,6 +94,7 @@ class PluginBuilder:
         self.action = None
         self.menu = None
         self.dialog = None
+        self.plugin_path: Path = Path()
         self.plugin_path: Path = Path()
         self.template = None
         self.shared_dir: Path = Path()
@@ -117,6 +121,7 @@ class PluginBuilder:
 
     def _get_plugin_path(self):
         """Prompt the user for the path where the plugin should be written to."""
+        while not QFileInfo(str(self.plugin_path)).isWritable():
         while not QFileInfo(str(self.plugin_path)).isWritable():
             # noinspection PyTypeChecker,PyArgumentList
             QMessageBox.critical(
@@ -191,6 +196,7 @@ class PluginBuilder:
             lines.append(f"gitlab_organization_slug: {specification.gitlab_namespace}")
         lines.append(f"project_slug: {specification.project_slug}")
         config_path = self.plugin_path / ".qgis-plugin-ci"
+        config_path = self.plugin_path / ".qgis-plugin-ci"
         with open(config_path, "w") as f:
             f.write("\n".join(lines) + "\n")
 
@@ -202,8 +208,12 @@ class PluginBuilder:
         QFile.copy(
             str(self.shared_dir / "github_release.yml"),
             str(workflows_dir / "release.yml"),
+            str(self.shared_dir / "github_release.yml"),
+            str(workflows_dir / "release.yml"),
         )
         QFile.copy(
+            str(self.shared_dir / "gitattributes"),
+            str(self.plugin_path / ".gitattributes"),
             str(self.shared_dir / "gitattributes"),
             str(self.plugin_path / ".gitattributes"),
         )
@@ -216,8 +226,12 @@ class PluginBuilder:
         QFile.copy(
             str(self.shared_dir / "gitlab_release.yml"),
             str(self.plugin_path / ".gitlab-ci.yml"),
+            str(self.shared_dir / "gitlab_release.yml"),
+            str(self.plugin_path / ".gitlab-ci.yml"),
         )
         QFile.copy(
+            str(self.shared_dir / "gitattributes"),
+            str(self.plugin_path / ".gitattributes"),
             str(self.shared_dir / "gitattributes"),
             str(self.plugin_path / ".gitattributes"),
         )
@@ -236,9 +250,13 @@ class PluginBuilder:
         QFile.copy(
             str(self.shared_dir / "help/make.py"),
             str(self.plugin_path / "help/make.py"),
+            str(self.shared_dir / "help/make.py"),
+            str(self.plugin_path / "help/make.py"),
         )
         # noinspection PyCallByClass,PyTypeChecker
         QFile.copy(
+            str(self.shared_dir / "help/Makefile"),
+            str(self.plugin_path / "help/Makefile"),
             str(self.shared_dir / "help/Makefile"),
             str(self.plugin_path / "help/Makefile"),
         )
@@ -264,9 +282,9 @@ class PluginBuilder:
         )
         self.populate_template(
             specification,
-            self.template_dir,
+            str(self.template_dir),
             "module_name.tmpl",
-            "%s.py" % specification.module_name,
+            f"{specification.module_name}.py",
         )
 
     def _prepare_specific_files(self, specification):
@@ -280,7 +298,7 @@ class PluginBuilder:
             specification
         ).items():
             self.populate_template(
-                specification, self.template_dir, template_name, output_name
+                specification, str(self.template_dir), template_name, output_name
             )
 
         # copy the non-generated files to the new plugin dir
@@ -291,6 +309,8 @@ class PluginBuilder:
             t_file.copy(self.plugin_path / output_name)
 
         QFile.copy(
+            str(self.shared_dir / "LICENSE"),
+            str(self.plugin_path / "LICENSE"),
             str(self.shared_dir / "LICENSE"),
             str(self.plugin_path / "LICENSE"),
         )
@@ -460,6 +480,8 @@ class PluginBuilder:
         module_name = "".join(c for c in raw_name if c.isalnum() or c == "_")
         self.plugin_path = self.plugin_path / module_name
         if not QDir().mkdir(str(self.plugin_path)):
+        self.plugin_path = self.plugin_path / module_name
+        if not QDir().mkdir(str(self.plugin_path)):
             QMessageBox.critical(
                 None,
                 self.tr("Error"),
@@ -482,8 +504,11 @@ class PluginBuilder:
         # if the user has their own taglist, use it
         user_tag_list = Path.home() / ".plugin_tags.txt"
         if user_tag_list.exists():
+        user_tag_list = Path.home() / ".plugin_tags.txt"
+        if user_tag_list.exists():
             tag_file = user_tag_list
         else:
+            tag_file = self.plugin_builder_path / "taglist.txt"
             tag_file = self.plugin_builder_path / "taglist.txt"
 
         with open(tag_file) as tf:
@@ -501,8 +526,7 @@ class PluginBuilder:
         if ok:
             selected = tag_dialog.listView.selectedIndexes()
             seltags = []
-            for tag in selected:
-                seltags.append(tag.data())
+            seltags.extend(tag.data() for tag in selected)
             taglist = ", ".join(seltags)
             self.dialog.tags.setText(taglist)
 
@@ -513,6 +537,7 @@ class PluginBuilder:
 
         # get version
         cfg = configparser.ConfigParser()
+        cfg.read(self.plugin_builder_path / "metadata.txt")
         cfg.read(self.plugin_builder_path / "metadata.txt")
         version = cfg.get("general", "version")
         self.dialog.setWindowTitle(self.tr("QGIS Plugin Builder - {}").format(version))
@@ -531,6 +556,7 @@ class PluginBuilder:
         specification = PluginSpecification(self.dialog)
         # get the location for the plugin
         # noinspection PyCallByClass,PyTypeChecker
+        self.plugin_path = Path(self.dialog.output_directory.text())
         self.plugin_path = Path(self.dialog.output_directory.text())
 
         self._set_last_used_path(self.plugin_path)
@@ -586,6 +612,8 @@ class PluginBuilder:
         QFile.copy(
             str(self.shared_dir / "pre-commit-config.yaml"),
             str(self.plugin_path / ".pre-commit-config.yaml"),
+            str(self.shared_dir / "pre-commit-config.yaml"),
+            str(self.plugin_path / ".pre-commit-config.yaml"),
         )
 
         if specification.gen_qgis_plugin_ci:
@@ -628,14 +656,12 @@ class PluginBuilder:
         template_file_path = template_dir / template_name
         output_name_path = self.plugin_path / output_name
 
-        template_file = open(template_file_path, encoding="utf-8")
-        content = template_file.read()
-        template_file.close()
+        with open(template_file_path, encoding="utf-8") as template_file:
+            content = template_file.read()
         template = Template(content)
         popped = template.safe_substitute(specification.template_map)
-        plugin_file = open(output_name_path, "w", encoding="utf-8")
-        plugin_file.write(popped)
-        plugin_file.close()
+        with open(output_name_path, "w", encoding="utf-8") as plugin_file:
+            plugin_file.write(popped)
 
     def show_help(self):
         """Display application help to the user."""
@@ -668,4 +694,4 @@ def copy(source, destination):
         if e.errno == errno.ENOTDIR:
             shutil.copy(source, destination)
         else:
-            print("Directory not copied. Error: %s" % e)
+            print(f"Directory not copied. Error: {e}")

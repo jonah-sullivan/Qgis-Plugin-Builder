@@ -28,7 +28,7 @@ from qgis.PyQt.QtWidgets import QAction
 
 # Import the code for the dialog
 from .${TemplateModuleName}_dialog import ${TemplateClass}Dialog
-import os.path
+from pathlib import Path
 
 
 class ${TemplateClass}:
@@ -45,17 +45,14 @@ class ${TemplateClass}:
         # Save reference to the QGIS interface
         self.iface = iface
         # initialize plugin directory
-        self.plugin_dir = os.path.dirname(__file__)
+        self.plugin_dir = Path(__file__).parent
         # initialize locale
         locale = QgsSettings().value('locale/userLocale', QLocale().name())[0:2]
-        locale_path = os.path.join(
-            self.plugin_dir,
-            'i18n',
-            '{}.qm'.format(locale))
+        locale_path = self.plugin_dir / 'i18n' / '{}.qm'.format(locale)
 
-        if os.path.exists(locale_path):
+        if locale_path.exists():
             self.translator = QTranslator()
-            self.translator.load(locale_path)
+            self.translator.load(str(locale_path))
             QCoreApplication.installTranslator(self.translator)
 
         # Declare instance attributes
@@ -157,7 +154,7 @@ class ${TemplateClass}:
     def initGui(self):
         """Create the menu entries and toolbar icons inside the QGIS GUI."""
 
-        icon_path = os.path.join(os.path.dirname(__file__), 'icon.png')
+        icon_path = Path(__file__).parent / 'icon.png'
         self.add_action(
             icon_path,
             text=self.tr(u'$TemplateMenuText'),
