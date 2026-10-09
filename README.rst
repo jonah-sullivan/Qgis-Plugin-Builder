@@ -121,11 +121,11 @@ Click **Generate**, choose an output directory, and click **Generate** again.
 Plugin Builder writes all the files into a new directory named after your module.
 
 Resource file compilation is optional. It is best practice to reference
-resources such as icons and images using ``os.path`` rather than Qt's resource
+resources such as icons and images using ``Path`` rather than Qt's resource
 system::
 
-    icon_path = os.path.join(os.path.dirname(__file__), 'icon.png')
-    icon = QIcon(icon_path)
+    icon_path = Path(__file__).parent / 'icon.png'
+    icon = QIcon(str(icon_path))
 
 This avoids the need to run ``rcc`` at build time and keeps your assets visible
 as ordinary files. If you do use a ``.qrc`` file, compile it with::

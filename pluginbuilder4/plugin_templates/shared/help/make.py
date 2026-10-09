@@ -10,6 +10,7 @@ available out of the box.
 
 import os
 import sys
+from pathlib import Path
 
 from sphinx.cmd.build import main as sphinx_main
 
@@ -36,8 +37,8 @@ TARGETS = [
 
 
 def build(target):
-    out_dir = os.path.join(BUILDDIR, target)
-    doctrees_dir = os.path.join(BUILDDIR, "doctrees")
+    out_dir = Path(BUILDDIR) / target
+    doctrees_dir = Path(BUILDDIR) / "doctrees"
     argv = ["-b", target, "-d", doctrees_dir]
     sphinx_opts = os.environ.get("SPHINXOPTS")
     if sphinx_opts:

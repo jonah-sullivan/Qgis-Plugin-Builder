@@ -22,15 +22,13 @@
  ***************************************************************************/
 """
 
-import os
+from pathlib import Path
 
 from qgis.PyQt import QtGui, QtWidgets, uic
 from qgis.PyQt.QtCore import pyqtSignal
 
 FORM_CLASS, _ = uic.loadUiType(
-    os.path.join(
-        os.path.dirname(__file__),
-        '${TemplateModuleName}_dockwidget_base.ui'))
+    Path(__file__).parent / '${TemplateModuleName}_dockwidget_base.ui')
 
 
 class ${TemplateClass}DockWidget(QtWidgets.QDockWidget, FORM_CLASS):

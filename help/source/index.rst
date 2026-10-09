@@ -356,10 +356,10 @@ Resource files
 
 Resource files (``*.qrc``) define media assets such as icons and images used
 in your plugin. Compiling a resource file is **optional** — the recommended
-approach is to reference assets directly using ``os.path``::
+approach is to reference assets directly using ``Path``::
 
-  icon_path = os.path.join(os.path.dirname(__file__), 'icon.png')
-  icon = QIcon(icon_path)
+  icon_path = Path(__file__).parent / 'icon.png'
+  icon = QIcon(str(icon_path))
 
 This keeps assets as ordinary files alongside your plugin source and avoids
 the need to run ``rcc`` at build time.

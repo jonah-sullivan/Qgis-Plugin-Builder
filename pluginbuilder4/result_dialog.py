@@ -21,15 +21,13 @@
  ***************************************************************************/
 """
 
-import os
+from pathlib import Path
 
 from qgis.PyQt import QtWidgets, uic
 from qgis.PyQt.QtCore import QUrl
 from qgis.PyQt.QtGui import QDesktopServices
 
-FORM_CLASS, _ = uic.loadUiType(
-    os.path.join(os.path.dirname(__file__), "results_dialog_base.ui")
-)
+FORM_CLASS, _ = uic.loadUiType(Path(__file__).parent / "results_dialog_base.ui")
 
 
 class ResultDialog(QtWidgets.QDialog, FORM_CLASS):
