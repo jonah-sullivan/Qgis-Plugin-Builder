@@ -1,6 +1,8 @@
 [run]
 omit =
+    conftest.py
     test/*
     */site-packages/*
     pluginbuilder4/help/*
-    pluginbuilder4/plugin_templates/*
+    pluginbuilder4/plugin_templates/*/template/*
+    pluginbuilder4/plugin_templates/shared/*
