@@ -1,0 +1,6 @@
+[run]
+omit =
+    test/*
+    */site-packages/*
+    pluginbuilder4/help/*
+    pluginbuilder4/plugin_templates/*
