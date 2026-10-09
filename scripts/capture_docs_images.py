@@ -20,8 +20,8 @@ and must be updated manually:
     - plugin_results.png    (results dialog after generation)
 """
 
-from pathlib import Path
 import sys
+from pathlib import Path
 
 # ---------------------------------------------------------------------------
 # Bootstrap QGIS — must happen before any qgis.PyQt imports

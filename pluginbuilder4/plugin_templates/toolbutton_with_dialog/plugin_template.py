@@ -72,13 +72,19 @@ class ToolbuttonWithDialogPluginTemplate(PluginTemplate):
     def template_files(self, specification):
         result = {
             "module_name_dialog.tmpl": f"{specification.module_name}_dialog.py",
-            "module_name_dialog_base.ui.tmpl": f"{specification.module_name}_dialog_base.ui",
+            "module_name_dialog_base.ui.tmpl": (
+                f"{specification.module_name}_dialog_base.ui"
+            ),
         }
         if specification.gen_tests:
             result.update(
                 {
-                    str(Path("test") / "test_module_name_dialog.templ"): str(Path("test") / "test_%s_dialog.py" % specification.module_name),
-                    str(Path("test") / "test_resources.templ"): str(Path("test") / "test_resources.py"),
+                    str(Path("test") / "test_module_name_dialog.templ"): str(
+                        Path("test") / f"test_{specification.module_name}_dialog.py"
+                    ),
+                    str(Path("test") / "test_resources.templ"): str(
+                        Path("test") / "test_resources.py"
+                    ),
                 }
             )
         return result

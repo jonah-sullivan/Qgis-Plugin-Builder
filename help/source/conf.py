@@ -50,9 +50,7 @@ copyright = "2011-2026, Gary Sherman, 2026 Jonah Sullivan"
 #
 # Read version from metadata.txt — the single source of truth.
 _meta = configparser.ConfigParser()
-_meta.read(
-    Path(__file__).parent / ".." / ".." / "pluginbuilder4" / "metadata.txt"
-)
+_meta.read(Path(__file__).parent / ".." / ".." / "pluginbuilder4" / "metadata.txt")
 version = _meta["general"]["version"]
 release = version
 

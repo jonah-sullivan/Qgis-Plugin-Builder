@@ -25,9 +25,7 @@ from pathlib import Path
 
 from qgis.PyQt import QtWidgets, uic
 
-FORM_CLASS, _ = uic.loadUiType(
-    Path(__file__).parent / "select_tags_dialog_base.ui"
-    )
+FORM_CLASS, _ = uic.loadUiType(Path(__file__).parent / "select_tags_dialog_base.ui")
 
 
 class SelectTagsDialog(QtWidgets.QDialog, FORM_CLASS):

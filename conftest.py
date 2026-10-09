@@ -10,9 +10,9 @@ its bare name so that 'from plugin_builder import PluginBuilder' works in tests.
 """
 
 import importlib.util
-from pathlib import Path
 import sys
 import types
+from pathlib import Path
 
 _PROJ = Path(__file__).parent
 _SRC = _PROJ / "pluginbuilder4"
@@ -41,11 +41,11 @@ def _load_module(bare_name, filepath=None):
 def _load_subpackage(bare_name, directory):
     full = f"{_PKG}.{bare_name}"
     pkg = types.ModuleType(full)
-    pkg.__path__ = [directory]
+    pkg.__path__ = [str(directory)]
     pkg.__package__ = full
     init = directory / "__init__.py"
     spec = importlib.util.spec_from_file_location(
-        full, init, submodule_search_locations=[directory]
+        full, init, submodule_search_locations=[str(directory)]
     )
     pkg.__spec__ = spec
     sys.modules[full] = pkg

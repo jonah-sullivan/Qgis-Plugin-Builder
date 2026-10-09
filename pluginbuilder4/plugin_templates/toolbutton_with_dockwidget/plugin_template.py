@@ -58,7 +58,7 @@ class ToolbuttonWithDockWidgetPluginTemplate(PluginTemplate):
 
         if dialog.tabify_dockwidget.isChecked():
             add_dock_call = (
-                f"addTabifiedDockWidget({area}, self.dockwidget, raiseTab=True)"
+                f"addTabifiedDockWidget({area},self.dockwidget, raiseTab=True)"
             )
         else:
             add_dock_call = f"addDockWidget({area}, self.dockwidget)"
@@ -91,18 +91,22 @@ class ToolbuttonWithDockWidgetPluginTemplate(PluginTemplate):
 
     def template_files(self, specification):
         result = {
-            "module_name_dockwidget.tmpl": f"{specification.module_name}_dockwidget.py",
-            "module_name_dockwidget_base.ui.tmpl": f"{specification.module_name}_dockwidget_base.ui",
+            "module_name_dockwidget.tmpl": (
+                f"{specification.module_name}_dockwidget.py"
+            ),
+            "module_name_dockwidget_base.ui.tmpl": (
+                f"{specification.module_name}_dockwidget_base.ui"
+            ),
         }
         if specification.gen_tests:
             result.update(
                 {
-                    str(Path("test") / Path("test_module_name_dockwidget.templ")): 
-                        str(Path("test") / Path(f"test_{specification.module_name}_dockwidget.py"
-                        )
+                    str(Path("test") / Path("test_module_name_dockwidget.templ")): str(
+                        Path("test")
+                        / Path(f"test_{specification.module_name}_dockwidget.py")
                     ),
-                    str(Path("test") / Path("test_resources.templ")): 
-                        str(Path("test") / Path("test_resources.py")
+                    str(Path("test") / Path("test_resources.templ")): str(
+                        Path("test") / Path("test_resources.py")
                     ),
                 }
             )

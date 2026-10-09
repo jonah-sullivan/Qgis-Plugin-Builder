@@ -8,9 +8,9 @@ platform-specific shell script — useful on Windows, where `make` isn't
 available out of the box.
 """
 
-from pathlib import Path
 import os
 import sys
+from pathlib import Path
 
 from sphinx.cmd.build import main as sphinx_main
 

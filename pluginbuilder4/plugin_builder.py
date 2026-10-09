@@ -24,9 +24,8 @@
 # Import Python stuff
 import configparser
 import errno
-from pathlib import Path
-from pathlib import Path
 import shutil
+from pathlib import Path
 from string import Template
 
 from qgis.core import QgsApplication
@@ -83,7 +82,9 @@ class PluginBuilder:
         self.plugin_builder_path = Path(__file__).parent
 
         locale = QLocale(QgsApplication.locale())
-        locale_path = self.plugin_builder_path / "i18n" / "{}.qm".format(locale.name()[:2])
+        locale_path = (
+            self.plugin_builder_path / "i18n" / "{}.qm".format(locale.name()[:2])
+        )
         if locale_path.exists():
             self.translator = QTranslator()
             self.translator.load(str(locale_path))
@@ -98,7 +99,7 @@ class PluginBuilder:
         self.plugin_path: Path = Path()
         self.template = None
         self.shared_dir: Path = Path()
-        self.template_dir = None
+        self.template_dir: Path = Path()
 
     def initGui(self):  # QGIS API override - camelCase required
         """Create the menu entries and toolbar icons inside the QGIS GUI."""
@@ -122,16 +123,17 @@ class PluginBuilder:
     def _get_plugin_path(self):
         """Prompt the user for the path where the plugin should be written to."""
         while not QFileInfo(str(self.plugin_path)).isWritable():
-        while not QFileInfo(str(self.plugin_path)).isWritable():
             # noinspection PyTypeChecker,PyArgumentList
             QMessageBox.critical(
                 None, self.tr("Error"), self.tr("Directory is not writeable")
             )
-            self.plugin_path = Path(QFileDialog.getExistingDirectory(
-                self.dialog,
-                self.tr("Select the Directory for your Plugin"),
-                str(self._last_used_path()),
-            ))
+            self.plugin_path = Path(
+                QFileDialog.getExistingDirectory(
+                    self.dialog,
+                    self.tr("Select the Directory for your Plugin"),
+                    str(self._last_used_path()),
+                )
+            )
             if self.plugin_path == "":
                 return False
         return True
@@ -147,7 +149,9 @@ class PluginBuilder:
         # is scanned for upload; restore the .py extension here.
         for entry in test_destination.iterdir():
             if entry.suffix == ".tmpl":
-                Path(test_destination / entry).replace(test_destination / entry.with_suffix(".py"))
+                Path(test_destination / entry).replace(
+                    test_destination / entry.with_suffix(".py")
+                )
 
         # Exclude test/ from packaged zips (tests use assert, which trips
         # Bandit's B101 rule on the QGIS Plugins website's upload scanner).
@@ -204,16 +208,12 @@ class PluginBuilder:
         """Generate .qgis-plugin-ci config and GitHub Actions release workflow."""
         self._write_qgis_plugin_ci_config(specification)
         workflows_dir = self.plugin_path / ".github" / "workflows"
-        workflows_dir.mkdir(exist_ok=True)
+        workflows_dir.mkdir(parents=True, exist_ok=True)
         QFile.copy(
-            str(self.shared_dir / "github_release.yml"),
-            str(workflows_dir / "release.yml"),
             str(self.shared_dir / "github_release.yml"),
             str(workflows_dir / "release.yml"),
         )
         QFile.copy(
-            str(self.shared_dir / "gitattributes"),
-            str(self.plugin_path / ".gitattributes"),
             str(self.shared_dir / "gitattributes"),
             str(self.plugin_path / ".gitattributes"),
         )
@@ -226,12 +226,8 @@ class PluginBuilder:
         QFile.copy(
             str(self.shared_dir / "gitlab_release.yml"),
             str(self.plugin_path / ".gitlab-ci.yml"),
-            str(self.shared_dir / "gitlab_release.yml"),
-            str(self.plugin_path / ".gitlab-ci.yml"),
         )
         QFile.copy(
-            str(self.shared_dir / "gitattributes"),
-            str(self.plugin_path / ".gitattributes"),
             str(self.shared_dir / "gitattributes"),
             str(self.plugin_path / ".gitattributes"),
         )
@@ -246,17 +242,11 @@ class PluginBuilder:
         QDir().mkdir(str(self.plugin_path / "help/source/_static"))
         QDir().mkdir(str(self.plugin_path / "help/source/_templates"))
         # copy doc makefiles
-        # noinspection PyCallByClass,PyTypeChecker
         QFile.copy(
-            str(self.shared_dir / "help/make.py"),
-            str(self.plugin_path / "help/make.py"),
             str(self.shared_dir / "help/make.py"),
             str(self.plugin_path / "help/make.py"),
         )
-        # noinspection PyCallByClass,PyTypeChecker
         QFile.copy(
-            str(self.shared_dir / "help/Makefile"),
-            str(self.plugin_path / "help/Makefile"),
             str(self.shared_dir / "help/Makefile"),
             str(self.plugin_path / "help/Makefile"),
         )
@@ -282,7 +272,7 @@ class PluginBuilder:
         )
         self.populate_template(
             specification,
-            str(self.template_dir),
+            self.template_dir,
             "module_name.tmpl",
             f"{specification.module_name}.py",
         )
@@ -298,22 +288,19 @@ class PluginBuilder:
             specification
         ).items():
             self.populate_template(
-                specification, str(self.template_dir), template_name, output_name
+                specification, self.template_dir, template_name, output_name
             )
 
         # copy the non-generated files to the new plugin dir
         for template_file, output_name in self.template.copy_files(
             specification
         ).items():
-            t_file = QFile(self.template_dir / template_file)
-            t_file.copy(self.plugin_path / output_name)
+            QFile.copy(
+                str(self.template_dir / template_file),
+                str(self.plugin_path / output_name),
+            )
 
-        QFile.copy(
-            str(self.shared_dir / "LICENSE"),
-            str(self.plugin_path / "LICENSE"),
-            str(self.shared_dir / "LICENSE"),
-            str(self.plugin_path / "LICENSE"),
-        )
+        QFile.copy(str(self.shared_dir / "LICENSE"), str(self.plugin_path / "LICENSE"))
 
     def _prepare_readme(self, specification, template_module_name):
         """Prepare the README file.
@@ -349,9 +336,7 @@ class PluginBuilder:
         processing_provider = specification.template_map[
             "TemplateHasProcessingProvider"
         ]
-        metadata_file = open(
-            self.plugin_path / "metadata.txt", "w", encoding="utf-8"
-        )
+        metadata_file = open(self.plugin_path / "metadata.txt", "w", encoding="utf-8")
         metadata_comment = (
             "# This file contains metadata for your plugin.\n\n"
             "# This file should be included when you package your plugin.\n"
@@ -415,10 +400,7 @@ class PluginBuilder:
         :type specification: PluginSpecification
         """
         template_module_name = specification.template_map["TemplateModuleName"]
-        template_file = open(
-            self.shared_dir / "results.tmpl", encoding="utf-8"
-        )
-        content = Path(template_file.name).read_text()
+        content = (self.shared_dir / "results.tmpl").read_text(encoding="utf-8")
         template = Template(content)
         ui_file = specification.template_map.get("TemplateUiFiles", "")
         what_next = (
@@ -480,8 +462,6 @@ class PluginBuilder:
         module_name = "".join(c for c in raw_name if c.isalnum() or c == "_")
         self.plugin_path = self.plugin_path / module_name
         if not QDir().mkdir(str(self.plugin_path)):
-        self.plugin_path = self.plugin_path / module_name
-        if not QDir().mkdir(str(self.plugin_path)):
             QMessageBox.critical(
                 None,
                 self.tr("Error"),
@@ -504,13 +484,9 @@ class PluginBuilder:
         # if the user has their own taglist, use it
         user_tag_list = Path.home() / ".plugin_tags.txt"
         if user_tag_list.exists():
-        user_tag_list = Path.home() / ".plugin_tags.txt"
-        if user_tag_list.exists():
             tag_file = user_tag_list
         else:
             tag_file = self.plugin_builder_path / "taglist.txt"
-            tag_file = self.plugin_builder_path / "taglist.txt"
-
         with open(tag_file) as tf:
             tags = tf.readlines()
 
@@ -645,7 +621,7 @@ class PluginBuilder:
         :type specification: PluginSpecification
 
         :param template_dir: Directory where template is.
-        :type template_dir: str
+        :type template_dir: Path
 
         :param template_name: Name for the template.
         :type template_name: str

@@ -30,9 +30,7 @@ from qgis.PyQt.QtWidgets import QDialog, QFileDialog, QFrame, QMessageBox
 
 from .plugin_templates import templates
 
-FORM_CLASS, _ = uic.loadUiType(
-    Path(__file__).parent / "plugin_builder_dialog_base.ui"
-)
+FORM_CLASS, _ = uic.loadUiType(Path(__file__).parent / "plugin_builder_dialog_base.ui")
 
 
 class PluginBuilderDialog(QDialog, FORM_CLASS):
@@ -79,8 +77,7 @@ class PluginBuilderDialog(QDialog, FORM_CLASS):
 
     def _prev_page_index(self, i):
         # skip back over CI/CD page if not opted in
-        return 4 if i == 6 and not self._any_ci_checked() else i - 1  
-
+        return 4 if i == 6 and not self._any_ci_checked() else i - 1
 
     def __next__(self):
         i = self.stackedWidget.currentIndex()
@@ -105,8 +102,9 @@ class PluginBuilderDialog(QDialog, FORM_CLASS):
                     self.next_button.setText("Generate")
                     if self.output_directory.text() != "":
                         self.show_output_info(
-                            Path(self.outputdirectory.text()) / self.module_name.text().lower()
-                            )
+                            Path(self.outputdirectory.text())
+                            / self.module_name.text().lower()
+                        )
             else:
                 self.accept()
 
@@ -118,7 +116,10 @@ class PluginBuilderDialog(QDialog, FORM_CLASS):
             self.next_button.setText("Next>")
 
     def validate_ci_page(self):
-        if self.qgis_plugin_ci_cb.isChecked() and not self.github_org_slug.text().strip():
+        if (
+            self.qgis_plugin_ci_cb.isChecked()
+            and not self.github_org_slug.text().strip()
+        ):
             QMessageBox.warning(
                 self,
                 "Missing GitHub organisation",
@@ -299,9 +300,7 @@ class PluginBuilderDialog(QDialog, FORM_CLASS):
         )
         self.output_directory.setText(plugin_path)
         full_output = Path(plugin_path) / self.module_name.text().lower()
-        self.lbl_full_output_path.setText(
-            (str(full_output))
-        )
+        self.lbl_full_output_path.setText((str(full_output)))
         self.show_output_info(full_output)
 
     def show_output_info(self, full_output):
