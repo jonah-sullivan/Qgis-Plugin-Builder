@@ -5,6 +5,3 @@ select = ["E", "F", "W", "I", "N"]
 ignore = ["N802"]
 
 [lint.per-file-ignores]
-"pluginbuilder4/plugin_builder_dialog_base.py" = ["E501", "N801", "N803", "N806"]
-# Local stubs mirror qgis.PyQt, which star-imports PyQt6
-"stubs/**/*.pyi" = ["F403"]

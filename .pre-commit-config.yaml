@@ -27,7 +27,7 @@ repos:
         language: python
         additional_dependencies:
           - mypy==2.4.0
-          - qgis-stubs==1.0.0.dev0
+          - qgis-stubs==1.0.0.dev1
           - types-defusedxml
         # Check the whole package via mypy.ini: its files/exclude settings are
         # ignored for filenames passed on the command line

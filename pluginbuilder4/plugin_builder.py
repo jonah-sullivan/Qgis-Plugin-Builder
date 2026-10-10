@@ -43,12 +43,13 @@ from qgis.PyQt.QtCore import (
     QUrl,
 )
 from qgis.PyQt.QtGui import (
+    QAction,
     QDesktopServices,
     QIcon,
     QStandardItem,
     QStandardItemModel,
 )
-from qgis.PyQt.QtWidgets import QAction, QMenu, QMessageBox
+from qgis.PyQt.QtWidgets import QMenu, QMessageBox
 
 # Import the code for the dialog
 from .plugin_builder_dialog import PluginBuilderDialog
