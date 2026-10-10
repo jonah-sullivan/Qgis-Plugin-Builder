@@ -10,6 +10,7 @@ available out of the box.
 
 import os
 import sys
+from pathlib import Path
 
 from sphinx.cmd.build import main as sphinx_main
 
@@ -36,13 +37,13 @@ TARGETS = [
 
 
 def build(target):
-    out_dir = os.path.join(BUILDDIR, target)
-    doctrees_dir = os.path.join(BUILDDIR, "doctrees")
-    argv = ["-b", target, "-d", doctrees_dir]
+    out_dir = Path(BUILDDIR) / target
+    doctrees_dir = Path(BUILDDIR) / "doctrees"
+    argv = ["-b", target, "-d", str(doctrees_dir)]
     sphinx_opts = os.environ.get("SPHINXOPTS")
     if sphinx_opts:
         argv.extend(sphinx_opts.split())
-    argv.extend([SOURCEDIR, out_dir])
+    argv.extend([SOURCEDIR, str(out_dir)])
     exit_code = sphinx_main(argv)
     if exit_code == 0:
         print(f"\nBuild finished. Output is in {out_dir}")

@@ -21,7 +21,7 @@
  ***************************************************************************/
 """
 
-import os
+from pathlib import Path
 from string import capwords
 from typing import Any
 
@@ -51,7 +51,7 @@ from .plugin_templates.plugin_template import PluginTemplate
 
 FORM_CLASS: Any
 FORM_CLASS, _ = uic.loadUiType(
-    os.path.join(os.path.dirname(__file__), "plugin_builder_dialog_base.ui")
+    str(Path(__file__).parent / "plugin_builder_dialog_base.ui")
 )
 
 
@@ -168,10 +168,8 @@ class PluginBuilderDialog(QDialog, FORM_CLASS):
                     self.next_button.setText("Generate")
                     if self.output_directory.text() != "":
                         self.show_output_info(
-                            os.path.join(
-                                self.output_directory.text(),
-                                self.module_name.text().lower(),
-                            )
+                            Path(self.output_directory.text())
+                            / self.module_name.text().lower()
                         )
             else:
                 self.accept()
@@ -239,7 +237,7 @@ class PluginBuilderDialog(QDialog, FORM_CLASS):
         subframe = QFrame(self.template_frame)
         self.frame_layout.addWidget(subframe, 1, 0, 1, 2)
         self.template_subframe = uic.loadUi(
-            os.path.join(self.template().subdir(), "wizard_form_base.ui"), subframe
+            str(self.template().subdir() / "wizard_form_base.ui"), subframe
         )
         is_dockwidget = "dock" in self.template().descr().lower()
         self.tabify_dockwidget.setVisible(is_dockwidget)
@@ -286,7 +284,7 @@ class PluginBuilderDialog(QDialog, FORM_CLASS):
 
         # validate plugin name
         # check that we have only ascii char in class name
-        if not all(ord(c) < 128 for c in self.class_name.text()):
+        if any(ord(c) >= 128 for c in self.class_name.text()):
             self.class_name.setText(
                 self.class_name.text().encode("ascii", "ignore").decode("ascii")
             )
@@ -295,7 +293,7 @@ class PluginBuilderDialog(QDialog, FORM_CLASS):
                 "the name has been modified for you. \n"
             )
         # check space and force CamelCase
-        if str(self.class_name.text()).find(" ") > -1:
+        if " " in str(self.class_name.text()):
             class_name = capwords(str(self.class_name.text()))
             self.class_name.setText(class_name.replace(" ", ""))
             message += (
@@ -320,23 +318,22 @@ class PluginBuilderDialog(QDialog, FORM_CLASS):
         else:
             if self.last_path:
                 self.lbl_full_output_path.setText(
-                    os.path.join(self.last_path, self.module_name.text())
+                    str(Path(self.last_path) / self.module_name.text())
                 )
             return True
 
     def validate_about(self) -> bool:
-        if len(self.about.toPlainText()) == 0:
-            QMessageBox.warning(
-                self,
-                "Missing About",
-                "Please enter a bit of detail about your plugin "
-                "(purpose, function, requirements, etc.).\n\n"
-                "You can modify this later by editing the 'about' tag in the "
-                "generated metadata.txt file.",
-            )
-            return False
-        else:
+        if len(self.about.toPlainText()) != 0:
             return True
+        QMessageBox.warning(
+            self,
+            "Missing About",
+            "Please enter a bit of detail about your plugin "
+            "(purpose, function, requirements, etc.).\n\n"
+            "You can modify this later by editing the 'about' tag in the "
+            "generated metadata.txt file.",
+        )
+        return False
 
     def validate_publication(self) -> bool:
         url_tracker = self.tracker.text()
@@ -368,16 +365,14 @@ class PluginBuilderDialog(QDialog, FORM_CLASS):
             self, "Select the Directory for your Plugin", self.last_path
         )
         self.output_directory.setText(plugin_path)
-        full_output = os.path.join(plugin_path, self.module_name.text().lower())
-        self.lbl_full_output_path.setText(
-            os.path.join(plugin_path, self.module_name.text().lower())
-        )
+        full_output = Path(plugin_path) / self.module_name.text().lower()
+        self.lbl_full_output_path.setText(str(full_output))
         self.show_output_info(full_output)
 
-    def show_output_info(self, full_output: str) -> None:
-        if QFileInfo(full_output).exists():
+    def show_output_info(self, full_output: Path) -> None:
+        if QFileInfo(str(full_output)).exists():
             self.lbl_full_output_path.setText(
-                full_output + "\nYour plugin will overwrite the existing contents!"
+                str(full_output) + "\nYour plugin will overwrite the existing contents!"
             )
             self.lbl_full_output_path.setStyleSheet(
                 "QLabel { color : red;  font-weight : bold;}"

@@ -1,7 +1,7 @@
 """Get the deployment directory for QGIS plugins based on operating system"""
 
-import os
 import platform
+from pathlib import Path
 
 _qgis_dir_location = {
     "Linux": ".local/share/QGIS/QGIS4/profiles/default/python/plugins",
@@ -9,7 +9,6 @@ _qgis_dir_location = {
     "Darwin": "Library/Application Support/QGIS/QGIS4/profiles/default/python/plugins",
 }
 
-deployment_dir = os.path.join(
-    os.path.expanduser("~"),
-    _qgis_dir_location.get(platform.system(), _qgis_dir_location["Linux"]),
+deployment_dir = Path.home() / _qgis_dir_location.get(
+    platform.system(), _qgis_dir_location["Linux"]
 )

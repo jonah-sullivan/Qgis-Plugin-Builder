@@ -1,7 +1,7 @@
 *.swp
 *.pyc
 .idea
-.coverage
+.coveragerc
 .noseids
 nohup.out
 .flake8

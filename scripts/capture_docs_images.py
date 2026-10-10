@@ -20,8 +20,8 @@ and must be updated manually:
     - plugin_results.png    (results dialog after generation)
 """
 
-import os
 import sys
+from pathlib import Path
 
 # ---------------------------------------------------------------------------
 # Bootstrap QGIS — must happen before any qgis.PyQt imports
@@ -38,12 +38,12 @@ QgsApplication.initQgis()
 import importlib.util  # noqa: E402
 import types  # noqa: E402
 
-repo_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-src_dir = os.path.join(repo_dir, "pluginbuilder4")
+repo_dir = Path(__file__).parent.parent
+src_dir = repo_dir / "pluginbuilder4"
 
 _PKG = "_pluginbuilder"
 _pkg = types.ModuleType(_PKG)
-_pkg.__path__ = [src_dir]
+_pkg.__path__ = [str(src_dir)]
 _pkg.__package__ = _PKG
 sys.modules[_PKG] = _pkg
 
@@ -52,7 +52,7 @@ def _load_module(bare_name, filepath=None):
     full = f"{_PKG}.{bare_name}"
     if full in sys.modules:
         return sys.modules[full]
-    path = filepath or os.path.join(src_dir, f"{bare_name}.py")
+    path = filepath or Path(src_dir) / f"{bare_name}.py"
     spec = importlib.util.spec_from_file_location(full, path)
     mod = importlib.util.module_from_spec(spec)
     mod.__package__ = _PKG
@@ -67,7 +67,7 @@ def _load_subpackage(bare_name, directory):
     pkg = types.ModuleType(full)
     pkg.__path__ = [directory]
     pkg.__package__ = full
-    init = os.path.join(directory, "__init__.py")
+    init = Path(directory) / "__init__.py"
     spec = importlib.util.spec_from_file_location(
         full, init, submodule_search_locations=[directory]
     )
@@ -79,7 +79,7 @@ def _load_subpackage(bare_name, directory):
 
 
 _load_module("plugin_specification")
-_load_subpackage("plugin_templates", os.path.join(src_dir, "plugin_templates"))
+_load_subpackage("plugin_templates", Path(src_dir) / "plugin_templates")
 _load_module("select_tags_dialog")
 _load_module("result_dialog")
 _load_module("plugin_builder_dialog")
@@ -111,7 +111,7 @@ SAMPLE = {
     "project_slug": "my_plugin",
 }
 
-output_dir = os.path.join(repo_dir, "help", "source", "images")
+output_dir = repo_dir / "help" / "source" / "images"
 
 # ---------------------------------------------------------------------------
 # Build and populate the dialog
@@ -152,7 +152,7 @@ for index, filename in PAGES:
     dialog.stackedWidget.setCurrentIndex(index)
     app.processEvents()
     pixmap = dialog.grab()
-    out_path = os.path.join(output_dir, filename)
+    out_path = output_dir / filename
     pixmap.save(out_path)
     print(f"Saved {out_path}")
 

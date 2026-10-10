@@ -21,7 +21,7 @@
  ***************************************************************************/
 """
 
-import os
+from pathlib import Path
 from typing import Any
 
 from qgis.PyQt import QtWidgets, uic
@@ -30,9 +30,7 @@ from qgis.PyQt.QtGui import QDesktopServices
 from qgis.PyQt.QtWidgets import QTextBrowser, QWidget
 
 FORM_CLASS: Any
-FORM_CLASS, _ = uic.loadUiType(
-    os.path.join(os.path.dirname(__file__), "results_dialog_base.ui")
-)
+FORM_CLASS, _ = uic.loadUiType(str(Path(__file__).parent / "results_dialog_base.ui"))
 
 
 class ResultDialog(QtWidgets.QDialog, FORM_CLASS):

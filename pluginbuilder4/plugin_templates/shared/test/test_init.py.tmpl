@@ -2,7 +2,7 @@
 """Tests that metadata.txt contains all fields required by plugins.qgis.org."""
 
 import configparser
-import os
+from pathlib import Path
 
 REQUIRED_METADATA = [
     "name",
@@ -18,9 +18,7 @@ REQUIRED_METADATA = [
 
 def test_metadata_has_required_fields():
     """metadata.txt has all fields required by plugins.qgis.org."""
-    file_path = os.path.abspath(
-        os.path.join(os.path.dirname(__file__), os.pardir, "metadata.txt")
-    )
+    file_path = Path(__file__).parent.parent / "metadata.txt"
     parser = configparser.ConfigParser()
     parser.optionxform = str
     parser.read(file_path)

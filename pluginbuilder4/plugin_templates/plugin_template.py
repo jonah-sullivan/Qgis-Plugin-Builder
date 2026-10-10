@@ -21,6 +21,7 @@
  ***************************************************************************/
 """
 
+from pathlib import Path
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
@@ -37,7 +38,7 @@ class PluginTemplate:
     def descr(self) -> str:
         raise NotImplementedError
 
-    def subdir(self) -> str:
+    def subdir(self) -> Path:
         raise NotImplementedError
 
     def template_map(
@@ -52,7 +53,7 @@ class PluginTemplate:
         return {}
 
     def what_next_items_html(
-        self, plugin_path: str, module_name: str, ui_file: str
+        self, plugin_path: Path, module_name: str, ui_file: str
     ) -> str:
         return (
             f"    <li>Test the plugin by enabling it in the QGIS plugin manager\n"

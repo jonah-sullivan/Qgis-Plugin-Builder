@@ -21,7 +21,7 @@
  ***************************************************************************/
 """
 
-import os
+from pathlib import Path
 from typing import TYPE_CHECKING
 
 from ...qgis_dirs import deployment_dir
@@ -36,8 +36,8 @@ class ToolbuttonWithDialogPluginTemplate(PluginTemplate):
     def descr(self) -> str:
         return "Tool button with dialog"
 
-    def subdir(self) -> str:
-        return os.path.dirname(__file__)
+    def subdir(self) -> Path:
+        return Path(__file__).parent
 
     def template_map(
         self, specification: "PluginSpecification", dialog: "PluginBuilderDialog"
@@ -50,8 +50,8 @@ class ToolbuttonWithDialogPluginTemplate(PluginTemplate):
             add_method = "addPluginToMenu"
             remove_method = "removePluginMenu"
         else:
-            add_method = "addPluginTo{}Menu".format(menu)
-            remove_method = "removePlugin{}Menu".format(menu)
+            add_method = f"addPluginTo{menu}Menu"
+            remove_method = f"removePlugin{menu}Menu"
         self.category = menu
         m = specification.module_name
         ui_file = f"{m}_dialog_base.ui"
@@ -60,7 +60,7 @@ class ToolbuttonWithDialogPluginTemplate(PluginTemplate):
             "TemplatePyFiles": f"{m}_dialog.py",
             "TemplateUiFiles": ui_file,
             "TemplateExtraFiles": "icon.png",
-            "TemplateQGISDir": deployment_dir,
+            "TemplateQGISDir": str(deployment_dir),
             # Metadata
             "TemplateHasProcessingProvider": False,
             # Menu
@@ -79,18 +79,19 @@ class ToolbuttonWithDialogPluginTemplate(PluginTemplate):
 
     def template_files(self, specification: "PluginSpecification") -> dict[str, str]:
         result = {
-            "module_name_dialog.tmpl": "%s_dialog.py" % specification.module_name,
-            "module_name_dialog_base.ui.tmpl": "%s_dialog_base.ui"
-            % specification.module_name,
+            "module_name_dialog.tmpl": f"{specification.module_name}_dialog.py",
+            "module_name_dialog_base.ui.tmpl": (
+                f"{specification.module_name}_dialog_base.ui"
+            ),
         }
         if specification.gen_tests:
             result.update(
                 {
-                    os.path.join("test", "test_module_name_dialog.templ"): os.path.join(
-                        "test", "test_%s_dialog.py" % specification.module_name
+                    str(Path("test") / "test_module_name_dialog.templ"): str(
+                        Path("test") / f"test_{specification.module_name}_dialog.py"
                     ),
-                    os.path.join("test", "test_resources.templ"): os.path.join(
-                        "test", "test_resources.py"
+                    str(Path("test") / "test_resources.templ"): str(
+                        Path("test") / "test_resources.py"
                     ),
                 }
             )

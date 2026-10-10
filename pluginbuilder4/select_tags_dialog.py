@@ -21,7 +21,7 @@
  ***************************************************************************/
 """
 
-import os
+from pathlib import Path
 from typing import Any
 
 from qgis.PyQt import QtWidgets, uic
@@ -29,7 +29,7 @@ from qgis.PyQt.QtWidgets import QListView, QWidget
 
 FORM_CLASS: Any
 FORM_CLASS, _ = uic.loadUiType(
-    os.path.join(os.path.dirname(__file__), "select_tags_dialog_base.ui")
+    str(Path(__file__).parent / "select_tags_dialog_base.ui")
 )
 
 

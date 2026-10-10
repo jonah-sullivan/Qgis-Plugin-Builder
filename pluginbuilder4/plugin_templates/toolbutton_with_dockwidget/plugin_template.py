@@ -21,7 +21,7 @@
  ***************************************************************************/
 """
 
-import os
+from pathlib import Path
 from typing import TYPE_CHECKING
 
 from ...qgis_dirs import deployment_dir
@@ -36,8 +36,8 @@ class ToolbuttonWithDockWidgetPluginTemplate(PluginTemplate):
     def descr(self) -> str:
         return "Tool button with dock widget"
 
-    def subdir(self) -> str:
-        return os.path.dirname(__file__)
+    def subdir(self) -> Path:
+        return Path(__file__).parent
 
     def template_map(
         self, specification: "PluginSpecification", dialog: "PluginBuilderDialog"
@@ -50,8 +50,8 @@ class ToolbuttonWithDockWidgetPluginTemplate(PluginTemplate):
             add_method = "addPluginToMenu"
             remove_method = "removePluginMenu"
         else:
-            add_method = "addPluginTo{}Menu".format(menu)
-            remove_method = "removePlugin{}Menu".format(menu)
+            add_method = f"addPluginTo{menu}Menu"
+            remove_method = f"removePlugin{menu}Menu"
         self.category = menu
 
         dockwidget_area: str = dialog.template_subframe.dockwidget_area.currentText()
@@ -66,7 +66,7 @@ class ToolbuttonWithDockWidgetPluginTemplate(PluginTemplate):
 
         if dialog.tabify_dockwidget.isChecked():
             add_dock_call = (
-                f"addTabifiedDockWidget({area}, self.dockwidget, raiseTab=True)"
+                f"addTabifiedDockWidget({area},self.dockwidget, raiseTab=True)"
             )
         else:
             add_dock_call = f"addDockWidget({area}, self.dockwidget)"
@@ -78,7 +78,7 @@ class ToolbuttonWithDockWidgetPluginTemplate(PluginTemplate):
             "TemplatePyFiles": f"{m}_dockwidget.py",
             "TemplateUiFiles": ui_file,
             "TemplateExtraFiles": "icon.png",
-            "TemplateQGISDir": deployment_dir,
+            "TemplateQGISDir": str(deployment_dir),
             # Metadata
             "TemplateHasProcessingProvider": False,
             # Menu
@@ -99,21 +99,22 @@ class ToolbuttonWithDockWidgetPluginTemplate(PluginTemplate):
 
     def template_files(self, specification: "PluginSpecification") -> dict[str, str]:
         result = {
-            "module_name_dockwidget.tmpl": "%s_dockwidget.py"
-            % specification.module_name,
-            "module_name_dockwidget_base.ui.tmpl": "%s_dockwidget_base.ui"
-            % specification.module_name,
+            "module_name_dockwidget.tmpl": (
+                f"{specification.module_name}_dockwidget.py"
+            ),
+            "module_name_dockwidget_base.ui.tmpl": (
+                f"{specification.module_name}_dockwidget_base.ui"
+            ),
         }
         if specification.gen_tests:
             result.update(
                 {
-                    os.path.join("test", "test_module_name_dockwidget.templ"): (
-                        os.path.join(
-                            "test", "test_%s_dockwidget.py" % specification.module_name
-                        )
+                    str(Path("test") / Path("test_module_name_dockwidget.templ")): str(
+                        Path("test")
+                        / Path(f"test_{specification.module_name}_dockwidget.py")
                     ),
-                    os.path.join("test", "test_resources.templ"): os.path.join(
-                        "test", "test_resources.py"
+                    str(Path("test") / Path("test_resources.templ")): str(
+                        Path("test") / Path("test_resources.py")
                     ),
                 }
             )

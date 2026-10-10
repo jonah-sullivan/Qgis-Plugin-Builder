@@ -21,7 +21,7 @@
  ***************************************************************************/
 """
 
-import os
+from pathlib import Path
 from typing import TYPE_CHECKING
 
 from ...qgis_dirs import deployment_dir
@@ -36,8 +36,8 @@ class ProcessingProviderPluginTemplate(PluginTemplate):
     def descr(self) -> str:
         return "Processing Provider"
 
-    def subdir(self) -> str:
-        return os.path.dirname(__file__)
+    def subdir(self) -> Path:
+        return Path(__file__).parent
 
     def template_map(
         self, specification: "PluginSpecification", dialog: "PluginBuilderDialog"
@@ -51,7 +51,7 @@ class ProcessingProviderPluginTemplate(PluginTemplate):
         provider_descr: str = frame.provider_descr_text.text()
         return {
             # Makefile
-            "TemplateQGISDir": deployment_dir,
+            "TemplateQGISDir": str(deployment_dir),
             "TemplatePyFiles": "%s_algorithm.py %s_provider.py"
             % (specification.module_name, specification.module_name),
             # Metadata
@@ -64,7 +64,7 @@ class ProcessingProviderPluginTemplate(PluginTemplate):
         }
 
     def what_next_items_html(
-        self, plugin_path: str, module_name: str, ui_file: str
+        self, plugin_path: Path, module_name: str, ui_file: str
     ) -> str:
         algo_file = f"{module_name}_algorithm.py"
         return (
@@ -80,7 +80,7 @@ class ProcessingProviderPluginTemplate(PluginTemplate):
             "module_name_provider.tmpl": "%s_provider.py" % specification.module_name,
         }
         if specification.gen_tests:
-            files[os.path.join("test", "test_plugin_lifecycle.templ")] = os.path.join(
-                "test", "test_plugin_lifecycle.py"
+            files[str(Path("test") / "test_plugin_lifecycle.templ")] = str(
+                Path("test") / "test_plugin_lifecycle.py"
             )
         return files
