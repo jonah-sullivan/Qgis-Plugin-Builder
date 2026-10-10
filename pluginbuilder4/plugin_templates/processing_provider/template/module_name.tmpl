@@ -53,7 +53,7 @@ class ${TemplateClass}Plugin(object):
         locale_path = Path(__file__).parent / "i18n" / "${TemplateModuleName}_{}.qm".format(locale.name())
         if locale_path.exists():
             self.translator = QTranslator()
-            self.translator.load(locale_path)
+            self.translator.load(str(locale_path))
             QCoreApplication.installTranslator(self.translator)
 
     def tr(self, message):

@@ -102,7 +102,7 @@ class PluginBuilderDialog(QDialog, FORM_CLASS):
                     self.next_button.setText("Generate")
                     if self.output_directory.text() != "":
                         self.show_output_info(
-                            Path(self.outputdirectory.text())
+                            Path(self.output_directory.text())
                             / self.module_name.text().lower()
                         )
             else:
