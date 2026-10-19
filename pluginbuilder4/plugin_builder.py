@@ -103,7 +103,7 @@ class PluginBuilder:
 
     def initGui(self):  # QGIS API override - camelCase required
         """Create the menu entries and toolbar icons inside the QGIS GUI."""
-        icon = QIcon(self.plugin_builder_path / "icon.png")
+        icon = QIcon(str(self.plugin_builder_path / "icon.png"))
         self.menu = self.iface.pluginMenu().addMenu(icon, self.tr("&Plugin Builder"))
         self.action = QAction(
             icon,
