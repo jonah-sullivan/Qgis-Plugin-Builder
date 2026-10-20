@@ -79,8 +79,6 @@ class PluginBuilder:
             + "/python/plugins"
         )
         self.plugin_builder_path = Path(__file__).parent
-        self.plugin_builder_path = Path(__file__).parent
-
         locale = QLocale(QgsApplication.locale())
         locale_path = (
             self.plugin_builder_path / "i18n" / "{}.qm".format(locale.name()[:2])
@@ -88,14 +86,12 @@ class PluginBuilder:
         if locale_path.exists():
             self.translator = QTranslator()
             self.translator.load(str(locale_path))
-            self.translator.load(str(locale_path))
             QCoreApplication.installTranslator(self.translator)
 
         # class members
         self.action = None
         self.menu = None
         self.dialog = None
-        self.plugin_path: Path = Path()
         self.plugin_path: Path = Path()
         self.template = None
         self.shared_dir: Path = Path()
@@ -127,15 +123,14 @@ class PluginBuilder:
             QMessageBox.critical(
                 None, self.tr("Error"), self.tr("Directory is not writeable")
             )
-            self.plugin_path = Path(
-                QFileDialog.getExistingDirectory(
-                    self.dialog,
-                    self.tr("Select the Directory for your Plugin"),
-                    str(self._last_used_path()),
-                )
+            chosen_path = QFileDialog.getExistingDirectory(
+                self.dialog,
+                self.tr("Select the Directory for your Plugin"),
+                self._last_used_path(),
             )
-            if self.plugin_path == "":
+            if chosen_path == "":
                 return False
+            self.plugin_path = Path(chosen_path)
         return True
 
     def _prepare_tests(self, specification):
@@ -199,7 +194,6 @@ class PluginBuilder:
         if specification.gen_gitlab_ci:
             lines.append(f"gitlab_organization_slug: {specification.gitlab_namespace}")
         lines.append(f"project_slug: {specification.project_slug}")
-        config_path = self.plugin_path / ".qgis-plugin-ci"
         config_path = self.plugin_path / ".qgis-plugin-ci"
         with open(config_path, "w") as f:
             f.write("\n".join(lines) + "\n")
@@ -514,7 +508,6 @@ class PluginBuilder:
         # get version
         cfg = configparser.ConfigParser()
         cfg.read(self.plugin_builder_path / "metadata.txt")
-        cfg.read(self.plugin_builder_path / "metadata.txt")
         version = cfg.get("general", "version")
         self.dialog.setWindowTitle(self.tr("QGIS Plugin Builder - {}").format(version))
 
@@ -533,9 +526,7 @@ class PluginBuilder:
         # get the location for the plugin
         # noinspection PyCallByClass,PyTypeChecker
         self.plugin_path = Path(self.dialog.output_directory.text())
-        self.plugin_path = Path(self.dialog.output_directory.text())
-
-        self._set_last_used_path(self.plugin_path)
+        self._set_last_used_path(str(self.plugin_path))
         if not self._create_plugin_directory():
             return
         self.template = self.dialog.template()
@@ -641,7 +632,7 @@ class PluginBuilder:
         """Display application help to the user."""
         help_file = self.plugin_builder_path / "help" / "index.html"
         if help_file.exists():
-            QDesktopServices.openUrl(QUrl("file:///" + str(help_file)))
+            QDesktopServices.openUrl(QUrl.fromLocalFile(str(help_file)))
         else:
             QDesktopServices.openUrl(
                 QUrl("https://jonah-sullivan.github.io/Qgis-Plugin-Builder/")

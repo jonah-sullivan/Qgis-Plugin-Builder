@@ -102,8 +102,10 @@ class PluginBuilderDialog(QDialog, FORM_CLASS):
                     self.next_button.setText("Generate")
                     if self.output_directory.text() != "":
                         self.show_output_info(
-                            Path(self.output_directory.text())
-                            / self.module_name.text().lower()
+                            str(
+                                Path(self.output_directory.text())
+                                / self.module_name.text().lower()
+                            )
                         )
             else:
                 self.accept()
@@ -296,7 +298,7 @@ class PluginBuilderDialog(QDialog, FORM_CLASS):
 
     def select_directory(self):
         plugin_path = QFileDialog.getExistingDirectory(
-            self, "Select the Directory for your Plugin", self.last_path
+            self, "Select the Directory for your Plugin", str(self.last_path)
         )
         self.output_directory.setText(plugin_path)
         full_output = Path(plugin_path) / self.module_name.text().lower()
