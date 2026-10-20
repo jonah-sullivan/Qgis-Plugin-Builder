@@ -472,11 +472,11 @@ class PluginBuilder:
 
     def _last_used_path(self):
         """Return the last used plugin path from settings"""
-        return QSettings().value("PluginBuilder/last_path", ".")
+        return str(QSettings().value("PluginBuilder/last_path", "."))
 
     def _set_last_used_path(self, value):
         """Set the last used plugin path for future use"""
-        QSettings().setValue("PluginBuilder/last_path", value)
+        QSettings().setValue("PluginBuilder/last_path", str(value))
 
     def _select_tags(self):
         """Select tags for the new plugin from the tags dialog"""
@@ -586,8 +586,6 @@ class PluginBuilder:
             self._prepare_i18n()
 
         QFile.copy(
-            str(self.shared_dir / "pre-commit-config.yaml"),
-            str(self.plugin_path / ".pre-commit-config.yaml"),
             str(self.shared_dir / "pre-commit-config.yaml"),
             str(self.plugin_path / ".pre-commit-config.yaml"),
         )
