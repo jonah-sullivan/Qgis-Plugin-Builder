@@ -252,7 +252,7 @@ class PluginBuilderDialog(QDialog, FORM_CLASS):
         else:
             if self.last_path:
                 self.lbl_full_output_path.setText(
-                    Path(self.last_path) / self.module_name.text()
+                    str(Path(self.last_path) / self.module_name.text())
                 )
                 return True
 
@@ -304,7 +304,7 @@ class PluginBuilderDialog(QDialog, FORM_CLASS):
         self.show_output_info(full_output)
 
     def show_output_info(self, full_output):
-        if QFileInfo(full_output).exists():
+        if QFileInfo(str(full_output)).exists():
             self.lbl_full_output_path.setText(
                 str(full_output) + "\nYour plugin will overwrite the existing contents!"
             )
