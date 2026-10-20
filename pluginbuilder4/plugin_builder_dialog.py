@@ -59,7 +59,7 @@ class PluginBuilderDialog(QDialog, FORM_CLASS):
         self.template_cbox.currentIndexChanged.connect(self.update_template)
         self.btn_select_output.clicked.connect(self.select_directory)
         self.next_button.setFocus()
-        self.output_directory.setText(stored_output_path)
+        self.output_directory.setText(str(stored_output_path))
         self.last_path = stored_output_path
 
     def update_prev_next_buttons(self):
@@ -306,7 +306,7 @@ class PluginBuilderDialog(QDialog, FORM_CLASS):
         self.show_output_info(full_output)
 
     def show_output_info(self, full_output):
-        if QFileInfo(str(full_output)).exists():
+        if QFileInfo(full_output).exists():
             self.lbl_full_output_path.setText(
                 str(full_output) + "\nYour plugin will overwrite the existing contents!"
             )
