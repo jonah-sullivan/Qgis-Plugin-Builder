@@ -645,7 +645,7 @@ class PluginBuilder:
         """Display application help to the user."""
         help_file = self.plugin_builder_path / "help" / "index.html"
         if help_file.exists():
-            QDesktopServices.openUrl(QUrl("file:///" + str(help_file)))
+            QDesktopServices.openUrl(QUrl.fromLocalFile(str(help_file)))
         else:
             QDesktopServices.openUrl(
                 QUrl("https://jonah-sullivan.github.io/Qgis-Plugin-Builder/")

@@ -38,10 +38,10 @@ from qgis.core import QgsProcessingAlgorithm, QgsApplication
 from qgis.PyQt.QtCore import QCoreApplication, QLocale, QTranslator
 from .${TemplateModuleName}_provider import ${TemplateClass}Provider
 
-cmd_folder = Path(inspect.getfile(inspect.currentframe())).parent
+cmd_folder = str(Path(inspect.getfile(inspect.currentframe())).parent)
 
 if cmd_folder not in sys.path:
-    sys.path.insert(0, str(cmd_folder))
+    sys.path.insert(0, (cmd_folder)
 
 
 class ${TemplateClass}Plugin(object):
