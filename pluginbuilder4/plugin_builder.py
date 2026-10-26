@@ -278,6 +278,11 @@ class PluginBuilder:
             f"{specification.module_name}.py",
         )
 
+        # Render mypy.ini at plugin root
+        self.populate_template(
+            specification, self.shared_dir, "mypy.ini.tmpl", "mypy.ini"
+        )
+
     def _prepare_specific_files(self, specification: PluginSpecification) -> None:
         """Prepare specific templates and files.
 

@@ -21,33 +21,35 @@
  *                                                                         *
  ***************************************************************************/
 """
-from qgis.PyQt.QtCore import QLocale, QTranslator, QCoreApplication
+from collections.abc import Callable
+from pathlib import Path
+
 from qgis.core import QgsSettings
+from qgis.gui import QgisInterface
+from qgis.PyQt.QtCore import QCoreApplication, QLocale, QTranslator
 from qgis.PyQt.QtGui import QIcon
-from qgis.PyQt.QtWidgets import QAction
+from qgis.PyQt.QtWidgets import QAction, QWidget
 
 # Import the code for the dialog
 from .${TemplateModuleName}_dialog import ${TemplateClass}Dialog
-from pathlib import Path
 
 
 class ${TemplateClass}:
     """QGIS Plugin Implementation."""
 
-    def __init__(self, iface):
+    def __init__(self, iface: QgisInterface) -> None:
         """Constructor.
 
         :param iface: An interface instance that will be passed to this class
             which provides the hook by which you can manipulate the QGIS
             application at run time.
-        :type iface: QgsInterface
         """
         # Save reference to the QGIS interface
         self.iface = iface
         # initialize plugin directory
         self.plugin_dir = Path(__file__).parent
         # initialize locale
-        locale = QgsSettings().value('locale/userLocale', QLocale().name())[0:2]
+        locale = str(QgsSettings().value('locale/userLocale', QLocale().name()))[0:2]
         locale_path = self.plugin_dir / 'i18n' / '{}.qm'.format(locale)
 
         if locale_path.exists():
@@ -56,75 +58,52 @@ class ${TemplateClass}:
             QCoreApplication.installTranslator(self.translator)
 
         # Declare instance attributes
-        self.actions = []
-        self.menu = self.tr(u'&${TemplateTitle}')
+        self.actions: list[QAction] = []
+        self.menu = self.tr('&${TemplateTitle}')
 
-        # Check if plugin was started the first time in current QGIS session
-        # Must be set in initGui() to survive plugin reloads
-        self.first_start = None
+        # Dialog is lazily created on first run()
+        self.dlg: ${TemplateClass}Dialog | None = None
 
-    def tr(self, message):
+    def tr(self, message: str) -> str:
         """Get the translation for a string using Qt translation API.
-
         We implement this ourselves since we do not inherit QObject.
 
         :param message: String for translation.
-        :type message: str
-
         :returns: Translated version of message.
-        :rtype: str
         """
         return QCoreApplication.translate('${TemplateClass}', message)
 
 
     def add_action(
         self,
-        icon_path,
-        text,
-        callback,
-        enabled_flag=True,
-        add_to_menu=True,
-        add_to_toolbar=True,
-        status_tip=None,
-        whats_this=None,
-        parent=None):
+        icon_path: str,
+        text: str,
+        callback: Callable[[], None],
+        enabled_flag: bool = True,
+        add_to_menu: bool = True,
+        add_to_toolbar: bool = True,
+        status_tip: str | None = None,
+        whats_this: str | None = None,
+        parent: QWidget | None = None) -> QAction:
         """Add a toolbar icon to the toolbar.
 
         :param icon_path: Path to the icon for this action. Can be a resource
             path (e.g. ':/plugins/foo/bar.png') or a normal file system path.
-        :type icon_path: str
-
         :param text: Text that should be shown in menu items for this action.
-        :type text: str
-
         :param callback: Function to be called when the action is triggered.
-        :type callback: function
-
         :param enabled_flag: A flag indicating if the action should be enabled
             by default. Defaults to True.
-        :type enabled_flag: bool
-
         :param add_to_menu: Flag indicating whether the action should also
             be added to the menu. Defaults to True.
-        :type add_to_menu: bool
-
         :param add_to_toolbar: Flag indicating whether the action should also
             be added to the toolbar. Defaults to True.
-        :type add_to_toolbar: bool
-
         :param status_tip: Optional text to show in a popup when mouse pointer
             hovers over the action.
-        :type status_tip: str
-
         :param parent: Parent widget for the new action. Defaults None.
-        :type parent: QWidget
-
         :param whats_this: Optional text to show in the status bar when the
             mouse pointer hovers over the action.
-
         :returns: The action that was created. Note that the action is also
             added to self.actions list.
-        :rtype: QAction
         """
 
         icon = QIcon(icon_path)
@@ -151,36 +130,32 @@ class ${TemplateClass}:
 
         return action
 
-    def initGui(self):
+    def initGui(self) -> None:
         """Create the menu entries and toolbar icons inside the QGIS GUI."""
 
         icon_path = str(Path(__file__).parent / 'icon.png')
         self.add_action(
             icon_path,
-            text=self.tr(u'$TemplateMenuText'),
+            text=self.tr('$TemplateMenuText'),
             callback=self.run,
             parent=self.iface.mainWindow())
 
-        # will be set False in run()
-        self.first_start = True
 
-
-    def unload(self):
+    def unload(self) -> None:
         """Removes the plugin menu item and icon from QGIS GUI."""
         for action in self.actions:
             self.iface.${TemplateMenuRemoveMethod}(
-                self.tr(u'&${TemplateTitle}'),
+                self.tr('&${TemplateTitle}'),
                 action)
             self.iface.removeToolBarIcon(action)
 
 
-    def run(self):
+    def run(self) -> None:
         """Run method that performs all the real work"""
 
         # Create the dialog with elements (after translation) and keep reference
         # Only create GUI ONCE in callback, so that it will only load when the plugin is started
-        if self.first_start == True:
-            self.first_start = False
+        if self.dlg is None:
             self.dlg = ${TemplateClass}Dialog()
 
         # show the dialog

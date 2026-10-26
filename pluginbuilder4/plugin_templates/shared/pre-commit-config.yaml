@@ -12,3 +12,19 @@ repos:
       - id: end-of-file-fixer
       - id: check-yaml
       - id: check-added-large-files
+  # Local hook so mypy can be pinned to 2.4+: mirrors-mypy only goes to 2.3.1,
+  # which rejects the Python 3.12 syntax in PyQt6-stubs
+  - repo: local
+    hooks:
+      - id: mypy
+        name: mypy
+        entry: mypy
+        language: python
+        additional_dependencies:
+          - mypy==2.4.0
+          - qgis-stubs>>=1.0.0.dev2
+        # Check the whole package via mypy.ini: its files/exclude settings are
+        # ignored for filenames passed on the command line
+        pass_filenames: false
+        files: \.py$|^mypy\.ini$
+        types_or: [python, ini]
