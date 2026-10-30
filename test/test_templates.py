@@ -200,7 +200,7 @@ def test_dockwidget_template_map_left_dock(dialog):
     dialog.tabify_dockwidget.setChecked(False)
     result = ToolbuttonWithDockWidgetPluginTemplate().template_map(FakeSpec(), dialog)
     assert result["TemplateMenuText"] == "Show Panel"
-    assert "LeftDockWidgetArea" in result["TemplateAddDockWidgetCall"]
+    assert result["TemplateDockWidgetArea"] == "Qt.DockWidgetArea.LeftDockWidgetArea"
     assert "addDockWidget" in result["TemplateAddDockWidgetCall"]
     assert result["TemplateHasProcessingProvider"] is False
 
@@ -213,7 +213,7 @@ def test_dockwidget_template_map_tabified(dialog):
     dialog.tabify_dockwidget.setChecked(True)
     result = ToolbuttonWithDockWidgetPluginTemplate().template_map(FakeSpec(), dialog)
     assert "addTabifiedDockWidget" in result["TemplateAddDockWidgetCall"]
-    assert "RightDockWidgetArea" in result["TemplateAddDockWidgetCall"]
+    assert result["TemplateDockWidgetArea"] == "Qt.DockWidgetArea.RightDockWidgetArea"
 
 
 def test_dockwidget_template_map_non_plugins_menu(dialog):

@@ -21,25 +21,28 @@
  *                                                                         *
  ***************************************************************************/
 """
-from qgis.PyQt.QtCore import QLocale, QTranslator, QCoreApplication, Qt
+from collections.abc import Callable
+from pathlib import Path
+
 from qgis.core import QgsSettings
+from qgis.gui import QgisInterface
+from qgis.PyQt.QtCore import QCoreApplication, QLocale, Qt, QTranslator
 from qgis.PyQt.QtGui import QIcon
-from qgis.PyQt.QtWidgets import QAction, QDockWidget
+from qgis.PyQt.QtWidgets import QAction, QWidget
+
 # Import the code for the DockWidget
 from .${TemplateModuleName}_dockwidget import ${TemplateClass}DockWidget
-from pathlib import Path
 
 
 class ${TemplateClass}:
     """QGIS Plugin Implementation."""
 
-    def __init__(self, iface):
+    def __init__(self, iface: QgisInterface) -> None:
         """Constructor.
 
         :param iface: An interface instance that will be passed to this class
             which provides the hook by which you can manipulate the QGIS
             application at run time.
-        :type iface: QgsInterface
         """
         # Save reference to the QGIS interface
         self.iface = iface
@@ -57,80 +60,61 @@ class ${TemplateClass}:
             QCoreApplication.installTranslator(self.translator)
 
         # Declare instance attributes
-        self.actions = []
+        self.actions: list[QAction] = []
         self.menu = self.tr(u'&${TemplateTitle}')
         # TODO: We are going to let the user set this up in a future iteration
-        self.toolbar = self.iface.addToolBar(u'${TemplateClass}')
+        toolbar = self.iface.addToolBar(u'${TemplateClass}')
+        if toolbar is None:
+            raise RuntimeError("Could not create toolbar")
+        self.toolbar = toolbar
         self.toolbar.setObjectName(u'${TemplateClass}')
 
         #print "** INITIALIZING ${TemplateClass}"
 
         self.pluginIsActive = False
-        self.dockwidget = None
+        self.dockwidget: ${TemplateClass}DockWidget | None = None
 
 
-    def tr(self, message):
+    def tr(self, message: str) -> str:
         """Get the translation for a string using Qt translation API.
-
         We implement this ourselves since we do not inherit QObject.
 
         :param message: String for translation.
-        :type message: str
-
         :returns: Translated version of message.
-        :rtype: str
         """
         return QCoreApplication.translate('${TemplateClass}', message)
 
 
     def add_action(
         self,
-        icon_path,
-        text,
-        callback,
-        enabled_flag=True,
-        add_to_menu=True,
-        add_to_toolbar=True,
-        status_tip=None,
-        whats_this=None,
-        parent=None):
+        icon_path: str,
+        text: str,
+        callback: Callable[[], None],
+        enabled_flag: bool = True,
+        add_to_menu: bool = True,
+        add_to_toolbar: bool = True,
+        status_tip: str | None = None,
+        whats_this: str | None = None,
+        parent: QWidget | None = None) -> QAction:
         """Add a toolbar icon to the toolbar.
 
         :param icon_path: Path to the icon for this action. Can be a resource
             path (e.g. ':/plugins/foo/bar.png') or a normal file system path.
-        :type icon_path: str
-
         :param text: Text that should be shown in menu items for this action.
-        :type text: str
-
         :param callback: Function to be called when the action is triggered.
-        :type callback: function
-
         :param enabled_flag: A flag indicating if the action should be enabled
             by default. Defaults to True.
-        :type enabled_flag: bool
-
         :param add_to_menu: Flag indicating whether the action should also
             be added to the menu. Defaults to True.
-        :type add_to_menu: bool
-
         :param add_to_toolbar: Flag indicating whether the action should also
             be added to the toolbar. Defaults to True.
-        :type add_to_toolbar: bool
-
         :param status_tip: Optional text to show in a popup when mouse pointer
             hovers over the action.
-        :type status_tip: str
-
         :param parent: Parent widget for the new action. Defaults None.
-        :type parent: QWidget
-
         :param whats_this: Optional text to show in the status bar when the
             mouse pointer hovers over the action.
-
         :returns: The action that was created. Note that the action is also
             added to self.actions list.
-        :rtype: QAction
         """
 
         icon = QIcon(icon_path)
@@ -157,7 +141,7 @@ class ${TemplateClass}:
         return action
 
 
-    def initGui(self):
+    def initGui(self) -> None:
         """Create the menu entries and toolbar icons inside the QGIS GUI."""
 
         icon_path = str(self.plugin_dir / 'icon.png')
@@ -169,24 +153,25 @@ class ${TemplateClass}:
 
     #--------------------------------------------------------------------------
 
-    def onClosePlugin(self):
+    def onClosePlugin(self) -> None:
         """Cleanup necessary items here when plugin dockwidget is closed"""
 
         #print "** CLOSING ${TemplateClass}"
 
         # disconnects
-        self.dockwidget.closingPlugin.disconnect(self.onClosePlugin)
+        if self.dockwidget is not None:
+            self.dockwidget.closingPlugin.disconnect(self.onClosePlugin)
 
         # remove this statement if dockwidget is to remain
         # for reuse if plugin is reopened
-        # Commented next statement since it causes QGIS crashe
+        # Commented next statement since it causes QGIS crash
         # when closing the docked window:
         # self.dockwidget = None
 
         self.pluginIsActive = False
 
 
-    def unload(self):
+    def unload(self) -> None:
         """Removes the plugin menu item and icon from QGIS GUI."""
 
         #print "** UNLOAD ${TemplateClass}"
@@ -201,7 +186,7 @@ class ${TemplateClass}:
 
     #--------------------------------------------------------------------------
 
-    def run(self):
+    def run(self) -> None:
         """Run method that loads and starts the plugin"""
 
         if not self.pluginIsActive:
@@ -212,7 +197,7 @@ class ${TemplateClass}:
             # dockwidget may not exist if:
             #    first run of plugin
             #    removed on close (see self.onClosePlugin method)
-            if self.dockwidget == None:
+            if self.dockwidget is None:
                 # Create the dockwidget (after translation) and keep reference
                 self.dockwidget = ${TemplateClass}DockWidget()
 
@@ -220,5 +205,6 @@ class ${TemplateClass}:
             self.dockwidget.closingPlugin.connect(self.onClosePlugin)
 
             # show the dockwidget
+            area = ${TemplateDockWidgetArea}
             self.iface.${TemplateAddDockWidgetCall}
             self.dockwidget.show()

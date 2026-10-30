@@ -23,10 +23,14 @@
 """
 
 from pathlib import Path
+from typing import Any
 
 from qgis.PyQt import QtGui, QtWidgets, uic
 from qgis.PyQt.QtCore import pyqtSignal
 
+# This loads your .ui file so that
+# PyQt can populate your plugin with the elements from Qt Designer
+FORM_CLASS: Any
 FORM_CLASS, _ = uic.loadUiType(
     Path(__file__).parent / '${TemplateModuleName}_dockwidget_base.ui')
 
@@ -35,9 +39,9 @@ class ${TemplateClass}DockWidget(QtWidgets.QDockWidget, FORM_CLASS):
 
     closingPlugin = pyqtSignal()
 
-    def __init__(self, parent=None):
+    def __init__(self, parent: QtWidgets.QWidget | None = None) -> None:
         """Constructor."""
-        super(${TemplateClass}DockWidget, self).__init__(parent)
+        super().__init__(parent)
         # Set up the user interface from Designer.
         # After setupUI you can access any designer object by doing
         # self.<objectname>, and you can use autoconnect slots - see
@@ -45,6 +49,7 @@ class ${TemplateClass}DockWidget(QtWidgets.QDockWidget, FORM_CLASS):
         # #widgets-and-dialogs-with-auto-connect
         self.setupUi(self)
 
-    def closeEvent(self, event):
+    def closeEvent(self, event: QtGui.QCloseEvent | None) -> None:
         self.closingPlugin.emit()
-        event.accept()
+        if event is not None:
+            event.accept()

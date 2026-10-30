@@ -121,7 +121,7 @@ class ${TemplateClass}Algorithm(QgsProcessingAlgorithm):
         # or output names.
         return {self.OUTPUT: dest_id}
 
-    def name(self):
+    def name(self) -> str:
         """
         Returns the algorithm name, used for identifying the algorithm. This
         string should be fixed for the algorithm, and must not be localised.
@@ -131,21 +131,21 @@ class ${TemplateClass}Algorithm(QgsProcessingAlgorithm):
         """
         return '$TemplateAlgoName'
 
-    def displayName(self):
+    def displayName(self) -> str:
         """
         Returns the translated algorithm name, which should be used for any
         user-visible display of the algorithm name.
         """
         return self.tr(self.name())
 
-    def group(self):
+    def group(self) -> str:
         """
         Returns the name of the group this algorithm belongs to. This string
         should be localised.
         """
         return self.tr(self.groupId())
 
-    def groupId(self):
+    def groupId(self) -> str:
         """
         Returns the unique ID of the group this algorithm belongs to. This
         string should be fixed for the algorithm, and must not be localised.
@@ -155,8 +155,8 @@ class ${TemplateClass}Algorithm(QgsProcessingAlgorithm):
         """
         return '$TemplateAlgoGroup'
 
-    def tr(self, string):
+    def tr(self, string: str) -> str:
         return QCoreApplication.translate('Processing', string)
 
-    def createInstance(self):
+    def createInstance(self) -> None:
         return ${TemplateClass}Algorithm()

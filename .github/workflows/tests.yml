@@ -9,14 +9,14 @@ on:
 permissions:
   contents: read
 
-# Windows is not tested: the qgis/qgis Docker image is Linux-only and there
+# Windows is not tested: the qgis/qgis-slim Docker image is Linux-only and there
 # is no reliable lightweight alternative for running pytest-qgis on Windows
 # runners. Revisit if a Windows-specific bug surfaces.
 jobs:
   test:
     runs-on: ubuntu-latest
     container:
-      image: qgis/qgis:latest
+      image: qgis/qgis-slim:latest
 
     env:
       QT_QPA_PLATFORM: offscreen

@@ -23,12 +23,18 @@
  This script initializes the plugin, making it known to QGIS.
 """
 
+from typing import TYPE_CHECKING
 
-def classFactory(iface):
+if TYPE_CHECKING:
+    from qgis.gui import QgisInterface
+
+    from .${TemplateModuleName} import ${TemplateClass}
+
+
+def classFactory(iface: "QgisInterface") -> "${TemplateClass}":
     """Load ${TemplateClass} class from file ${TemplateClass}.
 
     :param iface: A QGIS interface instance.
-    :type iface: QgsInterface
     """
     #
     from .${TemplateModuleName} import ${TemplateClass}

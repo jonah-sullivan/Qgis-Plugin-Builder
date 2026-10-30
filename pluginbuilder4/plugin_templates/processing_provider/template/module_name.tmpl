@@ -60,7 +60,7 @@ class ${TemplateClass}Plugin(object):
             self.translator.load(str(locale_path))
             QCoreApplication.installTranslator(self.translator)
 
-    def tr(self, message):
+    def tr(self, message: str) -> str:
         return QCoreApplication.translate("${TemplateClass}", message)
 
     def initProcessing(self):

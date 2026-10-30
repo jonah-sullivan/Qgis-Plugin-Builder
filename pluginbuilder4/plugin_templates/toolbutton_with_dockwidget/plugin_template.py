@@ -66,10 +66,10 @@ class ToolbuttonWithDockWidgetPluginTemplate(PluginTemplate):
 
         if dialog.tabify_dockwidget.isChecked():
             add_dock_call = (
-                f"addTabifiedDockWidget({area},self.dockwidget, raiseTab=True)"
+                "addTabifiedDockWidget(area, self.dockwidget, raiseTab=True)"
             )
         else:
-            add_dock_call = f"addDockWidget({area}, self.dockwidget)"
+            add_dock_call = "addDockWidget(area, self.dockwidget)"
 
         m = specification.module_name
         ui_file = f"{m}_dockwidget_base.ui"
@@ -86,6 +86,7 @@ class ToolbuttonWithDockWidgetPluginTemplate(PluginTemplate):
             "TemplateMenuAddMethod": add_method,
             "TemplateMenuRemoveMethod": remove_method,
             # DockWidget
+            "TemplateDockWidgetArea": area,
             "TemplateAddDockWidgetCall": add_dock_call,
             # readme.tmpl extras
             "TemplateCompileResourcesStep": (
