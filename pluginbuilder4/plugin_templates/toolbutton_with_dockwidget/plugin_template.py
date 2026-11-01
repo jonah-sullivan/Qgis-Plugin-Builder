@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 /***************************************************************************
  PluginTemplate
@@ -49,9 +48,11 @@ class ToolbuttonWithDockWidgetPluginTemplate(PluginTemplate):
         if menu == "Plugins":
             add_method = "addPluginToMenu"
             remove_method = "removePluginMenu"
+            menu_getter = "pluginMenu"
         else:
             add_method = f"addPluginTo{menu}Menu"
             remove_method = f"removePlugin{menu}Menu"
+            menu_getter = f"{menu.lower()}Menu"
         self.category = menu
 
         dockwidget_area: str = dialog.template_subframe.dockwidget_area.currentText()
@@ -85,6 +86,7 @@ class ToolbuttonWithDockWidgetPluginTemplate(PluginTemplate):
             "TemplateMenuText": menu_text,
             "TemplateMenuAddMethod": add_method,
             "TemplateMenuRemoveMethod": remove_method,
+            "TemplateMenuGetter": menu_getter,
             # DockWidget
             "TemplateDockWidgetArea": area,
             "TemplateAddDockWidgetCall": add_dock_call,

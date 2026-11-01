@@ -268,6 +268,12 @@ class PluginBuilder:
             self.populate_template(
                 specification, self.shared_dir, "pb_tool.tmpl", "pb_tool.cfg"
             )
+
+        # Copy LICENSE to plugin root
+        src = self.shared_dir / "LICENSE"
+        dst = self.plugin_path / "LICENSE"
+        QFile.copy(str(src), str(dst))
+
         self.populate_template(
             specification, self.template_dir, "__init__.tmpl", "__init__.py"
         )

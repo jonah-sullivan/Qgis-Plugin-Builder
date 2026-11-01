@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 /***************************************************************************
  $TemplateClass
@@ -52,7 +51,7 @@ class ${TemplateClass}:
 
         # initialize locale
         locale = QgsSettings().value('locale/userLocale', QLocale().name())[0:2]
-        locale_path = self.plugin_dir / 'i18n' / '{}.qm'.format(locale)
+        locale_path = self.plugin_dir / 'i18n' / f'{locale}.qm'
 
         if locale_path.exists():
             self.translator = QTranslator()
@@ -61,19 +60,15 @@ class ${TemplateClass}:
 
         # Declare instance attributes
         self.actions: list[QAction] = []
-        self.menu = self.tr(u'&${TemplateTitle}')
+        self.menu = self.tr('&${TemplateTitle}')
         # TODO: We are going to let the user set this up in a future iteration
         toolbar = self.iface.addToolBar(u'${TemplateClass}')
         if toolbar is None:
             raise RuntimeError("Could not create toolbar")
         self.toolbar = toolbar
         self.toolbar.setObjectName(u'${TemplateClass}')
-
-        #print "** INITIALIZING ${TemplateClass}"
-
         self.pluginIsActive = False
         self.dockwidget: ${TemplateClass}DockWidget | None = None
-
 
     def tr(self, message: str) -> str:
         """Get the translation for a string using Qt translation API.
@@ -83,7 +78,6 @@ class ${TemplateClass}:
         :returns: Translated version of message.
         """
         return QCoreApplication.translate('${TemplateClass}', message)
-
 
     def add_action(
         self,
@@ -95,7 +89,8 @@ class ${TemplateClass}:
         add_to_toolbar: bool = True,
         status_tip: str | None = None,
         whats_this: str | None = None,
-        parent: QWidget | None = None) -> QAction:
+        parent: QWidget | None = None,
+    ) -> QAction:
         """Add a toolbar icon to the toolbar.
 
         :param icon_path: Path to the icon for this action. Can be a resource
@@ -135,11 +130,16 @@ class ${TemplateClass}:
             self.iface.${TemplateMenuAddMethod}(
                 self.menu,
                 action)
+            # Show the icon on the submenu QGIS created for this plugin
+            parent_menu = self.iface.${TemplateMenuGetter}()
+            if parent_menu is not None:
+                for menu_action in parent_menu.actions():
+                    if menu_action.text() == self.menu:
+                        menu_action.setIcon(icon)
 
         self.actions.append(action)
 
         return action
-
 
     def initGui(self) -> None:
         """Create the menu entries and toolbar icons inside the QGIS GUI."""
@@ -151,12 +151,8 @@ class ${TemplateClass}:
             callback=self.run,
             parent=self.iface.mainWindow())
 
-    #--------------------------------------------------------------------------
-
     def onClosePlugin(self) -> None:
         """Cleanup necessary items here when plugin dockwidget is closed"""
-
-        #print "** CLOSING ${TemplateClass}"
 
         # disconnects
         if self.dockwidget is not None:
@@ -170,11 +166,8 @@ class ${TemplateClass}:
 
         self.pluginIsActive = False
 
-
     def unload(self) -> None:
         """Removes the plugin menu item and icon from QGIS GUI."""
-
-        #print "** UNLOAD ${TemplateClass}"
 
         for action in self.actions:
             self.iface.${TemplateMenuRemoveMethod}(
@@ -184,15 +177,11 @@ class ${TemplateClass}:
         # remove the toolbar
         del self.toolbar
 
-    #--------------------------------------------------------------------------
-
     def run(self) -> None:
         """Run method that loads and starts the plugin"""
 
         if not self.pluginIsActive:
             self.pluginIsActive = True
-
-            #print "** STARTING ${TemplateClass}"
 
             # dockwidget may not exist if:
             #    first run of plugin

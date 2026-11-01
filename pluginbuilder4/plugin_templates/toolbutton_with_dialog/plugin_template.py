@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 /***************************************************************************
  PluginTemplate
@@ -49,9 +48,11 @@ class ToolbuttonWithDialogPluginTemplate(PluginTemplate):
         if menu == "Plugins":
             add_method = "addPluginToMenu"
             remove_method = "removePluginMenu"
+            menu_getter = "pluginMenu"
         else:
             add_method = f"addPluginTo{menu}Menu"
             remove_method = f"removePlugin{menu}Menu"
+            menu_getter = f"{menu.lower()}Menu"
         self.category = menu
         m = specification.module_name
         ui_file = f"{m}_dialog_base.ui"
@@ -67,6 +68,7 @@ class ToolbuttonWithDialogPluginTemplate(PluginTemplate):
             "TemplateMenuText": menu_text,
             "TemplateMenuAddMethod": add_method,
             "TemplateMenuRemoveMethod": remove_method,
+            "TemplateMenuGetter": menu_getter,
             # readme.tmpl extras
             "TemplateCompileResourcesStep": (
                 "\n\n  * Compile the resources file using pyrcc6"

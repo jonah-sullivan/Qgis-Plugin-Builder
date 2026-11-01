@@ -67,6 +67,7 @@ class FakePluginSpecification:
             "TemplateMenuText": self.menu_text,
             "TemplateMenuAddMethod": "addPluginToMenu",
             "TemplateMenuRemoveMethod": "removePluginMenu",
+            "TemplateMenuGetter": "pluginMenu",
             "TemplateHasProcessingProvider": False,
             "TemplateGitHubOrg": "",
             "TemplateGitLabNamespace": "",

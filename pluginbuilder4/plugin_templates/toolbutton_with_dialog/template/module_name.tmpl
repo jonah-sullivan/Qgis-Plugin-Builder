@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 /***************************************************************************
  $TemplateClass
@@ -50,7 +49,7 @@ class ${TemplateClass}:
         self.plugin_dir = Path(__file__).parent
         # initialize locale
         locale = str(QgsSettings().value('locale/userLocale', QLocale().name()))[0:2]
-        locale_path = self.plugin_dir / 'i18n' / '{}.qm'.format(locale)
+        locale_path = self.plugin_dir / 'i18n' / f'{locale}.qm'
 
         if locale_path.exists():
             self.translator = QTranslator()
@@ -73,7 +72,6 @@ class ${TemplateClass}:
         """
         return QCoreApplication.translate('${TemplateClass}', message)
 
-
     def add_action(
         self,
         icon_path: str,
@@ -84,7 +82,8 @@ class ${TemplateClass}:
         add_to_toolbar: bool = True,
         status_tip: str | None = None,
         whats_this: str | None = None,
-        parent: QWidget | None = None) -> QAction:
+        parent: QWidget | None = None,
+    ) -> QAction:
         """Add a toolbar icon to the toolbar.
 
         :param icon_path: Path to the icon for this action. Can be a resource
@@ -125,6 +124,12 @@ class ${TemplateClass}:
             self.iface.${TemplateMenuAddMethod}(
                 self.menu,
                 action)
+            # Show the icon on the submenu QGIS created for this plugin
+            parent_menu = self.iface.${TemplateMenuGetter}()
+            if parent_menu is not None:
+                for menu_action in parent_menu.actions():
+                    if menu_action.text() == self.menu:
+                        menu_action.setIcon(icon)
 
         self.actions.append(action)
 
@@ -140,7 +145,6 @@ class ${TemplateClass}:
             callback=self.run,
             parent=self.iface.mainWindow())
 
-
     def unload(self) -> None:
         """Removes the plugin menu item and icon from QGIS GUI."""
         for action in self.actions:
@@ -149,12 +153,13 @@ class ${TemplateClass}:
                 action)
             self.iface.removeToolBarIcon(action)
 
-
     def run(self) -> None:
         """Run method that performs all the real work"""
 
-        # Create the dialog with elements (after translation) and keep reference
-        # Only create GUI ONCE in callback, so that it will only load when the plugin is started
+        # Create the dialog with elements (after translation)
+        #     and keep the reference
+        # Only create GUI ONCE in callback,
+        #    so that it will only load when the plugin is started
         if self.dlg is None:
             self.dlg = ${TemplateClass}Dialog()
 

@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """
 /***************************************************************************
  $TemplateClass
@@ -31,9 +29,9 @@ __copyright__ = '(C) $TemplateYear by $TemplateAuthor'
 __revision__ = '$TemplateVCSFormat'
 
 from qgis.core import QgsProcessingProvider
-from .${TemplateModuleName}_algorithm import ${TemplateClass}Algorithm
 from qgis.PyQt.QtGui import QIcon
 
+from .${TemplateModuleName}_algorithm import ${TemplateClass}Algorithm
 
 
 class ${TemplateClass}Provider(QgsProcessingProvider):
@@ -49,7 +47,6 @@ class ${TemplateClass}Provider(QgsProcessingProvider):
         Unloads the provider. Any tear-down steps required by the provider
         should be implemented here.
         """
-        pass
 
     def loadAlgorithms(self) -> None:
         """

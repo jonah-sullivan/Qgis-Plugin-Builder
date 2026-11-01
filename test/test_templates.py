@@ -138,6 +138,7 @@ def test_dialog_template_map_plugins_menu(dialog):
     assert result["TemplateMenuText"] == "Run Tool"
     assert result["TemplateMenuAddMethod"] == "addPluginToMenu"
     assert result["TemplateMenuRemoveMethod"] == "removePluginMenu"
+    assert result["TemplateMenuGetter"] == "pluginMenu"
     assert result["TemplateHasProcessingProvider"] is False
 
 
@@ -148,6 +149,7 @@ def test_dialog_template_map_vector_menu(dialog):
     result = ToolbuttonWithDialogPluginTemplate().template_map(FakeSpec(), dialog)
     assert result["TemplateMenuAddMethod"] == "addPluginToVectorMenu"
     assert result["TemplateMenuRemoveMethod"] == "removePluginVectorMenu"
+    assert result["TemplateMenuGetter"] == "vectorMenu"
 
 
 def test_dialog_template_map_ui_file(dialog):
@@ -225,6 +227,7 @@ def test_dockwidget_template_map_non_plugins_menu(dialog):
     result = ToolbuttonWithDockWidgetPluginTemplate().template_map(FakeSpec(), dialog)
     assert result["TemplateMenuAddMethod"] == "addPluginToRasterMenu"
     assert result["TemplateMenuRemoveMethod"] == "removePluginRasterMenu"
+    assert result["TemplateMenuGetter"] == "rasterMenu"
 
 
 def test_dockwidget_template_map_ui_file(dialog):
