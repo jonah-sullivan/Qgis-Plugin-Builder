@@ -5,10 +5,10 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>QGIS Plugin Builder &#8212; QGIS Plugin Builder 3.4.4 documentation</title>
+    <title>QGIS Plugin Builder &#8212; QGIS Plugin Builder 3.5.0 documentation</title>
     <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="_static/pyramid.css?v=424f8d56" />
-    <script src="_static/documentation_options.js?v=4c927a77"></script>
+    <script src="_static/documentation_options.js?v=c1362a89"></script>
     <script src="_static/doctools.js?v=fd6eb6e6"></script>
     <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
     <link rel="index" title="Index" href="genindex.html" />
@@ -27,7 +27,7 @@
         <li class="right" style="margin-right: 10px">
           <a href="genindex.html" title="General Index"
              accesskey="I">index</a></li>
-        <li class="nav-item nav-item-0"><a href="#">QGIS Plugin Builder 3.4.4 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="#">QGIS Plugin Builder 3.5.0 documentation</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">QGIS Plugin Builder</a></li>
       </ul>
     </div>
@@ -102,8 +102,9 @@ or make it more readable. Some examples:</p>
 displayed in both the Plugin Manager and Plugin Installer. Keep it short
 yet descriptive so the purpose of the plugin can be easily determined.</p>
 </dd>
-<dt><strong>Version number</strong></dt><dd><p>This is the version number of your plugin. Plugin Builder
-suggests 0.1, but you can start with any number. The Plugin Installer uses the
+<dt><strong>Version number</strong></dt><dd><p>This is the version number of your plugin. Plugin Builder suggests <code class="docutils literal notranslate"><span class="pre">0.1</span></code>,
+but you can start with any numeric version that has at least two parts, such
+as <code class="docutils literal notranslate"><span class="pre">1.0</span></code> or <code class="docutils literal notranslate"><span class="pre">1.0.0</span></code>. The Plugin Installer uses the
 version number to identify which plugins you have installed are upgradeable so
 it is important to increment it as you release new versions.</p>
 </dd>
@@ -178,6 +179,25 @@ menus:</p>
 Your choice is also written to the <em>category</em> field in metadata.txt.</p>
 </dd>
 </dl>
+<p>The “Tool button with dock widget” template has the same fields, plus an
+option to tabify the dock widget with any existing dock widgets.</p>
+<p>For the “Processing provider” template you get these fields instead:</p>
+<dl class="simple">
+<dt><strong>Provider name</strong></dt><dd><p>The short name of your Processing provider. It is used as the provider’s
+<code class="docutils literal notranslate"><span class="pre">id()</span></code>, which also prefixes your algorithm ids (<code class="docutils literal notranslate"><span class="pre">provider:algorithm</span></code>),
+so keep it short, lowercase and free of spaces, e.g. <code class="docutils literal notranslate"><span class="pre">myprovider</span></code>.</p>
+</dd>
+<dt><strong>Provider description</strong></dt><dd><p>The provider’s full name, shown in the Processing toolbox.</p>
+</dd>
+<dt><strong>Algorithm name</strong></dt><dd><p>The name of the example algorithm, used as its <code class="docutils literal notranslate"><span class="pre">name()</span></code>. Like the
+provider name, it should be lowercase with no spaces, e.g. <code class="docutils literal notranslate"><span class="pre">copylayer</span></code>.</p>
+</dd>
+<dt><strong>Algorithm group</strong></dt><dd><p>The id of the group the example algorithm appears under in the toolbox.</p>
+</dd>
+</dl>
+<p>The generated provider and algorithm use the plugin’s <code class="docutils literal notranslate"><span class="pre">icon.png</span></code> as their
+toolbox icon, and the algorithm’s <strong>Help</strong> button opens your plugin’s built
+help (see <a class="reference internal" href="#documenting-your-plugin">Documenting your Plugin</a>).</p>
 </section>
 <section id="additional-components">
 <h2>Additional components<a class="headerlink" href="#additional-components" title="Link to this heading">¶</a></h2>
@@ -190,7 +210,8 @@ recommended, but not strictly required.</p>
 <dt><strong>Help</strong></dt><dd><p>Creates a <a class="reference external" href="http://sphinx-doc.org">Sphinx</a> template for generating a HTML help.
 See <a class="reference internal" href="#documenting-your-plugin">Documenting your Plugin</a> for more information.</p>
 </dd>
-<dt><strong>Unit tests</strong></dt><dd><p>Creates a basic set of unit tests for your plugin.</p>
+<dt><strong>Unit tests</strong></dt><dd><p>Creates a basic set of unit tests for your plugin.
+See <a class="reference internal" href="#running-the-unit-tests">Running the Unit Tests</a> for more information.</p>
 </dd>
 <dt><strong>Makefile</strong></dt><dd><p>Adds a Makefile for building your plugin with GNU make.
 See <a class="reference internal" href="#using-the-makefile">Using the Makefile</a> for more information.</p>
@@ -301,13 +322,19 @@ pre-filled automatically.</p>
 </table>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>After generating your plugin you must add <code class="docutils literal notranslate"><span class="pre">OSGEO_USER</span></code> and
-<code class="docutils literal notranslate"><span class="pre">OSGEO_PASSWORD</span></code> as secrets so the release workflow can upload to the
-QGIS plugin repository:</p>
+<p>The token API requires your plugin to already exist on plugins.qgis.org.
+Upload your first release manually using <code class="docutils literal notranslate"><span class="pre">OSGEO_USER</span></code> and <code class="docutils literal notranslate"><span class="pre">OSGEO_PASSWORD</span></code>
+(see the alternative below), then switch to token auth for subsequent releases.</p>
+<p>Once your plugin is registered, create a plugin-specific token at
+<code class="docutils literal notranslate"><span class="pre">https://plugins.qgis.org/plugins/&lt;package_name&gt;/tokens/create/</span></code>
+and add it as <code class="docutils literal notranslate"><span class="pre">QGIS_PLUGIN_TOKEN</span></code>:</p>
 <ul class="simple">
 <li><p><strong>GitHub</strong> — Settings → Secrets and variables → Actions → New repository secret</p></li>
 <li><p><strong>GitLab</strong> — Settings → CI/CD → Variables → Add variable</p></li>
 </ul>
+<p><strong>Alternative:</strong> replace <code class="docutils literal notranslate"><span class="pre">--qgis-token</span> <span class="pre">$QGIS_PLUGIN_TOKEN</span></code> in the generated
+workflow file with <code class="docutils literal notranslate"><span class="pre">--osgeo-username</span> <span class="pre">$OSGEO_USER</span> <span class="pre">--osgeo-password</span> <span class="pre">$OSGEO_PASSWORD</span></code>
+and add those secrets instead.</p>
 </div>
 </section>
 </section>
@@ -315,13 +342,14 @@ QGIS plugin repository:</p>
 <section id="generating">
 <h1>Generating<a class="headerlink" href="#generating" title="Link to this heading">¶</a></h1>
 <img alt="_images/generating.png" src="_images/generating.png" />
-<p>Choose the location for your generated plugin. Once you select the directory, the complete path for your plugin is displayed.</p>
-<p>When you click <strong>Generate</strong>, Plugin Builder will attempt to build your <code class="docutils literal notranslate"><span class="pre">resources.py</span></code> file using <code class="docutils literal notranslate"><span class="pre">rcc</span></code>.</p>
-<p>If <code class="docutils literal notranslate"><span class="pre">rcc</span></code> is not found in your path, you’ll see:</p>
-<blockquote>
-<div><img alt="_images/compile_failed.png" class="align-center" src="_images/compile_failed.png" />
-</div></blockquote>
-<p>If the compilation fails, you’ll have to compile it manually as shown in the results dialog.</p>
+<p>Choose the location for your generated plugin. Once you select the directory,
+the complete path for your plugin is displayed: a new folder named after your
+module name, inside the directory you chose.</p>
+<p>Plugin Builder never overwrites an existing plugin. If that folder already
+exists, the path is shown in red and <strong>Generate</strong> is refused. Choose another
+directory, or go back and change the module name.</p>
+<p>Plugin Builder doesn’t compile any resource files; see <a class="reference internal" href="#resource-files">Resource files</a> if
+you want to use Qt’s resource system.</p>
 </section>
 <section id="results">
 <h1>Results<a class="headerlink" href="#results" title="Link to this heading">¶</a></h1>
@@ -336,9 +364,9 @@ directory.</p>
 <span id="index-5"></span><span id="index-4"></span><h1>Resource files<a class="headerlink" href="#resource-files" title="Link to this heading">¶</a></h1>
 <p id="index-6">Resource files (<code class="docutils literal notranslate"><span class="pre">*.qrc</span></code>) define media assets such as icons and images used
 in your plugin. Compiling a resource file is <strong>optional</strong> — the recommended
-approach is to reference assets directly using <code class="docutils literal notranslate"><span class="pre">os.path</span></code>:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">icon_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="vm">__file__</span><span class="p">),</span> <span class="s1">&#39;icon.png&#39;</span><span class="p">)</span>
-<span class="n">icon</span> <span class="o">=</span> <span class="n">QIcon</span><span class="p">(</span><span class="n">icon_path</span><span class="p">)</span>
+approach is to reference assets directly using <code class="docutils literal notranslate"><span class="pre">Path</span></code>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">icon_path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)</span><span class="o">.</span><span class="n">parent</span> <span class="o">/</span> <span class="s1">&#39;icon.png&#39;</span>
+<span class="n">icon</span> <span class="o">=</span> <span class="n">QIcon</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">icon_path</span><span class="p">))</span>
 </pre></div>
 </div>
 <p>This keeps assets as ordinary files alongside your plugin source and avoids
@@ -409,13 +437,102 @@ containing valid plugins will be added to the Plugin Manager.</p>
 enable it. Then click on the tool or the menu item for the plugin to run it.
 If all is well, you should see something similar to this:</p>
 <img alt="_images/plugin_test.png" class="align-center" src="_images/plugin_test.png" />
-<p>If the plugin throws an error make sure you have compiled the resource file
-before deploying and testing.</p>
+<p>If the plugin throws an error, check the Python error dialog or the <em>Python
+Warning</em> tab of the Log Messages panel for the traceback.</p>
 <p>Once the generated plugin is working it’s your turn to customize the user
 interface and add the needed code to make it do something useful.</p>
 </section>
+<section id="running-the-unit-tests">
+<span id="index-16"></span><span id="index-15"></span><span id="index-14"></span><h1>Running the Unit Tests<a class="headerlink" href="#running-the-unit-tests" title="Link to this heading">¶</a></h1>
+<p>If you included the “Unit tests” component, your plugin ships with a
+<code class="docutils literal notranslate"><span class="pre">pytest</span></code>/<code class="docutils literal notranslate"><span class="pre">pytest-qgis</span></code> suite in the <code class="docutils literal notranslate"><span class="pre">test</span></code> directory. These tests
+import the real <code class="docutils literal notranslate"><span class="pre">qgis</span></code> Python bindings, so they need to run against a
+Python environment that can see your QGIS installation:</p>
+<ol class="arabic">
+<li><p>Create a virtual environment that inherits the system’s site-packages so
+it can see the <code class="docutils literal notranslate"><span class="pre">qgis</span></code> bindings:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python3</span> <span class="o">-</span><span class="n">m</span> <span class="n">venv</span> <span class="o">--</span><span class="n">system</span><span class="o">-</span><span class="n">site</span><span class="o">-</span><span class="n">packages</span> <span class="o">.</span><span class="n">venv</span>
+</pre></div>
+</div>
+<p>or with <a class="reference external" href="https://docs.astral.sh/uv/">uv</a>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">uv</span> <span class="n">venv</span> <span class="o">--</span><span class="n">system</span><span class="o">-</span><span class="n">site</span><span class="o">-</span><span class="n">packages</span>
+</pre></div>
+</div>
+</li>
+<li><p>Set <code class="docutils literal notranslate"><span class="pre">QGIS_PREFIX_PATH</span></code> so <code class="docutils literal notranslate"><span class="pre">pytest-qgis</span></code> can locate your QGIS
+installation:</p>
+<ul class="simple">
+<li><dl class="simple">
+<dt>Linux:</dt><dd><p><code class="docutils literal notranslate"><span class="pre">export</span> <span class="pre">QGIS_PREFIX_PATH=/usr</span></code></p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>Mac OS X (Homebrew):</dt><dd><p><code class="docutils literal notranslate"><span class="pre">export</span> <span class="pre">QGIS_PREFIX_PATH=/usr/local</span></code></p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>Windows:</dt><dd><p>set it to your QGIS install directory before running pytest</p>
+</dd>
+</dl>
+</li>
+</ul>
+</li>
+<li><p>Install the test dependencies:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="o">-</span><span class="n">r</span> <span class="n">requirements</span><span class="o">-</span><span class="n">dev</span><span class="o">.</span><span class="n">txt</span>
+</pre></div>
+</div>
+</li>
+<li><p>Run the suite from the plugin directory:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pytest</span>
+</pre></div>
+</div>
+<p>or, if you generated a Makefile:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">make</span> <span class="n">test</span>
+</pre></div>
+</div>
+</li>
+</ol>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Editors backed by Pyright/Pylance (VS Code) or PyCharm won’t resolve
+imports like <code class="docutils literal notranslate"><span class="pre">photo_linker.photo_linker_dialog</span></code> the same way pytest
+does, because they don’t add the plugin’s parent directory to the import
+path automatically:</p>
+<ul>
+<li><p>VS Code (Pylance): add the parent directory to
+<code class="docutils literal notranslate"><span class="pre">.vscode/settings.json</span></code>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+  <span class="s2">&quot;python.analysis.extraPaths&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;..&quot;</span><span class="p">]</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</li>
+<li><p>PyCharm: right-click the plugin’s parent directory in the project
+tree and choose <strong>Mark Directory as → Sources Root</strong>.</p></li>
+</ul>
+<p>Jedi-backed editors (e.g. jedi-language-server, python-lsp-server)
+resolve this automatically and don’t need either fix.</p>
+</div>
+</section>
+<section id="type-checking">
+<span id="index-18"></span><span id="index-17"></span><h1>Type Checking<a class="headerlink" href="#type-checking" title="Link to this heading">¶</a></h1>
+<p>The generated plugin code is fully type annotated, and every plugin comes
+with a <code class="docutils literal notranslate"><span class="pre">mypy.ini</span></code> that runs <a class="reference external" href="https://mypy-lang.org">mypy</a> in strict mode
+against your plugin code (the <code class="docutils literal notranslate"><span class="pre">help</span></code> and <code class="docutils literal notranslate"><span class="pre">test</span></code> directories are
+excluded). Type stubs for the <code class="docutils literal notranslate"><span class="pre">qgis</span></code> bindings come from the <code class="docutils literal notranslate"><span class="pre">qgis-stubs</span></code>
+package.</p>
+<p><code class="docutils literal notranslate"><span class="pre">mypy</span></code> and <code class="docutils literal notranslate"><span class="pre">qgis-stubs</span></code> are included in <code class="docutils literal notranslate"><span class="pre">requirements-dev.txt</span></code>, so
+after installing the test dependencies run, from the plugin directory:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">mypy</span>
+</pre></div>
+</div>
+<p>The generated <code class="docutils literal notranslate"><span class="pre">.pre-commit-config.yaml</span></code> also runs <code class="docutils literal notranslate"><span class="pre">mypy</span></code> on every commit
+once you have enabled it with <code class="docutils literal notranslate"><span class="pre">pre-commit</span> <span class="pre">install</span></code>.</p>
+</section>
 <section id="using-pb-tool">
-<span id="index-14"></span><h1>Using pb_tool<a class="headerlink" href="#using-pb-tool" title="Link to this heading">¶</a></h1>
+<span id="index-19"></span><h1>Using pb_tool<a class="headerlink" href="#using-pb-tool" title="Link to this heading">¶</a></h1>
 <p><em>pb_tool</em> is a Python command line tool for compiling and deploying QGIS plugins on Linux, Mac OS X, and Windows.</p>
 <section id="features">
 <h2>Features<a class="headerlink" href="#features" title="Link to this heading">¶</a></h2>
@@ -496,25 +613,30 @@ support <a class="reference external" href="http://gnu.org/software/make">GNU ma
 </section>
 <section id="documenting-your-plugin">
 <h1>Documenting your Plugin<a class="headerlink" href="#documenting-your-plugin" title="Link to this heading">¶</a></h1>
-<p id="index-17"><span id="index-16"></span><span id="index-15"></span>Plugin Builder optionally creates a <a class="reference external" href="http://sphinx-doc.org">Sphinx</a> project for you in
+<p id="index-22"><span id="index-21"></span><span id="index-20"></span>Plugin Builder optionally creates a <a class="reference external" href="http://sphinx-doc.org">Sphinx</a> project for you in
 the <code class="docutils literal notranslate"><span class="pre">help</span></code> subdirectory of your plugin. To build the documentation you will
 need to install Sphinx using <a class="reference external" href="https://pypi.org/project/Sphinx/">pip</a>.
-Once installed, you can build the documentation using <code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">doc</span></code>
-or change to the <code class="docutils literal notranslate"><span class="pre">help</span></code> subdirectory and use <code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">html</span></code>
-(this works on any platform).</p>
+Once installed, you can build the documentation using <code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">doc</span></code>, or change
+to the <code class="docutils literal notranslate"><span class="pre">help</span></code> subdirectory and use <code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">html</span></code> on Linux/macOS, or
+<code class="docutils literal notranslate"><span class="pre">python</span> <span class="pre">make.py</span> <span class="pre">html</span></code> on Windows (or anywhere without GNU make installed).</p>
 <p>Sphinx supports building other formats, including latex, text, qthelp, and epub.</p>
 <p>Of course you need to actually <em>write</em> something to document your plugin by
 editing <code class="docutils literal notranslate"><span class="pre">help/source/index.rst</span></code>.</p>
 <p>Once your documentation is complete you can distribute it with your plugin,
-as well as publishing it on a website. You can also add a Help button to the
-button box group on the dialog and connect it to a method to show your help
-file in the user’s default web browser. See the code in <code class="docutils literal notranslate"><span class="pre">pluginbuilder.py</span></code>
-for an example.</p>
+as well as publishing it on a website. <code class="docutils literal notranslate"><span class="pre">pb_tool</span> <span class="pre">deploy</span></code> and <code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">deploy</span></code>
+copy the built HTML into a <code class="docutils literal notranslate"><span class="pre">help</span></code> folder in the deployed plugin.</p>
+<p>In a Processing provider plugin, the example algorithm’s <code class="docutils literal notranslate"><span class="pre">helpUrl()</span></code>
+already points at <code class="docutils literal notranslate"><span class="pre">help/index.html</span></code> in the deployed plugin, so its <strong>Help</strong>
+button opens your documentation once it is built and deployed.</p>
+<p>For dialog plugins, you can add a Help button to the button box group on the
+dialog and connect it to a method to show your help file in the user’s
+default web browser. See <code class="docutils literal notranslate"><span class="pre">show_help()</span></code> in Plugin Builder’s own
+<code class="docutils literal notranslate"><span class="pre">plugin_builder.py</span></code> for an example.</p>
 <p>For an example of writing your documentation using Sphinx, you can
-<a class="reference external" href="_sources/index.txt">view</a> the source of this document.</p>
+<a class="reference external" href="_sources/index.rst.txt">view</a> the source of this document.</p>
 </section>
 <section id="the-repository">
-<span id="index-19"></span><span id="index-18"></span><h1>The Repository<a class="headerlink" href="#the-repository" title="Link to this heading">¶</a></h1>
+<span id="index-24"></span><span id="index-23"></span><h1>The Repository<a class="headerlink" href="#the-repository" title="Link to this heading">¶</a></h1>
 <p>When your plugin is ready to be shared with the QGIS community, upload it to
 the QGIS plugin repository at <a class="reference external" href="http://plugins.qgis.org/plugins">http://plugins.qgis.org/plugins</a>. Make sure to
 package it properly in zip format and test the zip before adding it to the
@@ -557,6 +679,8 @@ community.</p>
 </ul>
 </li>
 <li><a class="reference internal" href="#testing">Testing</a></li>
+<li><a class="reference internal" href="#running-the-unit-tests">Running the Unit Tests</a></li>
+<li><a class="reference internal" href="#type-checking">Type Checking</a></li>
 <li><a class="reference internal" href="#using-pb-tool">Using pb_tool</a><ul>
 <li><a class="reference internal" href="#features">Features</a></li>
 <li><a class="reference internal" href="#installation">Installation</a></li>
@@ -596,7 +720,7 @@ community.</p>
         <li class="right" style="margin-right: 10px">
           <a href="genindex.html" title="General Index"
              >index</a></li>
-        <li class="nav-item nav-item-0"><a href="#">QGIS Plugin Builder 3.4.4 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="#">QGIS Plugin Builder 3.5.0 documentation</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">QGIS Plugin Builder</a></li>
       </ul>
     </div>

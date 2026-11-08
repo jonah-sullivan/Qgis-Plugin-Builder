@@ -82,8 +82,9 @@ Plugin name and required information
   yet descriptive so the purpose of the plugin can be easily determined.
 
 **Version number**
-  This is the version number of your plugin. Plugin Builder
-  suggests 0.1, but you can start with any number. The Plugin Installer uses the
+  This is the version number of your plugin. Plugin Builder suggests ``0.1``,
+  but you can start with any numeric version that has at least two parts, such
+  as ``1.0`` or ``1.0.0``. The Plugin Installer uses the
   version number to identify which plugins you have installed are upgradeable so
   it is important to increment it as you release new versions.
 
@@ -167,6 +168,30 @@ parameter fields:
 
   If none of the specific categories apply (Database, Raster, Vector, Web), choose *Plugins*.
   Your choice is also written to the *category* field in metadata.txt.
+
+The "Tool button with dock widget" template has the same fields, plus an
+option to tabify the dock widget with any existing dock widgets.
+
+For the "Processing provider" template you get these fields instead:
+
+**Provider name**
+  The short name of your Processing provider. It is used as the provider's
+  ``id()``, which also prefixes your algorithm ids (``provider:algorithm``),
+  so keep it short, lowercase and free of spaces, e.g. ``myprovider``.
+
+**Provider description**
+  The provider's full name, shown in the Processing toolbox.
+
+**Algorithm name**
+  The name of the example algorithm, used as its ``name()``. Like the
+  provider name, it should be lowercase with no spaces, e.g. ``copylayer``.
+
+**Algorithm group**
+  The id of the group the example algorithm appears under in the toolbox.
+
+The generated provider and algorithm use the plugin's ``icon.png`` as their
+toolbox icon, and the algorithm's **Help** button opens your plugin's built
+help (see `Documenting your Plugin`_).
 
 Additional components
 .....................
@@ -321,16 +346,16 @@ Generating
 
 .. image:: images/generating.png
 
-Choose the location for your generated plugin. Once you select the directory, the complete path for your plugin is displayed.
+Choose the location for your generated plugin. Once you select the directory,
+the complete path for your plugin is displayed: a new folder named after your
+module name, inside the directory you chose.
 
-When you click **Generate**, Plugin Builder will attempt to build your ``resources.py`` file using ``rcc``.
+Plugin Builder never overwrites an existing plugin. If that folder already
+exists, the path is shown in red and **Generate** is refused. Choose another
+directory, or go back and change the module name.
 
-If ``rcc`` is not found in your path, you'll see:
-
-  .. image:: images/compile_failed.png
-     :align: center
-
-If the compilation fails, you'll have to compile it manually as shown in the results dialog.
+Plugin Builder doesn't compile any resource files; see `Resource files`_ if
+you want to use Qt's resource system.
 
 Results
 =======
@@ -441,8 +466,8 @@ If all is well, you should see something similar to this:
 .. image:: images/plugin_test.png
    :align: center
 
-If the plugin throws an error make sure you have compiled the resource file
-before deploying and testing.
+If the plugin throws an error, check the Python error dialog or the *Python
+Warning* tab of the Log Messages panel for the traceback.
 
 Once the generated plugin is working it's your turn to customize the user
 interface and add the needed code to make it do something useful.
@@ -508,6 +533,26 @@ Python environment that can see your QGIS installation:
 
    Jedi-backed editors (e.g. jedi-language-server, python-lsp-server)
    resolve this automatically and don't need either fix.
+
+.. index:: type checking
+.. index:: mypy
+
+Type Checking
+=============
+
+The generated plugin code is fully type annotated, and every plugin comes
+with a ``mypy.ini`` that runs `mypy <https://mypy-lang.org>`_ in strict mode
+against your plugin code (the ``help`` and ``test`` directories are
+excluded). Type stubs for the ``qgis`` bindings come from the ``qgis-stubs``
+package.
+
+``mypy`` and ``qgis-stubs`` are included in ``requirements-dev.txt``, so
+after installing the test dependencies run, from the plugin directory::
+
+    mypy
+
+The generated ``.pre-commit-config.yaml`` also runs ``mypy`` on every commit
+once you have enabled it with ``pre-commit install``.
 
 .. index:: Makefile
    double: Makefile; using
@@ -617,13 +662,20 @@ Of course you need to actually *write* something to document your plugin by
 editing ``help/source/index.rst``.
 
 Once your documentation is complete you can distribute it with your plugin,
-as well as publishing it on a website. You can also add a Help button to the
-button box group on the dialog and connect it to a method to show your help
-file in the user's default web browser. See the code in ``pluginbuilder.py``
-for an example.
+as well as publishing it on a website. ``pb_tool deploy`` and ``make deploy``
+copy the built HTML into a ``help`` folder in the deployed plugin.
+
+In a Processing provider plugin, the example algorithm's ``helpUrl()``
+already points at ``help/index.html`` in the deployed plugin, so its **Help**
+button opens your documentation once it is built and deployed.
+
+For dialog plugins, you can add a Help button to the button box group on the
+dialog and connect it to a method to show your help file in the user's
+default web browser. See ``show_help()`` in Plugin Builder's own
+``plugin_builder.py`` for an example.
 
 For an example of writing your documentation using Sphinx, you can
-`view <_sources/index.txt>`_ the source of this document.
+`view <_sources/index.rst.txt>`_ the source of this document.
 
 .. index:: repository
 .. index:: Plugins; repository

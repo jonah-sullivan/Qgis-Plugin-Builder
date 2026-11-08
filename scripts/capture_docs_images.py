@@ -16,7 +16,6 @@ and must be updated manually:
     - plugin_menu.png       (QGIS menu bar with plugin installed)
     - redundant_menu.png    (QGIS menu bar showing redundant name)
     - plugin_test.png       (QGIS running the generated plugin)
-    - compile_failed.png    (compile error notification)
     - plugin_results.png    (results dialog after generation)
 """
 
@@ -65,11 +64,11 @@ def _load_module(bare_name, filepath=None):
 def _load_subpackage(bare_name, directory):
     full = f"{_PKG}.{bare_name}"
     pkg = types.ModuleType(full)
-    pkg.__path__ = [directory]
+    pkg.__path__ = [str(directory)]
     pkg.__package__ = full
     init = Path(directory) / "__init__.py"
     spec = importlib.util.spec_from_file_location(
-        full, init, submodule_search_locations=[directory]
+        full, init, submodule_search_locations=[str(directory)]
     )
     pkg.__spec__ = spec
     sys.modules[full] = pkg
@@ -78,6 +77,7 @@ def _load_subpackage(bare_name, directory):
     return pkg
 
 
+_load_module("qgis_dirs")
 _load_module("plugin_specification")
 _load_subpackage("plugin_templates", Path(src_dir) / "plugin_templates")
 _load_module("select_tags_dialog")
@@ -92,13 +92,13 @@ from plugin_builder_dialog import PluginBuilderDialog  # noqa: E402
 SAMPLE = {
     "class_name": "MyPlugin",
     "module_name": "my_plugin",
-    "plugin_name": "My Plugin",
+    "title": "My Plugin",
     "description": "A sample QGIS plugin",
-    "version_number": "0.1",
+    "plugin_version": "0.1",
     "qgis_minimum_version": "4.0",
     "qgis_maximum_version": "4.99",
     "author": "Jane Developer",
-    "email": "jane@example.com",
+    "email_address": "jane@example.com",
     "about": (
         "This plugin does something useful with spatial data. "
         "It provides tools for analysing and visualising geographic information."
@@ -111,6 +111,13 @@ SAMPLE = {
     "project_slug": "my_plugin",
 }
 
+# Template sub-form ("Tool button with dialog", the default template)
+MENU_TEXT = "My Plugin Tool"
+
+# Shown on the final page. It needn't exist; it only has to not contain a
+# my_plugin folder, or the page shows the "already exists" warning.
+SAMPLE_OUTPUT_DIR = "/home/jane/qgis_plugins"
+
 output_dir = repo_dir / "help" / "source" / "images"
 
 # ---------------------------------------------------------------------------
@@ -121,10 +128,15 @@ dialog.resize(600, 500)
 
 for field, value in SAMPLE.items():
     widget = getattr(dialog, field, None)
-    if widget is not None and hasattr(widget, "setText"):
-        widget.setText(value)
-    elif widget is not None and hasattr(widget, "setPlainText"):
+    if widget is None:
+        raise SystemExit(f"SAMPLE field {field!r} is not a widget on the dialog")
+    if hasattr(widget, "setPlainText"):
         widget.setPlainText(value)
+    else:
+        widget.setText(value)
+
+dialog.template_subframe.menu_text.setText(MENU_TEXT)
+dialog.output_directory.setText(SAMPLE_OUTPUT_DIR)
 
 app.processEvents()
 
@@ -148,12 +160,21 @@ dialog.gitlab_namespace.setText(SAMPLE["github_org_slug"])
 dialog.show()
 app.processEvents()
 
+next_label = dialog.next_button.text()
+
 for index, filename in PAGES:
     dialog.stackedWidget.setCurrentIndex(index)
+    if index == 6:
+        dialog.next_button.setText("Generate")
+        dialog.show_output_info(dialog._full_output_path())
+    else:
+        dialog.next_button.setText(next_label)
     app.processEvents()
     pixmap = dialog.grab()
     out_path = output_dir / filename
-    pixmap.save(out_path)
+    # PyQt6 doesn't accept Path objects here
+    if not pixmap.save(str(out_path)):
+        raise SystemExit(f"Could not save {out_path}")
     print(f"Saved {out_path}")
 
 dialog.hide()
@@ -166,5 +187,4 @@ print("\nDone. Update the following images manually (require a live QGIS session
 print("  help/source/images/plugin_menu.png")
 print("  help/source/images/redundant_menu.png")
 print("  help/source/images/plugin_test.png")
-print("  help/source/images/compile_failed.png")
 print("  help/source/images/plugin_results.png")
