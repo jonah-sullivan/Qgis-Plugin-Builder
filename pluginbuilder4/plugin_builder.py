@@ -203,8 +203,7 @@ class PluginBuilder:
             lines.append(f"gitlab_organization_slug: {specification.gitlab_namespace}")
         lines.append(f"project_slug: {specification.project_slug}")
         config_path = self.plugin_path / ".qgis-plugin-ci"
-        with open(config_path, "w", encoding="utf-8") as f:
-            f.write("\n".join(lines) + "\n")
+        config_path.write_text("\n".join(lines) + "\n", encoding="utf-8")
 
     def _prepare_qgis_plugin_ci(self, specification: PluginSpecification) -> None:
         """Generate .qgis-plugin-ci config and GitHub Actions release workflow."""
@@ -326,7 +325,7 @@ class PluginBuilder:
         :type template_module_name: str
         """
         # populate the results readme text template
-        content = (self.shared_dir / "readme.tmpl").read_text()
+        content = (self.shared_dir / "readme.tmpl").read_text(encoding="utf-8")
         template = Template(content)
         result_map = {
             **specification.template_map,
@@ -501,8 +500,7 @@ class PluginBuilder:
             tag_file = user_tag_list
         else:
             tag_file = self.plugin_builder_path / "taglist.txt"
-        with open(tag_file, encoding="utf-8") as tf:
-            tags = tf.readlines()
+        tags = tag_file.read_text(encoding="utf-8").splitlines()
 
         model = QStandardItemModel()
 
