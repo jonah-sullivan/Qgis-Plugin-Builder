@@ -195,7 +195,7 @@ class PluginBuilder:
             lines.append(f"gitlab_organization_slug: {specification.gitlab_namespace}")
         lines.append(f"project_slug: {specification.project_slug}")
         config_path = self.plugin_path / ".qgis-plugin-ci"
-        with open(config_path, "w") as f:
+        with open(config_path, "w", encoding="utf-8") as f:
             f.write("\n".join(lines) + "\n")
 
     def _prepare_qgis_plugin_ci(self, specification):
@@ -481,7 +481,7 @@ class PluginBuilder:
             tag_file = user_tag_list
         else:
             tag_file = self.plugin_builder_path / "taglist.txt"
-        with open(tag_file) as tf:
+        with open(tag_file, encoding="utf-8") as tf:
             tags = tf.readlines()
 
         model = QStandardItemModel()
