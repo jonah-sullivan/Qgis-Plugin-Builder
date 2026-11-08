@@ -167,10 +167,7 @@ class PluginBuilderDialog(QDialog, FORM_CLASS):
                 if next_i == 6:
                     self.next_button.setText("Generate")
                     if self.output_directory.text() != "":
-                        self.show_output_info(
-                            Path(self.output_directory.text())
-                            / self.module_name.text().lower()
-                        )
+                        self.show_output_info(self._full_output_path())
             else:
                 self.accept()
 
@@ -365,39 +362,48 @@ class PluginBuilderDialog(QDialog, FORM_CLASS):
             self, "Select the Directory for your Plugin", self.last_path
         )
         self.output_directory.setText(plugin_path)
-        full_output = Path(plugin_path) / self.module_name.text().lower()
+        full_output = self._full_output_path()
         self.lbl_full_output_path.setText(str(full_output))
         self.show_output_info(full_output)
+
+    def _full_output_path(self) -> Path:
+        """The folder the plugin will be generated into."""
+        return Path(self.output_directory.text()) / self.module_name.text().lower()
 
     def show_output_info(self, full_output: Path) -> None:
         if QFileInfo(str(full_output)).exists():
             self.lbl_full_output_path.setText(
-                str(full_output) + "\nYour plugin will overwrite the existing contents!"
+                str(full_output) + "\nThis folder already exists. Choose another "
+                "output directory, or go back and change the module name."
             )
             self.lbl_full_output_path.setStyleSheet(
                 "QLabel { color : red;  font-weight : bold;}"
             )
         else:
+            self.lbl_full_output_path.setText(str(full_output))
             self.lbl_full_output_path.setStyleSheet("QLabel { color : black; }")
 
     def validate_output_directory(self) -> bool:
-        good_dir = False
-        if len(self.output_directory.text()) > 0:
-            if QFileInfo(self.output_directory.text()).exists():
-                if QFileInfo(self.output_directory.text()).isWritable():
-                    good_dir = True
-                else:
-                    msg = "Your output directory is write-protected."
-            else:
-                msg = "Your output directory does not exist."
-
-        else:
+        output_dir = self.output_directory.text()
+        if not output_dir:
             msg = "Please select an output directory."
+        elif not QFileInfo(output_dir).exists():
+            msg = "Your output directory does not exist."
+        elif not QFileInfo(output_dir).isWritable():
+            msg = "Your output directory is write-protected."
+        elif QFileInfo(str(self._full_output_path())).exists():
+            # Never generate into an existing folder: it may hold a plugin
+            # the user has since edited
+            msg = (
+                f"The folder {self._full_output_path()} already exists.\n"
+                "Choose another output directory, or go back and change "
+                "the module name."
+            )
+        else:
+            return True
 
-        if not good_dir:
-            QMessageBox.warning(None, "Error", msg)
-
-        return good_dir
+        QMessageBox.warning(None, "Error", msg)
+        return False
 
     def keyPressEvent(self, event: QKeyEvent | None) -> None:  # Qt override
         # Don't let Escape close the wizard and discard the user's entries

@@ -8,24 +8,6 @@ from plugin_builder_dialog import PluginBuilderDialog
 from plugin_specification import PluginSpecification
 
 
-def _fill_dialog(dlg):
-    """Populate a PluginBuilderDialog with valid test data."""
-    dlg.class_name.setText("TestPlugin")
-    dlg.title.setText("Test Plugin")
-    dlg.description.setText("A test plugin")
-    dlg.module_name.setText("test_plugin")
-    dlg.plugin_version.setText("1.0.0")
-    dlg.qgis_minimum_version.setText("4.0.0")
-    dlg.qgis_maximum_version.setText("4.99")
-    dlg.author.setText("Test Author")
-    dlg.email_address.setText("test@example.com")
-    dlg.about.setPlainText("This is a test plugin.")
-    dlg.homepage.setText("https://github.com/testorg/test-plugin")
-    dlg.tracker.setText("https://github.com/testorg/test-plugin/issues")
-    dlg.repository.setText("https://github.com/testorg/test-plugin")
-    dlg.tags.setText("test, qgis")
-
-
 @pytest.fixture
 def dialog(qgis_app):
     return PluginBuilderDialog()
@@ -36,9 +18,9 @@ def dialog(qgis_app):
 # ---------------------------------------------------------------------------
 
 
-def test_specification_basic_fields(dialog):
+def test_specification_basic_fields(dialog, fill_dialog):
     """PluginSpecification reads all basic dialog fields correctly."""
-    _fill_dialog(dialog)
+    fill_dialog(dialog)
     spec = PluginSpecification(dialog)
     assert spec.class_name == "TestPlugin"
     assert spec.module_name == "test_plugin"
@@ -49,9 +31,9 @@ def test_specification_basic_fields(dialog):
     assert spec.gen_qgis_plugin_ci is False
 
 
-def test_specification_qgis_plugin_ci_off(dialog):
+def test_specification_qgis_plugin_ci_off(dialog, fill_dialog):
     """When qgis_plugin_ci_cb is unchecked, CI fields are empty strings."""
-    _fill_dialog(dialog)
+    fill_dialog(dialog)
     dialog.qgis_plugin_ci_cb.setChecked(False)
     spec = PluginSpecification(dialog)
     assert spec.gen_qgis_plugin_ci is False
@@ -59,9 +41,9 @@ def test_specification_qgis_plugin_ci_off(dialog):
     assert spec.project_slug == ""
 
 
-def test_specification_qgis_plugin_ci_on(dialog):
+def test_specification_qgis_plugin_ci_on(dialog, fill_dialog):
     """When qgis_plugin_ci_cb is checked, CI fields are read into the spec."""
-    _fill_dialog(dialog)
+    fill_dialog(dialog)
     dialog.qgis_plugin_ci_cb.setChecked(True)
     dialog.github_org_slug.setText("myorg")
     dialog.project_slug.setText("my-plugin")
@@ -191,9 +173,9 @@ def test_validate_ci_page_gitlab_valid(dialog):
     assert dialog.validate_ci_page() is True
 
 
-def test_specification_gitlab_ci_on(dialog):
+def test_specification_gitlab_ci_on(dialog, fill_dialog):
     """When gitlab_ci_cb is checked, GitLab fields are read into the spec."""
-    _fill_dialog(dialog)
+    fill_dialog(dialog)
     dialog.gitlab_ci_cb.setChecked(True)
     dialog.gitlab_namespace.setText("mygroup")
     dialog.project_slug.setText("my-plugin")
@@ -250,3 +232,150 @@ def test_populate_ci_fields_does_not_overwrite_existing(dialog):
     dialog._populate_ci_fields()
     assert dialog.github_org_slug.text() == "existing-org"
     assert dialog.project_slug.text() == "my-plugin"
+
+
+# ---------------------------------------------------------------------------
+# Field validation
+# ---------------------------------------------------------------------------
+
+
+def test_validate_entries_valid(dialog, fill_dialog):
+    """validate_entries passes and shows no warning for a complete form."""
+    fill_dialog(dialog)
+    with patch("plugin_builder_dialog.QMessageBox.warning") as warn:
+        assert dialog.validate_entries() is True
+    warn.assert_not_called()
+
+
+@pytest.mark.parametrize(
+    "field, value",
+    [
+        ("class_name", ""),
+        ("title", ""),
+        ("description", ""),
+        ("module_name", ""),
+        ("author", ""),
+        ("email_address", ""),
+        ("plugin_version", "1.x"),
+        ("plugin_version", "1"),
+        ("qgis_minimum_version", "four"),
+        ("qgis_maximum_version", "4.beta"),
+        ("qgis_maximum_version", "4.0.0"),  # equal to minimum
+        ("qgis_maximum_version", "3.40"),  # below minimum
+    ],
+)
+def test_validate_entries_invalid(dialog, fill_dialog, field, value):
+    """validate_entries fails and warns for a missing or bad field."""
+    fill_dialog(dialog)
+    getattr(dialog, field).setText(value)
+    with patch("plugin_builder_dialog.QMessageBox.warning") as warn:
+        assert dialog.validate_entries() is False
+    warn.assert_called_once()
+
+
+def test_validate_entries_max_version_required(dialog, fill_dialog):
+    """The maximum QGIS version is a required field."""
+    fill_dialog(dialog)
+    dialog.qgis_maximum_version.setText("")
+    with patch("plugin_builder_dialog.QMessageBox.warning") as warn:
+        assert dialog.validate_entries() is False
+    assert "required fields are missing" in warn.call_args.args[2]
+
+
+@pytest.mark.parametrize(
+    "field, value, expected",
+    [
+        ("class_name", "my test plugin", "MyTestPlugin"),
+        ("class_name", "Plügin", "Plgin"),
+        ("module_name", "My-Plugin!", "myplugin"),
+    ],
+)
+def test_validate_entries_fixes_names(dialog, fill_dialog, field, value, expected):
+    """Bad class/module names are corrected in place, but the user is
+    still stopped so they can see the change."""
+    fill_dialog(dialog)
+    getattr(dialog, field).setText(value)
+    with patch("plugin_builder_dialog.QMessageBox.warning"):
+        assert dialog.validate_entries() is False
+    assert getattr(dialog, field).text() == expected
+    # A second pass with the corrected name succeeds
+    with patch("plugin_builder_dialog.QMessageBox.warning"):
+        assert dialog.validate_entries() is True
+
+
+def test_validate_about(dialog):
+    """validate_about requires non-empty about text."""
+    dialog.about.setPlainText("")  # .ui pre-fills a placeholder
+    with patch("plugin_builder_dialog.QMessageBox.warning"):
+        assert dialog.validate_about() is False
+    dialog.about.setPlainText("Does things.")
+    assert dialog.validate_about() is True
+
+
+@pytest.mark.parametrize(
+    "tracker, repository, ok",
+    [
+        ("https://github.com/o/p/issues", "https://github.com/o/p", True),
+        ("http://example.com/issues", "http://example.com/repo", True),
+        ("", "https://github.com/o/p", False),
+        ("https://github.com/o/p/issues", "", False),
+        ("github.com/o/p/issues", "https://github.com/o/p", False),
+        ("https://github.com/o/p/issues", "git@github.com:o/p.git", False),
+    ],
+)
+def test_validate_publication(dialog, tracker, repository, ok):
+    """Tracker and repository are required and must be http(s) URLs."""
+    dialog.tracker.setText(tracker)
+    dialog.repository.setText(repository)
+    with patch("plugin_builder_dialog.QMessageBox.warning") as warn:
+        assert dialog.validate_publication() is ok
+    assert warn.called is not ok
+
+
+def test_validate_output_directory_empty(dialog):
+    dialog.output_directory.setText("")
+    with patch("plugin_builder_dialog.QMessageBox.warning") as warn:
+        assert dialog.validate_output_directory() is False
+    assert "select an output directory" in warn.call_args.args[2]
+
+
+def test_validate_output_directory_missing(dialog, tmp_path):
+    dialog.output_directory.setText(str(tmp_path / "does_not_exist"))
+    with patch("plugin_builder_dialog.QMessageBox.warning") as warn:
+        assert dialog.validate_output_directory() is False
+    assert "does not exist" in warn.call_args.args[2]
+
+
+def test_validate_output_directory_plugin_folder_exists(dialog, tmp_path):
+    """Generating into an existing plugin folder is refused, not overwritten."""
+    dialog.module_name.setText("test_plugin")
+    (tmp_path / "test_plugin").mkdir()
+    dialog.output_directory.setText(str(tmp_path))
+    with patch("plugin_builder_dialog.QMessageBox.warning") as warn:
+        assert dialog.validate_output_directory() is False
+    assert "already exists" in warn.call_args.args[2]
+
+
+def test_show_output_info_existing_folder(dialog, tmp_path):
+    """The final page warns, in red, that an existing folder blocks Generate."""
+    dialog.show_output_info(tmp_path)
+    text = dialog.lbl_full_output_path.text()
+    assert "already exists" in text
+    assert "overwrite" not in text
+    assert "red" in dialog.lbl_full_output_path.styleSheet()
+
+
+def test_show_output_info_new_folder_clears_warning(dialog, tmp_path):
+    """Picking a free folder after an existing one removes the warning."""
+    dialog.show_output_info(tmp_path)
+    dialog.show_output_info(tmp_path / "new_plugin")
+    assert dialog.lbl_full_output_path.text() == str(tmp_path / "new_plugin")
+    assert "red" not in dialog.lbl_full_output_path.styleSheet()
+
+
+def test_validate_output_directory_valid(dialog, tmp_path):
+    dialog.module_name.setText("test_plugin")
+    dialog.output_directory.setText(str(tmp_path))
+    with patch("plugin_builder_dialog.QMessageBox.warning") as warn:
+        assert dialog.validate_output_directory() is True
+    warn.assert_not_called()
