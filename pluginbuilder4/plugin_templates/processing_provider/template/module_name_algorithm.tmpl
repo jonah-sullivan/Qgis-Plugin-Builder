@@ -28,6 +28,7 @@ __copyright__ = '(C) $TemplateYear by $TemplateAuthor'
 
 __revision__ = '$TemplateVCSFormat'
 
+from pathlib import Path
 from typing import Any
 
 from qgis.core import (
@@ -40,7 +41,8 @@ from qgis.core import (
     QgsProcessingParameterFeatureSink,
     QgsProcessingParameterFeatureSource,
 )
-from qgis.PyQt.QtCore import QCoreApplication
+from qgis.PyQt.QtCore import QCoreApplication, QUrl
+from qgis.PyQt.QtGui import QIcon
 
 
 class ${TemplateClass}Algorithm(QgsProcessingAlgorithm):
@@ -181,3 +183,10 @@ class ${TemplateClass}Algorithm(QgsProcessingAlgorithm):
 
     def createInstance(self) -> "${TemplateClass}Algorithm":
         return ${TemplateClass}Algorithm()
+
+    def helpUrl(self) -> str:
+        path = Path(__file__).parent / "help" / "index.html"
+        return QUrl.fromLocalFile(str(path)).toString()
+
+    def icon(self) -> QIcon:
+        return QIcon(str(Path(__file__).parent / "icon.png"))

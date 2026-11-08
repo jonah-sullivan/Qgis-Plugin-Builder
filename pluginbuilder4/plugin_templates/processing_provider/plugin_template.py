@@ -53,6 +53,7 @@ class ProcessingProviderPluginTemplate(PluginTemplate):
             "TemplateQGISDir": str(deployment_dir),
             "TemplatePyFiles": "%s_algorithm.py %s_provider.py"
             % (specification.module_name, specification.module_name),
+            "TemplateExtraFiles": "icon.png",
             # Metadata
             "TemplateHasProcessingProvider": True,
             # Processing
@@ -83,3 +84,6 @@ class ProcessingProviderPluginTemplate(PluginTemplate):
                 Path("test") / "test_plugin_lifecycle.py"
             )
         return files
+
+    def copy_files(self, specification: "PluginSpecification") -> dict[str, str]:
+        return {"icon.png": "icon.png"}
