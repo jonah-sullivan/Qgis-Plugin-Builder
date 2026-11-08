@@ -3,3 +3,5 @@ line-length = 88
 [lint]
 select = ["E", "F", "W", "I", "N"]
 ignore = ["N802"]
+
+[lint.per-file-ignores]

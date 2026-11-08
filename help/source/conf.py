@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 #
 # QGIS Plugin Builder documentation build configuration file, created by
 # sphinx-quickstart on Sat Jan  5 14:17:19 2013.

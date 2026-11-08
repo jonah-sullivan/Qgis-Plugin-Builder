@@ -86,6 +86,8 @@ def process_file(ts_path: Path, target: str) -> None:
     print(f"  {ts_path.name} -> {target}", flush=True)
     tree = ET.parse(ts_path)
     root = tree.getroot()
+    if root is None:
+        raise ValueError(f"{ts_path} has no root element")
 
     count = 0
     for context in root.findall("context"):

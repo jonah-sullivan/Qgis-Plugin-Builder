@@ -1,6 +1,6 @@
 PLUGINNAME = pluginbuilder4
 
-.PHONY: deploy dclean clean doc test lint
+.PHONY: deploy dclean clean doc test lint typecheck
 
 # Deploy for local development using pb_tool
 deploy:
@@ -27,3 +27,7 @@ test:
 # Lint with ruff
 lint:
 	ruff check .
+
+# Type check with mypy (config in mypy.ini)
+typecheck:
+	mypy

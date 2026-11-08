@@ -14,6 +14,8 @@ import sys
 import types
 from pathlib import Path
 
+import pytest
+
 _PROJ = Path(__file__).parent
 _SRC = _PROJ / "pluginbuilder4"
 _PKG = "_pluginbuilder"
@@ -62,3 +64,27 @@ _load_module("select_tags_dialog")
 _load_module("result_dialog")
 _load_module("plugin_builder_dialog")
 _load_module("plugin_builder")
+
+
+def _fill_dialog(dlg):
+    """Populate a PluginBuilderDialog with valid test data."""
+    dlg.class_name.setText("TestPlugin")
+    dlg.title.setText("Test Plugin")
+    dlg.description.setText("A test plugin")
+    dlg.module_name.setText("test_plugin")
+    dlg.plugin_version.setText("1.0.0")
+    dlg.qgis_minimum_version.setText("4.0.0")
+    dlg.qgis_maximum_version.setText("4.99")
+    dlg.author.setText("Test Author")
+    dlg.email_address.setText("test@example.com")
+    dlg.about.setPlainText("This is a test plugin.")
+    dlg.homepage.setText("https://github.com/testorg/test-plugin")
+    dlg.tracker.setText("https://github.com/testorg/test-plugin/issues")
+    dlg.repository.setText("https://github.com/testorg/test-plugin")
+    dlg.tags.setText("test, qgis")
+
+
+@pytest.fixture
+def fill_dialog():
+    """Return a function that fills a PluginBuilderDialog with valid data."""
+    return _fill_dialog

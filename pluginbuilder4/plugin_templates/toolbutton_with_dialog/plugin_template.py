@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 /***************************************************************************
  PluginTemplate
@@ -22,28 +21,38 @@
 """
 
 from pathlib import Path
+from typing import TYPE_CHECKING
 
 from ...qgis_dirs import deployment_dir
 from ..plugin_template import PluginTemplate
 
+if TYPE_CHECKING:
+    from ...plugin_builder_dialog import PluginBuilderDialog
+    from ...plugin_specification import PluginSpecification, TemplateMap
+
 
 class ToolbuttonWithDialogPluginTemplate(PluginTemplate):
-    def descr(self):
+    def descr(self) -> str:
         return "Tool button with dialog"
 
-    def subdir(self):
+    def subdir(self) -> Path:
         return Path(__file__).parent
 
-    def template_map(self, specification, dialog):
-        menu_text = dialog.template_subframe.menu_text.text()
-        menu = dialog.template_subframe.menu_location.currentText()
+    def template_map(
+        self, specification: "PluginSpecification", dialog: "PluginBuilderDialog"
+    ) -> "TemplateMap":
+        # template_subframe is built from this template's wizard_form_base.ui
+        menu_text: str = dialog.template_subframe.menu_text.text()
+        menu: str = dialog.template_subframe.menu_location.currentText()
         # Munge the plugin menu function based on user choice
         if menu == "Plugins":
             add_method = "addPluginToMenu"
             remove_method = "removePluginMenu"
+            menu_getter = "pluginMenu"
         else:
             add_method = f"addPluginTo{menu}Menu"
             remove_method = f"removePlugin{menu}Menu"
+            menu_getter = f"{menu.lower()}Menu"
         self.category = menu
         m = specification.module_name
         ui_file = f"{m}_dialog_base.ui"
@@ -52,13 +61,14 @@ class ToolbuttonWithDialogPluginTemplate(PluginTemplate):
             "TemplatePyFiles": f"{m}_dialog.py",
             "TemplateUiFiles": ui_file,
             "TemplateExtraFiles": "icon.png",
-            "TemplateQGISDir": deployment_dir,
+            "TemplateQGISDir": str(deployment_dir),
             # Metadata
             "TemplateHasProcessingProvider": False,
             # Menu
             "TemplateMenuText": menu_text,
             "TemplateMenuAddMethod": add_method,
             "TemplateMenuRemoveMethod": remove_method,
+            "TemplateMenuGetter": menu_getter,
             # readme.tmpl extras
             "TemplateCompileResourcesStep": (
                 "\n\n  * Compile the resources file using pyrcc6"
@@ -69,7 +79,7 @@ class ToolbuttonWithDialogPluginTemplate(PluginTemplate):
             ),
         }
 
-    def template_files(self, specification):
+    def template_files(self, specification: "PluginSpecification") -> dict[str, str]:
         result = {
             "module_name_dialog.tmpl": f"{specification.module_name}_dialog.py",
             "module_name_dialog_base.ui.tmpl": (
@@ -89,5 +99,5 @@ class ToolbuttonWithDialogPluginTemplate(PluginTemplate):
             )
         return result
 
-    def copy_files(self, specification):
+    def copy_files(self, specification: "PluginSpecification") -> dict[str, str]:
         return {"icon.png": "icon.png"}

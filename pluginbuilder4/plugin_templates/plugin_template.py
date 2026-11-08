@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 /***************************************************************************
  PluginTemplate
@@ -21,26 +20,40 @@
  ***************************************************************************/
 """
 
+from pathlib import Path
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from ..plugin_builder_dialog import PluginBuilderDialog
+    from ..plugin_specification import PluginSpecification, TemplateMap
+
 
 class PluginTemplate:
     """Base class for plugin templates."""
 
-    def descr(self):
+    # Plugin category for metadata.txt; set by template_map()
+    category: str
+
+    def descr(self) -> str:
         raise NotImplementedError
 
-    def subdir(self):
+    def subdir(self) -> Path:
         raise NotImplementedError
 
-    def template_map(self, specification, dialog):
+    def template_map(
+        self, specification: "PluginSpecification", dialog: "PluginBuilderDialog"
+    ) -> "TemplateMap":
         return {}
 
-    def template_files(self, specification):
+    def template_files(self, specification: "PluginSpecification") -> dict[str, str]:
         return {}
 
-    def copy_files(self, specification):
+    def copy_files(self, specification: "PluginSpecification") -> dict[str, str]:
         return {}
 
-    def what_next_items_html(self, plugin_path, module_name, ui_file):
+    def what_next_items_html(
+        self, plugin_path: Path, module_name: str, ui_file: str
+    ) -> str:
         return (
             f"    <li>Test the plugin by enabling it in the QGIS plugin manager\n"
             f"    <li>Customize it by editing the implementation file"

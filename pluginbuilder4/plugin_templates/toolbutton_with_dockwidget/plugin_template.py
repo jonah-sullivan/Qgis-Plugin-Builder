@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 /***************************************************************************
  PluginTemplate
@@ -22,31 +21,41 @@
 """
 
 from pathlib import Path
+from typing import TYPE_CHECKING
 
 from ...qgis_dirs import deployment_dir
 from ..plugin_template import PluginTemplate
 
+if TYPE_CHECKING:
+    from ...plugin_builder_dialog import PluginBuilderDialog
+    from ...plugin_specification import PluginSpecification, TemplateMap
+
 
 class ToolbuttonWithDockWidgetPluginTemplate(PluginTemplate):
-    def descr(self):
+    def descr(self) -> str:
         return "Tool button with dock widget"
 
-    def subdir(self):
+    def subdir(self) -> Path:
         return Path(__file__).parent
 
-    def template_map(self, specification, dialog):
-        menu_text = dialog.template_subframe.menu_text.text()
-        menu = dialog.template_subframe.menu_location.currentText()
+    def template_map(
+        self, specification: "PluginSpecification", dialog: "PluginBuilderDialog"
+    ) -> "TemplateMap":
+        # template_subframe is built from this template's wizard_form_base.ui
+        menu_text: str = dialog.template_subframe.menu_text.text()
+        menu: str = dialog.template_subframe.menu_location.currentText()
         # Munge the plugin menu function based on user choice
         if menu == "Plugins":
             add_method = "addPluginToMenu"
             remove_method = "removePluginMenu"
+            menu_getter = "pluginMenu"
         else:
             add_method = f"addPluginTo{menu}Menu"
             remove_method = f"removePlugin{menu}Menu"
+            menu_getter = f"{menu.lower()}Menu"
         self.category = menu
 
-        dockwidget_area = dialog.template_subframe.dockwidget_area.currentText()
+        dockwidget_area: str = dialog.template_subframe.dockwidget_area.currentText()
 
         dock_area_map = {
             "Left": "Qt.DockWidgetArea.LeftDockWidgetArea",
@@ -58,10 +67,10 @@ class ToolbuttonWithDockWidgetPluginTemplate(PluginTemplate):
 
         if dialog.tabify_dockwidget.isChecked():
             add_dock_call = (
-                f"addTabifiedDockWidget({area},self.dockwidget, raiseTab=True)"
+                "addTabifiedDockWidget(area, self.dockwidget, raiseTab=True)"
             )
         else:
-            add_dock_call = f"addDockWidget({area}, self.dockwidget)"
+            add_dock_call = "addDockWidget(area, self.dockwidget)"
 
         m = specification.module_name
         ui_file = f"{m}_dockwidget_base.ui"
@@ -70,14 +79,16 @@ class ToolbuttonWithDockWidgetPluginTemplate(PluginTemplate):
             "TemplatePyFiles": f"{m}_dockwidget.py",
             "TemplateUiFiles": ui_file,
             "TemplateExtraFiles": "icon.png",
-            "TemplateQGISDir": deployment_dir,
+            "TemplateQGISDir": str(deployment_dir),
             # Metadata
             "TemplateHasProcessingProvider": False,
             # Menu
             "TemplateMenuText": menu_text,
             "TemplateMenuAddMethod": add_method,
             "TemplateMenuRemoveMethod": remove_method,
+            "TemplateMenuGetter": menu_getter,
             # DockWidget
+            "TemplateDockWidgetArea": area,
             "TemplateAddDockWidgetCall": add_dock_call,
             # readme.tmpl extras
             "TemplateCompileResourcesStep": (
@@ -89,7 +100,7 @@ class ToolbuttonWithDockWidgetPluginTemplate(PluginTemplate):
             ),
         }
 
-    def template_files(self, specification):
+    def template_files(self, specification: "PluginSpecification") -> dict[str, str]:
         result = {
             "module_name_dockwidget.tmpl": (
                 f"{specification.module_name}_dockwidget.py"
@@ -112,5 +123,5 @@ class ToolbuttonWithDockWidgetPluginTemplate(PluginTemplate):
             )
         return result
 
-    def copy_files(self, specification):
+    def copy_files(self, specification: "PluginSpecification") -> dict[str, str]:
         return {"icon.png": "icon.png"}

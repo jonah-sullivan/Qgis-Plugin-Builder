@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 /***************************************************************************
  ${TemplateClass}
@@ -23,13 +22,20 @@
  This script initializes the plugin, making it known to QGIS.
 """
 
+from typing import TYPE_CHECKING
 
-def classFactory(iface):
-    """Load ${TemplateClass} class from file ${TemplateClass}.
+if TYPE_CHECKING:
+    from qgis.gui import QgisInterface
+
+    from .${TemplateModuleName} import ${TemplateClass}
+
+
+def classFactory(iface: "QgisInterface") -> "${TemplateClass}":
+    """Load PluginBuilder class from file PluginBuilder.
 
     :param iface: A QGIS interface instance.
     :type iface: QgsInterface
     """
-    #
+
     from .${TemplateModuleName} import ${TemplateClass}
     return ${TemplateClass}(iface)

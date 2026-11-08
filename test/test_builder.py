@@ -1,13 +1,22 @@
 # coding=utf-8
 """Tests for the plugin builder."""
 
+import configparser
+import importlib.util
+import os
 import platform
+import re
+import subprocess
+import sys
 from pathlib import Path
+from unittest.mock import patch
 
 import pytest
 from plugin_builder import PluginBuilder, copy
+from plugin_builder_dialog import PluginBuilderDialog
 from qgis.core import QgsProviderRegistry
 from qgis_dirs import _qgis_dir_location, deployment_dir
+from result_dialog import ResultDialog
 
 
 class FakePluginSpecification:
@@ -67,6 +76,7 @@ class FakePluginSpecification:
             "TemplateMenuText": self.menu_text,
             "TemplateMenuAddMethod": "addPluginToMenu",
             "TemplateMenuRemoveMethod": "removePluginMenu",
+            "TemplateMenuGetter": "pluginMenu",
             "TemplateHasProcessingProvider": False,
             "TemplateGitHubOrg": "",
             "TemplateGitLabNamespace": "",
@@ -177,13 +187,18 @@ def test_prepare_tests(builder, spec):
     """_prepare_tests copies test files and renders lifecycle and pyproject
     templates."""
     builder._prepare_tests(spec)
-    assert (Path(builder.plugin_path) / "test").is_dir()
-    assert (Path(builder.plugin_path) / "test" / "test_plugin_lifecycle.py").exists()
+    test_dir = Path(builder.plugin_path) / "test"
+    assert test_dir.is_dir()
+    assert (test_dir / "test_plugin_lifecycle.py").exists()
+    # .py.tmpl files are restored to .py, not .py.py
+    for name in ["test_init", "test_qgis_environment", "test_translations"]:
+        assert (test_dir / f"{name}.py").exists()
+    assert list(test_dir.glob("*.tmpl")) == []
+    assert list(test_dir.glob("*.py.py")) == []
     assert (Path(builder.plugin_path) / "pyproject.toml").exists()
     gitattributes_path = Path(builder.plugin_path) / ".gitattributes"
     assert gitattributes_path.exists()
-    with open(gitattributes_path) as f:
-        assert "test/ export-ignore" in f.read()
+    assert "test/ export-ignore" in gitattributes_path.read_text()
 
 
 def test_prepare_help(builder):
@@ -291,3 +306,238 @@ def test_prepare_specific_files(builder, spec):
     assert (builder.plugin_path / "fake_module_dialog.py").exists()
     assert (builder.plugin_path / "fake_module_dialog_base.ui").exists()
     assert (builder.plugin_path / "icon.png").exists()
+
+
+# ---------------------------------------------------------------------------
+# End-to-end run()
+# ---------------------------------------------------------------------------
+
+# Files every template must produce with the default dialog options.
+_COMMON_FILES = [
+    "__init__.py",
+    "test_plugin.py",
+    "metadata.txt",
+    "icon.png",
+    "LICENSE",
+    "Makefile",
+    "pb_tool.cfg",
+    "mypy.ini",
+    "pyproject.toml",
+    "requirements-dev.txt",
+    "README.txt",
+    ".pre-commit-config.yaml",
+    ".gitattributes",
+    "help/source/conf.py",
+    "help/source/index.rst",
+    "i18n/af.ts",
+    "test/test_init.py",
+    "test/test_plugin_lifecycle.py",
+]
+
+# A $Template... placeholder that safe_substitute() left in place.
+_UNREPLACED = re.compile(r"\$\{?Template\w+")
+
+
+@pytest.fixture
+def run_env(monkeypatch):
+    """Patch everything run() would show or persist, so it runs headless.
+
+    The test still has to patch PluginBuilderDialog.exec. Returns the list
+    of ResultDialogs that run() showed.
+    """
+    results = []
+    monkeypatch.setattr(PluginBuilderDialog, "show", lambda self: None)
+    monkeypatch.setattr(ResultDialog, "show", lambda self: None)
+    monkeypatch.setattr(ResultDialog, "exec", lambda self: results.append(self) or 0)
+    # Keep the tests from reading or writing the user's real QGIS settings
+    monkeypatch.setattr(PluginBuilder, "_last_used_path", lambda self: "")
+    monkeypatch.setattr(PluginBuilder, "_set_last_used_path", lambda self, v: None)
+    return results
+
+
+# Template sub-form entries, by position in the template combo box.
+_SUBFORMS = {
+    0: {"menu_text": "Test Plugin"},
+    1: {"menu_text": "Test Plugin"},
+    2: {
+        "algo_name_text": "copylayer",
+        "algo_group_text": "examples",
+        "provider_name_text": "Test Provider",
+        "provider_descr_text": "Test provider description",
+    },
+}
+_TEMPLATE_IDS = ["dialog", "dockwidget", "processing"]
+
+
+@pytest.fixture
+def generate_plugin(qgis_app, qgis_iface, fill_dialog, run_env, tmp_path, monkeypatch):
+    """Return a function that runs the wizard for a template and returns the
+    generated plugin folder."""
+
+    def generate(template_index):
+        def fake_exec(dlg):
+            # Stand in for the user clicking through the wizard and pressing
+            # Generate
+            dlg.template_cbox.setCurrentIndex(template_index)
+            fill_dialog(dlg)
+            for widget, text in _SUBFORMS[template_index].items():
+                getattr(dlg.template_subframe, widget).setText(text)
+            dlg.output_directory.setText(str(tmp_path))
+            return 1
+
+        monkeypatch.setattr(PluginBuilderDialog, "exec", fake_exec)
+        PluginBuilder(qgis_iface).run()
+        return tmp_path / "test_plugin"
+
+    return generate
+
+
+@pytest.mark.parametrize(
+    "template_index, extra_files",
+    [
+        (0, ["test_plugin_dialog.py", "test_plugin_dialog_base.ui"]),
+        (1, ["test_plugin_dockwidget.py", "test_plugin_dockwidget_base.ui"]),
+        (2, ["test_plugin_algorithm.py", "test_plugin_provider.py"]),
+    ],
+    ids=_TEMPLATE_IDS,
+)
+def test_run_generates_plugin(generate_plugin, run_env, template_index, extra_files):
+    """run() builds a complete plugin for each template from a filled-in wizard."""
+    plugin_dir = generate_plugin(template_index)
+
+    missing = [f for f in _COMMON_FILES + extra_files if not (plugin_dir / f).exists()]
+    assert missing == []
+    assert len(run_env) == 1, "results dialog should be shown once"
+
+    metadata = configparser.ConfigParser()
+    metadata.read(plugin_dir / "metadata.txt")
+    assert metadata.get("general", "name") == "Test Plugin"
+    assert metadata.get("general", "version") == "1.0.0"
+
+    for path in plugin_dir.rglob("*"):
+        if path.suffix not in {".py", ".txt", ".cfg", ".ini", ".toml", ".ui", ".rst"}:
+            continue
+        text = path.read_text(encoding="utf-8")
+        leftover = _UNREPLACED.search(text)
+        assert leftover is None, f"{leftover.group()} not replaced in {path.name}"
+        if path.suffix == ".py":
+            compile(text, str(path), "exec")  # raises SyntaxError on bad output
+
+
+def test_run_processing_algorithm_is_usable(generate_plugin):
+    """The generated processing algorithm imports and its methods run.
+
+    Catches errors that only show up at runtime, such as a missing import in
+    the algorithm template.
+    """
+    plugin_dir = generate_plugin(2)
+
+    algo_path = plugin_dir / "test_plugin_algorithm.py"
+    spec = importlib.util.spec_from_file_location("generated_algorithm", algo_path)
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+
+    algo = module.TestPluginAlgorithm()
+    assert algo.name() == "copylayer"
+    assert algo.groupId() == "examples"
+    assert algo.helpUrl().endswith("/help/index.html")
+    assert not algo.icon().isNull()
+    assert isinstance(algo.createInstance(), module.TestPluginAlgorithm)
+
+
+@pytest.mark.parametrize("template_index", [0, 1, 2], ids=_TEMPLATE_IDS)
+def test_generated_plugin_tests_pass(generate_plugin, template_index):
+    """The test suite shipped in each generated plugin passes as generated.
+
+    Runs pytest in a subprocess inside the new plugin, the way a plugin
+    author would. Collection warnings are errors, so a template that makes
+    pytest mistake a plugin class for a test class fails here too.
+    """
+    plugin_dir = generate_plugin(template_index)
+
+    env = {**os.environ, "QT_QPA_PLATFORM": "offscreen"}
+    proc = subprocess.run(
+        [
+            sys.executable,
+            "-m",
+            "pytest",
+            "-q",
+            "-rfEs",
+            "-p",
+            "no:cacheprovider",
+            "-W",
+            "error::pytest.PytestCollectionWarning",
+        ],
+        cwd=plugin_dir,
+        env=env,
+        capture_output=True,
+        text=True,
+        timeout=300,
+    )
+    assert proc.returncode == 0, proc.stdout + proc.stderr
+
+
+# ---------------------------------------------------------------------------
+# Plugin directory creation and early exits from run()
+# ---------------------------------------------------------------------------
+
+
+@pytest.fixture
+def builder_with_dialog(builder, fill_dialog):
+    """A builder whose dialog holds valid entries, as run() leaves it."""
+    builder.dialog = PluginBuilderDialog()
+    fill_dialog(builder.dialog)
+    return builder
+
+
+def test_create_plugin_directory(builder_with_dialog, tmp_path):
+    """The plugin folder is named after the cleaned, lowercased module name."""
+    builder_with_dialog.dialog.module_name.setText("My_Plugin")
+    assert builder_with_dialog._create_plugin_directory() is True
+    assert builder_with_dialog.plugin_path == tmp_path / "my_plugin"
+    assert (tmp_path / "my_plugin").is_dir()
+
+
+def test_create_plugin_directory_missing_parent(builder_with_dialog, tmp_path):
+    """If the folder can't be created, the user is told and nothing is made."""
+    builder_with_dialog.plugin_path = tmp_path / "missing"
+    with patch("plugin_builder.QMessageBox.critical") as critical:
+        assert builder_with_dialog._create_plugin_directory() is False
+    critical.assert_called_once()
+    assert not (tmp_path / "missing").exists()
+
+
+def test_create_plugin_directory_refuses_existing(builder_with_dialog, tmp_path):
+    """An existing plugin folder is never reused, so its files stay untouched."""
+    existing = tmp_path / "test_plugin"
+    existing.mkdir()
+    (existing / "edited.py").write_text("# user's work")
+    with patch("plugin_builder.QMessageBox.critical") as critical:
+        assert builder_with_dialog._create_plugin_directory() is False
+    critical.assert_called_once()
+    assert (existing / "edited.py").read_text() == "# user's work"
+
+
+def test_run_cancelled(qgis_iface, run_env, tmp_path, monkeypatch):
+    """Cancelling the wizard writes nothing and shows no results."""
+    monkeypatch.setattr(PluginBuilderDialog, "exec", lambda self: 0)
+    PluginBuilder(qgis_iface).run()
+    assert list(tmp_path.iterdir()) == []
+    assert run_env == []
+
+
+def test_run_stops_if_directory_not_created(
+    qgis_iface, fill_dialog, run_env, tmp_path, monkeypatch
+):
+    """If the plugin folder can't be created, run() generates nothing."""
+
+    def fake_exec(dlg):
+        fill_dialog(dlg)
+        dlg.output_directory.setText(str(tmp_path))
+        return 1
+
+    monkeypatch.setattr(PluginBuilderDialog, "exec", fake_exec)
+    monkeypatch.setattr(PluginBuilder, "_create_plugin_directory", lambda self: False)
+    PluginBuilder(qgis_iface).run()
+    assert list(tmp_path.iterdir()) == []
+    assert run_env == []

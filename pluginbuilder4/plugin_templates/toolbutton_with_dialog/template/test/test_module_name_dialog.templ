@@ -5,7 +5,11 @@ import pytest
 from qgis.core import Qgis
 from qgis.PyQt.QtWidgets import QDialogButtonBox, QDialog
 
-from ${TemplateModuleName}.${TemplateModuleName}_dialog import ${TemplateClass}Dialog
+# Imported under a neutral name: pytest would try to collect the class as a
+# test class if the plugin's class name starts with "Test"
+from ${TemplateModuleName}.${TemplateModuleName}_dialog import (
+    ${TemplateClass}Dialog as PluginDialog,
+)
 
 if Qgis.QGIS_VERSION_INT >= 40000:
     OK_BUTTON = QDialogButtonBox.StandardButton.Ok
@@ -21,7 +25,7 @@ else:
 
 @pytest.fixture
 def dialog(qgis_app):
-    dlg = ${TemplateClass}Dialog(None)
+    dlg = PluginDialog(None)
     yield dlg
     dlg.close()
 

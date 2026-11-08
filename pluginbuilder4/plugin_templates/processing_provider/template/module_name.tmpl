@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 
 """
 /***************************************************************************
@@ -30,42 +29,49 @@ __copyright__ = '(C) $TemplateYear by $TemplateAuthor'
 
 __revision__ = '$TemplateVCSFormat'
 
-from pathlib import Path
 import sys
-import inspect
+from pathlib import Path
 
-from qgis.core import QgsProcessingAlgorithm, QgsApplication
-from qgis.PyQt.QtCore import QCoreApplication, QLocale, QTranslator
+from qgis.core import QgsApplication
+from qgis.PyQt.QtCore import QCoreApplication, QTranslator
+
 from .${TemplateModuleName}_provider import ${TemplateClass}Provider
 
-cmd_folder = str(Path(inspect.getfile(inspect.currentframe())).parent)
+cmd_folder = str(Path(__file__).parent)
 
 if cmd_folder not in sys.path:
-    sys.path.insert(0, (cmd_folder)
+    sys.path.insert(0, cmd_folder)
 
 
-class ${TemplateClass}Plugin(object):
+class ${TemplateClass}Plugin:
 
-    def __init__(self):
-        self.provider = None
+    def __init__(self) -> None:
+        self.provider: ${TemplateClass}Provider | None = None
 
-        locale = QLocale(QgsApplication.locale())
-        locale_path = Path(__file__).parent / "i18n" / "${TemplateModuleName}_{}.qm".format(locale.name())
+        locale = QgsApplication.locale()[0:2]
+        locale_path = Path(__file__).parent / "i18n" / f"{locale}.qm"
         if locale_path.exists():
             self.translator = QTranslator()
             self.translator.load(str(locale_path))
             QCoreApplication.installTranslator(self.translator)
 
-    def tr(self, message):
+    def tr(self, message: str) -> str:
         return QCoreApplication.translate("${TemplateClass}", message)
 
-    def initProcessing(self):
+    def initProcessing(self) -> None:
         """Init Processing provider for QGIS >= 3.8."""
+        registry = QgsApplication.processingRegistry()
+        if registry is None:
+            raise RuntimeError("Processing registry is not available")
         self.provider = ${TemplateClass}Provider()
-        QgsApplication.processingRegistry().addProvider(self.provider)
+        registry.addProvider(self.provider)
 
-    def initGui(self):
+    def initGui(self) -> None:
         self.initProcessing()
 
-    def unload(self):
-        QgsApplication.processingRegistry().removeProvider(self.provider)
+    def unload(self) -> None:
+        registry = QgsApplication.processingRegistry()
+        if registry is not None and self.provider is not None:
+            registry.removeProvider(self.provider)
+            # removeProvider() deletes the C++ object; drop the stale wrapper
+            self.provider = None

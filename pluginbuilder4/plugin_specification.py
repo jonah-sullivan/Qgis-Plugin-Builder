@@ -22,12 +22,19 @@
 """
 
 import datetime
+from typing import TYPE_CHECKING, TypeAlias
+
+if TYPE_CHECKING:
+    from .plugin_builder_dialog import PluginBuilderDialog
+
+# Substitution values for string.Template placeholders in the plugin templates
+TemplateMap: TypeAlias = dict[str, str | int | bool]
 
 
 class PluginSpecification:
     """A convenience store with information needed to create the plugin."""
 
-    def __init__(self, dialog):
+    def __init__(self, dialog: "PluginBuilderDialog") -> None:
         """Constructor.
 
         After calling the constructor, the class properties
@@ -37,44 +44,44 @@ class PluginSpecification:
         :type dialog: PluginBuilderDialog
 
         """
-        self.class_name = str(dialog.class_name.text())
-        self.author = dialog.author.text()
-        self.description = dialog.description.text()
-        self.module_name = dialog.module_name.text()
-        self.email_address = dialog.email_address.text()
-        self.qgis_minimum_version = dialog.qgis_minimum_version.text()
-        self.qgis_maximum_version = dialog.qgis_maximum_version.text()
-        self.title = dialog.title.text()
-        self.plugin_version = dialog.plugin_version.text()
+        self.class_name: str = str(dialog.class_name.text())
+        self.author: str = dialog.author.text()
+        self.description: str = dialog.description.text()
+        self.module_name: str = dialog.module_name.text()
+        self.email_address: str = dialog.email_address.text()
+        self.qgis_minimum_version: str = dialog.qgis_minimum_version.text()
+        self.qgis_maximum_version: str = dialog.qgis_maximum_version.text()
+        self.title: str = dialog.title.text()
+        self.plugin_version: str = dialog.plugin_version.text()
 
         # remove multiple newlines/spaces from about text
         about = dialog.about.toPlainText().replace("\n", " ")
         self.about = " ".join(about.split())
 
-        self.homepage = dialog.homepage.text()
-        self.tracker = dialog.tracker.text()
-        self.repository = dialog.repository.text()
-        self.tags = dialog.tags.text()
+        self.homepage: str = dialog.homepage.text()
+        self.tracker: str = dialog.tracker.text()
+        self.repository: str = dialog.repository.text()
+        self.tags: str = dialog.tags.text()
         # icon selection from disk will be added at a later version
         self.icon = "icon.png"
-        self.experimental = dialog.experimental.isChecked()
+        self.experimental: bool = dialog.experimental.isChecked()
         # deprecated is always false for a new plugin
         self.deprecated = False
         # Builder flags
-        self.gen_i18n = dialog.i18n_cb.isChecked()
-        self.gen_help = dialog.help_cb.isChecked()
-        self.gen_tests = dialog.tests_cb.isChecked()
-        self.gen_makefile = dialog.makefile_cb.isChecked()
-        self.gen_pb_tool = dialog.pb_tool_cb.isChecked()
-        self.gen_qgis_plugin_ci = dialog.qgis_plugin_ci_cb.isChecked()
-        self.gen_gitlab_ci = dialog.gitlab_ci_cb.isChecked()
-        self.github_org_slug = (
+        self.gen_i18n: bool = dialog.i18n_cb.isChecked()
+        self.gen_help: bool = dialog.help_cb.isChecked()
+        self.gen_tests: bool = dialog.tests_cb.isChecked()
+        self.gen_makefile: bool = dialog.makefile_cb.isChecked()
+        self.gen_pb_tool: bool = dialog.pb_tool_cb.isChecked()
+        self.gen_qgis_plugin_ci: bool = dialog.qgis_plugin_ci_cb.isChecked()
+        self.gen_gitlab_ci: bool = dialog.gitlab_ci_cb.isChecked()
+        self.github_org_slug: str = (
             dialog.github_org_slug.text().strip() if self.gen_qgis_plugin_ci else ""
         )
-        self.gitlab_namespace = (
+        self.gitlab_namespace: str = (
             dialog.gitlab_namespace.text().strip() if self.gen_gitlab_ci else ""
         )
-        self.project_slug = (
+        self.project_slug: str = (
             dialog.project_slug.text().strip()
             if (self.gen_qgis_plugin_ci or self.gen_gitlab_ci)
             else ""
@@ -86,7 +93,7 @@ class PluginSpecification:
         # Git will replace this with the sha - I do it a funny way below so
         # that this line below does not itself get substituted by git!
         self.vcs_format = "$Format:" + "%H$"
-        self.template_map = {
+        self.template_map: TemplateMap = {
             "TemplateClass": self.class_name,
             "TemplateTitle": self.title,
             "TemplateDescription": self.description,
