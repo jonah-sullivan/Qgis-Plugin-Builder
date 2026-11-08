@@ -28,6 +28,8 @@ __copyright__ = '(C) $TemplateYear by $TemplateAuthor'
 
 __revision__ = '$TemplateVCSFormat'
 
+from pathlib import Path
+
 from qgis.core import QgsProcessingProvider
 from qgis.PyQt.QtGui import QIcon
 
@@ -78,7 +80,7 @@ class ${TemplateClass}Provider(QgsProcessingProvider):
         Should return a QIcon which is used for your provider inside
         the Processing toolbox.
         """
-        return QgsProcessingProvider.icon(self)
+        return QIcon(str(Path(__file__).parent / "icon.png"))
 
     def longName(self) -> str:
         """

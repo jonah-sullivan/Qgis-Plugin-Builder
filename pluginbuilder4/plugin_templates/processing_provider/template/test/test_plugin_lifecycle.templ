@@ -1,25 +1,36 @@
 # coding=utf-8
 """Lifecycle tests for processing provider: initGui -> unload."""
 
+import pytest
 from qgis.core import QgsApplication
 
+# Imported under a neutral name: pytest would try to collect the class as a
+# test class if the plugin's class name starts with "Test"
+from ${TemplateModuleName}.${TemplateModuleName} import (
+    ${TemplateClass}Plugin as Plugin,
+)
 
-def test_init_gui_registers_provider(qgis_app):
+PROVIDER_ID = "${TemplateProviderName}"
+
+
+@pytest.fixture
+def plugin(qgis_app):
+    plugin = Plugin()
+    plugin.initGui()
+    yield plugin
+    # Unload even if the test failed, so the provider doesn't leak into
+    # the next test
+    plugin.unload()
+
+
+def test_init_gui_registers_provider(plugin):
     """initGui registers the processing provider."""
-    from ${TemplateModuleName} import ${TemplateClass}Plugin
-    plugin = ${TemplateClass}Plugin()
-    plugin.initGui()
-    provider_ids = [p.id() for p in QgsApplication.processingRegistry().providers()]
-    assert any("${TemplateProviderName}".lower() in pid for pid in provider_ids)
-    plugin.unload()
+    registry = QgsApplication.processingRegistry()
+    assert registry.providerById(PROVIDER_ID) is not None
 
 
-def test_unload_removes_provider(qgis_app):
+def test_unload_removes_provider(plugin):
     """unload removes the provider from the processing registry."""
-    from ${TemplateModuleName} import ${TemplateClass}Plugin
-    plugin = ${TemplateClass}Plugin()
-    plugin.initGui()
-    count_before = len(QgsApplication.processingRegistry().providers())
     plugin.unload()
-    count_after = len(QgsApplication.processingRegistry().providers())
-    assert count_after < count_before
+    registry = QgsApplication.processingRegistry()
+    assert registry.providerById(PROVIDER_ID) is None

@@ -4,12 +4,16 @@
 import pytest
 from qgis.PyQt.QtWidgets import QDockWidget
 
-from ${TemplateModuleName}.${TemplateModuleName}_dockwidget import ${TemplateClass}DockWidget
+# Imported under a neutral name: pytest would try to collect the class as a
+# test class if the plugin's class name starts with "Test"
+from ${TemplateModuleName}.${TemplateModuleName}_dockwidget import (
+    ${TemplateClass}DockWidget as PluginDockWidget,
+)
 
 
 @pytest.fixture
 def dockwidget(qgis_app):
-    widget = ${TemplateClass}DockWidget(None)
+    widget = PluginDockWidget(None)
     yield widget
     widget.close()
 

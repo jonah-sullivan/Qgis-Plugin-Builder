@@ -153,7 +153,8 @@ class PluginBuilder:
         # is scanned for upload; restore the .py extension here.
         for entry in test_destination.iterdir():
             if entry.suffix == ".tmpl":
-                entry.replace(entry.with_suffix(".py"))
+                # test_init.py.tmpl -> test_init.py
+                entry.replace(entry.with_name(entry.name.removesuffix(".tmpl")))
 
         # Exclude test/ from packaged zips (tests use assert, which trips
         # Bandit's B101 rule on the QGIS Plugins website's upload scanner).
@@ -202,8 +203,7 @@ class PluginBuilder:
             lines.append(f"gitlab_organization_slug: {specification.gitlab_namespace}")
         lines.append(f"project_slug: {specification.project_slug}")
         config_path = self.plugin_path / ".qgis-plugin-ci"
-        with open(config_path, "w") as f:
-            f.write("\n".join(lines) + "\n")
+        config_path.write_text("\n".join(lines) + "\n", encoding="utf-8")
 
     def _prepare_qgis_plugin_ci(self, specification: PluginSpecification) -> None:
         """Generate .qgis-plugin-ci config and GitHub Actions release workflow."""
@@ -500,13 +500,12 @@ class PluginBuilder:
             tag_file = user_tag_list
         else:
             tag_file = self.plugin_builder_path / "taglist.txt"
-        with open(tag_file) as tf:
-            tags = tf.readlines()
+        tags = tag_file.read_text(encoding="utf-8").splitlines()
 
         model = QStandardItemModel()
 
         for tag in tags:
-            item = QStandardItem(tag.rstrip("\n"))
+            item = QStandardItem(tag)
             model.appendRow(item)
 
         tag_dialog.listView.setModel(model)
@@ -644,13 +643,10 @@ class PluginBuilder:
         """
         template_file_path = template_dir / template_name
         output_name_path = self.plugin_path / output_name
-
-        with open(template_file_path, encoding="utf-8") as template_file:
-            content = template_file.read()
+        content = template_file_path.read_text(encoding="utf-8")
         template = Template(content)
         popped = template.safe_substitute(specification.template_map)
-        with open(output_name_path, "w", encoding="utf-8") as plugin_file:
-            plugin_file.write(popped)
+        output_name_path.write_text(popped, encoding="utf-8")
 
     def show_help(self) -> None:
         """Display application help to the user."""

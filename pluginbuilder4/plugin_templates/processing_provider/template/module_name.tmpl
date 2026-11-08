@@ -73,3 +73,5 @@ class ${TemplateClass}Plugin:
         registry = QgsApplication.processingRegistry()
         if registry is not None and self.provider is not None:
             registry.removeProvider(self.provider)
+            # removeProvider() deletes the C++ object; drop the stale wrapper
+            self.provider = None
