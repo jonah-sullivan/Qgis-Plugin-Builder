@@ -1,4 +1,3 @@
-# coding=utf-8
 """
 /***************************************************************************
     PluginBuilder
@@ -23,7 +22,6 @@
 
 # Import Python stuff
 import configparser
-import errno
 import shutil
 from pathlib import Path
 from string import Template
@@ -34,8 +32,6 @@ from qgis.gui import QgisInterface
 # Import the PyQt and QGIS libraries
 from qgis.PyQt.QtCore import (
     QCoreApplication,
-    QDir,
-    QFile,
     QFileInfo,
     QLocale,
     QSettings,
@@ -84,9 +80,7 @@ class PluginBuilder:
         self.plugin_builder_path = Path(__file__).parent
 
         locale = QLocale(QgsApplication.locale())
-        locale_path = (
-            self.plugin_builder_path / "i18n" / "{}.qm".format(locale.name()[:2])
-        )
+        locale_path = self.plugin_builder_path / "i18n" / f"{locale.name()[:2]}.qm"
         if locale_path.exists():
             self.translator = QTranslator()
             self.translator.load(str(locale_path))
@@ -146,7 +140,7 @@ class PluginBuilder:
         """Populate and write test files."""
         test_source = self.shared_dir / "test"
         test_destination = self.plugin_path / "test"
-        copy(str(test_source), str(test_destination))
+        copy(test_source, test_destination)
 
         # Templates that use `assert` are stored as .tmpl so Bandit's B101
         # rule doesn't flag Plugin Builder's own packaged .py files when it
@@ -158,10 +152,8 @@ class PluginBuilder:
 
         # Exclude test/ from packaged zips (tests use assert, which trips
         # Bandit's B101 rule on the QGIS Plugins website's upload scanner).
-        # No-op if a CI step already wrote this file first.
-        src = self.shared_dir / "gitattributes"
-        dst = self.plugin_path / ".gitattributes"
-        QFile.copy(str(src), str(dst))
+        # The CI steps copy the same file, so whichever runs last wins.
+        copy(self.shared_dir / "gitattributes", self.plugin_path / ".gitattributes")
 
         # Render lifecycle test for iface-based plugin types
         is_processing = specification.template_map.get(
@@ -181,14 +173,14 @@ class PluginBuilder:
         )
 
         # Copy requirements-dev.txt to plugin root
-        src = self.shared_dir / "requirements-dev.txt"
-        dst = self.plugin_path / "requirements-dev.txt"
-        QFile.copy(str(src), str(dst))
+        copy(
+            self.shared_dir / "requirements-dev.txt",
+            self.plugin_path / "requirements-dev.txt",
+        )
 
     def _prepare_i18n(self) -> None:
         """Copy the i18n folder."""
-        scripts_source = self.shared_dir / "i18n"
-        copy(str(scripts_source), str(self.plugin_path / "i18n"))
+        copy(self.shared_dir / "i18n", self.plugin_path / "i18n")
 
     def _write_qgis_plugin_ci_config(self, specification: PluginSpecification) -> None:
         """Write .qgis-plugin-ci, including whichever platform slugs are enabled."""
@@ -208,49 +200,32 @@ class PluginBuilder:
     def _prepare_qgis_plugin_ci(self, specification: PluginSpecification) -> None:
         """Generate .qgis-plugin-ci config and GitHub Actions release workflow."""
         self._write_qgis_plugin_ci_config(specification)
-        workflows_dir = self.plugin_path / ".github" / "workflows"
-        workflows_dir.mkdir(parents=True, exist_ok=True)
-        QFile.copy(
-            str(self.shared_dir / "github_release.yml"),
-            str(workflows_dir / "release.yml"),
+        copy(
+            self.shared_dir / "github_release.yml",
+            self.plugin_path / ".github" / "workflows" / "release.yml",
         )
-        QFile.copy(
-            str(self.shared_dir / "gitattributes"),
-            str(self.plugin_path / ".gitattributes"),
-        )
+        copy(self.shared_dir / "gitattributes", self.plugin_path / ".gitattributes")
 
     def _prepare_gitlab_ci(self, specification: PluginSpecification) -> None:
         """Generate .qgis-plugin-ci config and GitLab CI release pipeline."""
         if not specification.gen_qgis_plugin_ci:
             # Only write the config if GitHub CI hasn't already written it
             self._write_qgis_plugin_ci_config(specification)
-        QFile.copy(
-            str(self.shared_dir / "gitlab_release.yml"),
-            str(self.plugin_path / ".gitlab-ci.yml"),
+        copy(
+            self.shared_dir / "gitlab_release.yml",
+            self.plugin_path / ".gitlab-ci.yml",
         )
-        QFile.copy(
-            str(self.shared_dir / "gitattributes"),
-            str(self.plugin_path / ".gitattributes"),
-        )
+        copy(self.shared_dir / "gitattributes", self.plugin_path / ".gitattributes")
 
     def _prepare_help(self) -> None:
         """Prepare the help directory."""
         # Create sphinx default project for help
-        QDir().mkdir(str(self.plugin_path / "help"))
-        QDir().mkdir(str(self.plugin_path / "help/build"))
-        QDir().mkdir(str(self.plugin_path / "help/build/html"))
-        QDir().mkdir(str(self.plugin_path / "help/source"))
-        QDir().mkdir(str(self.plugin_path / "help/source/_static"))
-        QDir().mkdir(str(self.plugin_path / "help/source/_templates"))
+        help_dir = self.plugin_path / "help"
+        for subdir in ("build/html", "source/_static", "source/_templates"):
+            (help_dir / subdir).mkdir(parents=True, exist_ok=True)
         # copy doc makefiles
-        QFile.copy(
-            str(self.shared_dir / "help/make.py"),
-            str(self.plugin_path / "help/make.py"),
-        )
-        QFile.copy(
-            str(self.shared_dir / "help/Makefile"),
-            str(self.plugin_path / "help/Makefile"),
-        )
+        copy(self.shared_dir / "help" / "make.py", help_dir / "make.py")
+        copy(self.shared_dir / "help" / "Makefile", help_dir / "Makefile")
 
     def _prepare_code(self, specification: PluginSpecification) -> None:
         """Prepare the code turning templates into python.
@@ -270,9 +245,7 @@ class PluginBuilder:
             )
 
         # Copy LICENSE to plugin root
-        src = self.shared_dir / "LICENSE"
-        dst = self.plugin_path / "LICENSE"
-        QFile.copy(str(src), str(dst))
+        copy(self.shared_dir / "LICENSE", self.plugin_path / "LICENSE")
 
         self.populate_template(
             specification, self.template_dir, "__init__.tmpl", "__init__.py"
@@ -306,10 +279,7 @@ class PluginBuilder:
 
         # copy the non-generated files to the new plugin dir
         for template_file, output_name in template.copy_files(specification).items():
-            QFile.copy(
-                str(self.template_dir / template_file),
-                str(self.plugin_path / output_name),
-            )
+            copy(self.template_dir / template_file, self.plugin_path / output_name)
 
     def _prepare_readme(
         self, specification: PluginSpecification, template_module_name: str
@@ -348,61 +318,66 @@ class PluginBuilder:
         processing_provider = specification.template_map[
             "TemplateHasProcessingProvider"
         ]
-        metadata_file = open(self.plugin_path / "metadata.txt", "w", encoding="utf-8")
-        metadata_comment = (
-            "# This file contains metadata for your plugin.\n\n"
-            "# This file should be included when you package your plugin.\n"
-            "# Mandatory items:\n\n"
-        )
-        metadata_file.write(metadata_comment)
-        metadata_file.write("[general]\n")
-        metadata_file.write("name=%s\n" % specification.title)
-        metadata_file.write(
-            "qgisMinimumVersion=%s\n" % specification.qgis_minimum_version
-        )
-        metadata_file.write(
-            "qgisMaximumVersion=%s\n" % specification.qgis_maximum_version
-        )
-        metadata_file.write("description=%s\n" % specification.description)
-        metadata_file.write("version=%s\n" % specification.plugin_version)
-        metadata_file.write("author=%s\n" % specification.author)
-        metadata_file.write("email=%s\n\n" % specification.email_address)
-        metadata_file.write("about=%s\n\n" % specification.about)
-        metadata_file.write("tracker=%s\n" % specification.tracker)
-        metadata_file.write("repository=%s\n" % specification.repository)
-        metadata_file.write("license=GNU GPL v2\n")
-        metadata_file.write("# End of mandatory metadata\n\n")
-        metadata_file.write("# Recommended items:\n\n")
-        metadata_file.write(
-            "hasProcessingProvider={}\n".format("yes" if processing_provider else "no")
-        )
-        metadata_file.write("# Uncomment the following line and add your changelog:\n")
-        metadata_file.write("# changelog=\n\n")
-        metadata_file.write("# Tags are comma separated with spaces allowed\n")
-        metadata_file.write("tags=%s\n\n" % specification.tags)
-        metadata_file.write("homepage=%s\n" % specification.homepage)
-        metadata_file.write("category=%s\n" % template.category)
-        metadata_file.write("icon=%s\n" % specification.icon)
-        metadata_file.write("# experimental flag\n")
-        metadata_file.write("experimental=%s\n\n" % specification.experimental)
-        metadata_file.write(
-            "# deprecated flag (applies to the whole plugin, not "
-            "just a single version)\n"
-        )
-        metadata_file.write("deprecated=%s\n\n" % specification.deprecated)
-        metadata_file.write(
-            "# Since QGIS 3.8, a comma separated list of plugins to be installed\n"
-        )
-        metadata_file.write("# (or upgraded) can be specified.\n")
-        metadata_file.write("# Check the documentation for more information.\n")
-        metadata_file.write("# plugin_dependencies=\n\n")
-        metadata_file.write(
-            "# Category of the plugin: Raster, Vector, Database or Web\n"
-        )
-        metadata_file.write("# category=\n\n")
-        metadata_file.write("# If the plugin can run on QGIS Server.\n")
-        metadata_file.write("server=False\n\n")
-        metadata_file.close()
+        with (self.plugin_path / "metadata.txt").open(
+            "w", encoding="utf-8"
+        ) as metadata_file:
+            metadata_comment = (
+                "# This file contains metadata for your plugin.\n\n"
+                "# This file should be included when you package your plugin.\n"
+                "# Mandatory items:\n\n"
+            )
+            metadata_file.write(metadata_comment)
+            metadata_file.write("[general]\n")
+            metadata_file.write(f"name={specification.title}\n")
+            metadata_file.write(
+                f"qgisMinimumVersion={specification.qgis_minimum_version}\n"
+            )
+            metadata_file.write(
+                f"qgisMaximumVersion={specification.qgis_maximum_version}\n"
+            )
+            metadata_file.write(f"description={specification.description}\n")
+            metadata_file.write(f"version={specification.plugin_version}\n")
+            metadata_file.write(f"author={specification.author}\n")
+            metadata_file.write(f"email={specification.email_address}\n\n")
+            metadata_file.write(f"about={specification.about}\n\n")
+            metadata_file.write(f"tracker={specification.tracker}\n")
+            metadata_file.write(f"repository={specification.repository}\n")
+            metadata_file.write("license=GNU GPL v2\n")
+            metadata_file.write("# End of mandatory metadata\n\n")
+            metadata_file.write("# Recommended items:\n\n")
+            metadata_file.write(
+                "hasProcessingProvider={}\n".format(
+                    "yes" if processing_provider else "no"
+                )
+            )
+            metadata_file.write(
+                "# Uncomment the following line and add your changelog:\n"
+            )
+            metadata_file.write("# changelog=\n\n")
+            metadata_file.write("# Tags are comma separated with spaces allowed\n")
+            metadata_file.write(f"tags={specification.tags}\n\n")
+            metadata_file.write(f"homepage={specification.homepage}\n")
+            metadata_file.write(f"category={template.category}\n")
+            metadata_file.write(f"icon={specification.icon}\n")
+            metadata_file.write("# experimental flag\n")
+            metadata_file.write(f"experimental={specification.experimental}\n\n")
+            metadata_file.write(
+                "# deprecated flag (applies to the whole plugin, not "
+                "just a single version)\n"
+            )
+            metadata_file.write(f"deprecated={specification.deprecated}\n\n")
+            metadata_file.write(
+                "# Since QGIS 3.8, a comma separated list of plugins to be installed\n"
+            )
+            metadata_file.write("# (or upgraded) can be specified.\n")
+            metadata_file.write("# Check the documentation for more information.\n")
+            metadata_file.write("# plugin_dependencies=\n\n")
+            metadata_file.write(
+                "# Category of the plugin: Raster, Vector, Database or Web\n"
+            )
+            metadata_file.write("# category=\n\n")
+            metadata_file.write("# If the plugin can run on QGIS Server.\n")
+            metadata_file.write("server=False\n\n")
 
     def _prepare_results_html(
         self, specification: PluginSpecification
@@ -474,11 +449,17 @@ class PluginBuilder:
         raw_name = self._require_dialog().module_name.text().lower()
         module_name = "".join(c for c in raw_name if c.isalnum() or c == "_")
         self.plugin_path = self.plugin_path / module_name
-        if not QDir().mkdir(str(self.plugin_path)):
+        try:
+            # Fails if the folder already exists, so a plugin the user may
+            # have edited is never overwritten
+            self.plugin_path.mkdir()
+        except OSError as error:
             QMessageBox.critical(
                 None,
                 self.tr("Error"),
-                self.tr(f"Could not create plugin directory:\n{self.plugin_path}"),
+                self.tr("Could not create plugin directory:\n{}\n\n{}").format(
+                    self.plugin_path, error.strerror
+                ),
             )
             return False
         return True
@@ -547,6 +528,33 @@ class PluginBuilder:
         self._set_last_used_path(str(self.plugin_path))
         if not self._create_plugin_directory():
             return
+        try:
+            results_popped = self._generate_plugin(dialog, specification)
+        except OSError as error:
+            QMessageBox.critical(
+                None,
+                self.tr("Error"),
+                self.tr(
+                    "Plugin generation failed, so the plugin in\n{}\n"
+                    "is incomplete. Delete that folder and try again.\n\n{}"
+                ).format(self.plugin_path, error),
+            )
+            return
+
+        # show the results
+        results_dialog = ResultDialog()
+        results_dialog.web_view.setHtml(results_popped)
+        results_dialog.show()
+        results_dialog.exec()
+
+    def _generate_plugin(
+        self, dialog: PluginBuilderDialog, specification: PluginSpecification
+    ) -> str:
+        """Write every file of the new plugin into self.plugin_path.
+
+        :returns: The HTML for the results dialog.
+        :raises OSError: If any file or folder can't be read or written.
+        """
         template = dialog.template()
         self.template = template
         self.template_dir = template.subdir() / "template"
@@ -595,9 +603,9 @@ class PluginBuilder:
         if specification.gen_i18n:
             self._prepare_i18n()
 
-        QFile.copy(
-            str(self.shared_dir / "pre-commit-config.yaml"),
-            str(self.plugin_path / ".pre-commit-config.yaml"),
+        copy(
+            self.shared_dir / "pre-commit-config.yaml",
+            self.plugin_path / ".pre-commit-config.yaml",
         )
 
         if specification.gen_qgis_plugin_ci:
@@ -612,12 +620,7 @@ class PluginBuilder:
 
         self._prepare_readme(specification, template_module_name)
         self._prepare_metadata(specification)
-
-        # show the results
-        results_dialog = ResultDialog()
-        results_dialog.web_view.setHtml(results_popped)
-        results_dialog.show()
-        results_dialog.exec()
+        return results_popped
 
     def populate_template(
         self,
@@ -659,24 +662,21 @@ class PluginBuilder:
             )
 
 
-def copy(source: str, destination: str) -> None:
-    """Copy files recursively.
+def copy(source: Path, destination: Path) -> None:
+    """Copy a file or a whole directory tree, overwriting existing files.
 
-    Taken from: http://www.pythoncentral.io/
-                how-to-recursively-copy-a-directory-folder-in-python/
+    The parent folders of destination are created if needed.
 
-    :param source: Source directory.
-    :type source: str
+    :param source: Source file or directory.
+    :type source: Path
 
-    :param destination: Destination directory.
-    :type destination: str
+    :param destination: Destination file or directory.
+    :type destination: Path
 
+    :raises OSError: If the source is missing or the copy fails.
     """
-    try:
+    if source.is_dir():
         shutil.copytree(source, destination, dirs_exist_ok=True)
-    except OSError as e:
-        # If the error was caused because the source wasn't a directory
-        if e.errno == errno.ENOTDIR:
-            shutil.copy(source, destination)
-        else:
-            print(f"Directory not copied. Error: {e}")
+    else:
+        destination.parent.mkdir(parents=True, exist_ok=True)
+        shutil.copyfile(source, destination)

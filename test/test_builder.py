@@ -1,4 +1,3 @@
-# coding=utf-8
 """Tests for the plugin builder."""
 
 import configparser
@@ -168,13 +167,29 @@ def test_deployment_dir():
 
 
 def test_copy_single_file(tmp_path):
-    """copy() falls back to shutil.copy when source is a file not a directory."""
+    """copy() copies a single file, creating missing parent folders."""
     src = tmp_path / "source.txt"
     src.write_text("hello")
-    dest = str(tmp_path / "dest.txt")
-    copy(str(src), dest)
-    assert Path(dest).exists()
-    assert Path(dest).read_text() == "hello"
+    dest = tmp_path / "new" / "dir" / "dest.txt"
+    copy(src, dest)
+    assert dest.read_text() == "hello"
+
+
+def test_copy_directory(tmp_path):
+    """copy() copies a directory tree into an existing destination."""
+    src = tmp_path / "src"
+    (src / "sub").mkdir(parents=True)
+    (src / "sub" / "a.txt").write_text("a")
+    dest = tmp_path / "dest"
+    dest.mkdir()
+    copy(src, dest)
+    assert (dest / "sub" / "a.txt").read_text() == "a"
+
+
+def test_copy_missing_source_raises(tmp_path):
+    """copy() raises instead of silently skipping a missing source."""
+    with pytest.raises(FileNotFoundError):
+        copy(tmp_path / "missing.txt", tmp_path / "dest.txt")
 
 
 def test_prepare_i18n(builder):
@@ -540,4 +555,26 @@ def test_run_stops_if_directory_not_created(
     monkeypatch.setattr(PluginBuilder, "_create_plugin_directory", lambda self: False)
     PluginBuilder(qgis_iface).run()
     assert list(tmp_path.iterdir()) == []
+    assert run_env == []
+
+
+def test_run_reports_file_error(
+    qgis_iface, fill_dialog, run_env, tmp_path, monkeypatch
+):
+    """A file error during generation is shown to the user, not the results."""
+
+    def fake_exec(dlg):
+        fill_dialog(dlg)
+        dlg.output_directory.setText(str(tmp_path))
+        return 1
+
+    def fail(self, specification):
+        raise PermissionError(13, "Permission denied", "LICENSE")
+
+    monkeypatch.setattr(PluginBuilderDialog, "exec", fake_exec)
+    monkeypatch.setattr(PluginBuilder, "_prepare_code", fail)
+    with patch("plugin_builder.QMessageBox.critical") as critical:
+        PluginBuilder(qgis_iface).run()
+    critical.assert_called_once()
+    assert "Permission denied" in critical.call_args.args[2]
     assert run_env == []

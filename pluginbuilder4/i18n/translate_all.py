@@ -56,9 +56,7 @@ def should_skip(src: str) -> bool:
     if s == "...":
         return True
     # Lowercase 'python' is a tag value, keep it as-is
-    if s == "python":
-        return True
-    return False
+    return s == "python"
 
 
 def translate(text: str, target: str, retries: int = 3) -> str:

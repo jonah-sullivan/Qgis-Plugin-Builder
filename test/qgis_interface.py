@@ -1,4 +1,3 @@
-# coding=utf-8
 """QGIS plugin implementation.
 
 .. note:: This program is free software; you can redistribute it and/or modify
@@ -137,6 +136,7 @@ class QgisInterface(QObject):
         layers = QgsProject.instance().mapLayers()
         for item in layers:
             return layers[item]
+        return None
 
     def addToolBarIcon(self, action):  # QgsInterface override - camelCase required
         """Add an icon to the plugins toolbar.

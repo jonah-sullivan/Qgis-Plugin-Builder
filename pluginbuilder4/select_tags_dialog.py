@@ -1,4 +1,3 @@
-# coding=utf-8
 """
 /***************************************************************************
     SelectTagsDialog
@@ -40,6 +39,6 @@ class SelectTagsDialog(QtWidgets.QDialog, FORM_CLASS):
     listView: QListView  # noqa: N815 - name set in the .ui file
 
     def __init__(self, parent: QWidget | None = None) -> None:
-        super(SelectTagsDialog, self).__init__(parent)
+        super().__init__(parent)
         # Set up the user interface from Designer.
         self.setupUi(self)

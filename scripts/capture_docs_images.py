@@ -84,7 +84,7 @@ _load_module("select_tags_dialog")
 _load_module("result_dialog")
 _load_module("plugin_builder_dialog")
 
-from plugin_builder_dialog import PluginBuilderDialog  # noqa: E402
+from plugin_builder_dialog import Page, PluginBuilderDialog  # noqa: E402
 
 # ---------------------------------------------------------------------------
 # Sample data — makes screenshots look realistic rather than blank
@@ -141,16 +141,16 @@ dialog.output_directory.setText(SAMPLE_OUTPUT_DIR)
 app.processEvents()
 
 # ---------------------------------------------------------------------------
-# Wizard pages → image filenames (index matches stackedWidget page order)
+# Wizard pages → image filenames
 # ---------------------------------------------------------------------------
 PAGES = [
-    (0, "wizard_required_info.png"),
-    (1, "wizard_about.png"),
-    (2, "wizard_template.png"),
-    (3, "wizard_helpers.png"),
-    (4, "wizard_publication_info.png"),
-    (5, "wizard_ci.png"),
-    (6, "generating.png"),
+    (Page.REQUIRED_INFO, "wizard_required_info.png"),
+    (Page.ABOUT, "wizard_about.png"),
+    (Page.TEMPLATE, "wizard_template.png"),
+    (Page.HELPERS, "wizard_helpers.png"),
+    (Page.PUBLICATION, "wizard_publication_info.png"),
+    (Page.CI, "wizard_ci.png"),
+    (Page.OUTPUT, "generating.png"),
 ]
 
 dialog.qgis_plugin_ci_cb.setChecked(True)
@@ -162,9 +162,9 @@ app.processEvents()
 
 next_label = dialog.next_button.text()
 
-for index, filename in PAGES:
-    dialog.stackedWidget.setCurrentIndex(index)
-    if index == 6:
+for page, filename in PAGES:
+    dialog.stackedWidget.setCurrentIndex(page)
+    if page == Page.OUTPUT:
         dialog.next_button.setText("Generate")
         dialog.show_output_info(dialog._full_output_path())
     else:

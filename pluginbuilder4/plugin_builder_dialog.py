@@ -1,4 +1,3 @@
-# coding=utf-8
 """
 /***************************************************************************
     PluginBuilderDialog
@@ -21,6 +20,8 @@
  ***************************************************************************/
 """
 
+from collections.abc import Callable
+from enum import IntEnum
 from pathlib import Path
 from string import capwords
 from typing import Any
@@ -53,6 +54,18 @@ FORM_CLASS: Any
 FORM_CLASS, _ = uic.loadUiType(
     str(Path(__file__).parent / "plugin_builder_dialog_base.ui")
 )
+
+
+class Page(IntEnum):
+    """Wizard pages, by their index in the .ui file's stackedWidget."""
+
+    REQUIRED_INFO = 0
+    ABOUT = 1
+    TEMPLATE = 2
+    HELPERS = 3
+    PUBLICATION = 4
+    CI = 5
+    OUTPUT = 6
 
 
 class PluginBuilderDialog(QDialog, FORM_CLASS):
@@ -107,7 +120,7 @@ class PluginBuilderDialog(QDialog, FORM_CLASS):
         self, parent: QWidget | None = None, stored_output_path: str = ""
     ) -> None:
         """Constructor."""
-        super(PluginBuilderDialog, self).__init__(parent)
+        super().__init__(parent)
         # Set up the user interface from Designer.
         self.setupUi(self)
         # Built by update_template() from the selected template's own .ui
@@ -119,8 +132,8 @@ class PluginBuilderDialog(QDialog, FORM_CLASS):
         self.update_prev_next_buttons()
         self.update_template()
         self.stackedWidget.currentChanged.connect(self.update_prev_next_buttons)
-        self.next_button.clicked.connect(self.__next__)
-        self.prev_button.clicked.connect(self.prev)
+        self.next_button.clicked.connect(self.next_page)
+        self.prev_button.clicked.connect(self.prev_page)
         self.template_cbox.currentIndexChanged.connect(self.update_template)
         self.btn_select_output.clicked.connect(self.select_directory)
         self.next_button.setFocus()
@@ -128,73 +141,82 @@ class PluginBuilderDialog(QDialog, FORM_CLASS):
         self.last_path = stored_output_path
 
     def update_prev_next_buttons(self) -> None:
-        i = self.stackedWidget.currentIndex()
-        self.prev_button.setEnabled(i > 0)
+        self.prev_button.setEnabled(self._current_page() != Page.REQUIRED_INFO)
+
+    def _current_page(self) -> Page:
+        return Page(self.stackedWidget.currentIndex())
 
     def _any_ci_checked(self) -> bool:
         return self.qgis_plugin_ci_cb.isChecked() or self.gitlab_ci_cb.isChecked()
 
-    def _next_page_index(self, i: int) -> int | None:
-        """Return the next stacked-widget index, skipping page_ci if not opted in."""
-        if i == 4 and not self._any_ci_checked():
-            return 6  # skip CI/CD page (index 5)
-        return i + 1 if i < 6 else None  # None → accept()
+    def _next_page(self, page: Page) -> Page | None:
+        """Return the page after this one, or None on the last page.
 
-    def _prev_page_index(self, i: int) -> int:
-        if i == 6 and not self._any_ci_checked():
-            return 4  # skip back over CI/CD page
-        return i - 1
+        The CI page is skipped unless a CI option is checked.
+        """
+        if page == Page.PUBLICATION and not self._any_ci_checked():
+            return Page.OUTPUT
+        if page == Page.OUTPUT:
+            return None
+        return Page(page + 1)
 
-    def __next__(self) -> None:
-        i = self.stackedWidget.currentIndex()
-        ok = True
-        if i == 0:
-            ok = self.validate_entries()
-        elif i == 1:
-            ok = self.validate_about()
-        elif i == 4:
-            ok = self.validate_publication()
-        elif i == 5:
-            ok = self.validate_ci_page()
-        elif i == 6:
-            ok = self.validate_output_directory()
-        if ok:
-            next_i = self._next_page_index(i)
-            if next_i is not None:
-                if next_i == 5:
-                    self._populate_ci_fields()
-                self.stackedWidget.setCurrentIndex(next_i)
-                if next_i == 6:
-                    self.next_button.setText("Generate")
-                    if self.output_directory.text() != "":
-                        self.show_output_info(self._full_output_path())
-            else:
-                self.accept()
+    def _prev_page(self, page: Page) -> Page:
+        """Return the page before this one, skipping CI as _next_page does."""
+        if page == Page.OUTPUT and not self._any_ci_checked():
+            return Page.PUBLICATION
+        return Page(page - 1)
 
-    def prev(self) -> None:
-        i = self.stackedWidget.currentIndex()
-        prev_i = self._prev_page_index(i)
-        self.stackedWidget.setCurrentIndex(prev_i)
-        if prev_i != 6:
+    def _validator(self, page: Page) -> Callable[[], bool] | None:
+        """Return the check that must pass before leaving this page, if any."""
+        return {
+            Page.REQUIRED_INFO: self.validate_entries,
+            Page.ABOUT: self.validate_about,
+            Page.PUBLICATION: self.validate_publication,
+            Page.CI: self.validate_ci_page,
+            Page.OUTPUT: self.validate_output_directory,
+        }.get(page)
+
+    def next_page(self) -> None:
+        page = self._current_page()
+        validate = self._validator(page)
+        if validate is not None and not validate():
+            return
+        next_page = self._next_page(page)
+        if next_page is None:
+            self.accept()
+            return
+        if next_page == Page.CI:
+            self._populate_ci_fields()
+        self.stackedWidget.setCurrentIndex(next_page)
+        if next_page == Page.OUTPUT:
+            self.next_button.setText("Generate")
+            if self.output_directory.text() != "":
+                self.show_output_info(self._full_output_path())
+
+    def prev_page(self) -> None:
+        prev_page = self._prev_page(self._current_page())
+        self.stackedWidget.setCurrentIndex(prev_page)
+        if prev_page != Page.OUTPUT:
             self.next_button.setText("Next>")
 
     def validate_ci_page(self) -> bool:
-        if self.qgis_plugin_ci_cb.isChecked():
-            if not self.github_org_slug.text().strip():
-                QMessageBox.warning(
-                    self,
-                    "Missing GitHub organisation",
-                    "Please enter your GitHub organisation or username.",
-                )
-                return False
-        if self.gitlab_ci_cb.isChecked():
-            if not self.gitlab_namespace.text().strip():
-                QMessageBox.warning(
-                    self,
-                    "Missing GitLab namespace",
-                    "Please enter your GitLab group or username.",
-                )
-                return False
+        if (
+            self.qgis_plugin_ci_cb.isChecked()
+            and not self.github_org_slug.text().strip()
+        ):
+            QMessageBox.warning(
+                self,
+                "Missing GitHub organisation",
+                "Please enter your GitHub organisation or username.",
+            )
+            return False
+        if self.gitlab_ci_cb.isChecked() and not self.gitlab_namespace.text().strip():
+            QMessageBox.warning(
+                self,
+                "Missing GitLab namespace",
+                "Please enter your GitLab group or username.",
+            )
+            return False
         if not self.project_slug.text().strip():
             QMessageBox.warning(
                 self,
@@ -273,11 +295,8 @@ class PluginBuilderDialog(QDialog, FORM_CLASS):
         ):
             message += "Version numbers must be numeric.\n"
 
-        elif max_ver and is_valid_version(max_ver) and is_valid_version(min_ver):
-            if version_tuple(min_ver) >= version_tuple(max_ver):
-                message += (
-                    "Minimum QGIS version must be less than the maximum version.\n"
-                )
+        elif max_ver and version_tuple(min_ver) >= version_tuple(max_ver):
+            message += "Minimum QGIS version must be less than the maximum version.\n"
 
         # validate plugin name
         # check that we have only ascii char in class name
@@ -312,12 +331,11 @@ class PluginBuilderDialog(QDialog, FORM_CLASS):
         if message != "":
             QMessageBox.warning(self, "Information missing or invalid", message)
             return False
-        else:
-            if self.last_path:
-                self.lbl_full_output_path.setText(
-                    str(Path(self.last_path) / self.module_name.text())
-                )
-            return True
+        if self.last_path:
+            self.lbl_full_output_path.setText(
+                str(Path(self.last_path) / self.module_name.text())
+            )
+        return True
 
     def validate_about(self) -> bool:
         if len(self.about.toPlainText()) != 0:
@@ -345,7 +363,7 @@ class PluginBuilderDialog(QDialog, FORM_CLASS):
                 "plugin repository.",
             )
             return False
-        elif not (
+        if not (
             url_tracker.startswith("http://") or url_tracker.startswith("https://")
         ) or not (url_repo.startswith("http://") or url_repo.startswith("https://")):
             QMessageBox.warning(

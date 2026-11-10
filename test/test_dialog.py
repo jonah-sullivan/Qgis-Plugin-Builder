@@ -1,10 +1,9 @@
-# coding=utf-8
 """Tests for PluginBuilderDialog and PluginSpecification."""
 
 from unittest.mock import patch
 
 import pytest
-from plugin_builder_dialog import PluginBuilderDialog
+from plugin_builder_dialog import Page, PluginBuilderDialog
 from plugin_specification import PluginSpecification
 
 
@@ -60,60 +59,114 @@ def test_specification_qgis_plugin_ci_on(dialog, fill_dialog):
 # ---------------------------------------------------------------------------
 
 
+def test_page_enum_matches_ui(dialog):
+    """Page has one member per stackedWidget page in the .ui file."""
+    assert dialog.stackedWidget.count() == len(Page)
+
+
 def test_next_page_skips_ci_when_unchecked(dialog):
-    """_next_page_index skips page_ci (5) when neither CI option is selected."""
+    """_next_page skips the CI page when neither CI option is selected."""
     dialog.qgis_plugin_ci_cb.setChecked(False)
     dialog.gitlab_ci_cb.setChecked(False)
-    assert dialog._next_page_index(4) == 6
+    assert dialog._next_page(Page.PUBLICATION) == Page.OUTPUT
 
 
 def test_next_page_includes_ci_when_checked(dialog):
-    """_next_page_index goes to page_ci (5) when GitHub CI is selected."""
+    """_next_page goes to the CI page when GitHub CI is selected."""
     dialog.qgis_plugin_ci_cb.setChecked(True)
-    assert dialog._next_page_index(4) == 5
+    assert dialog._next_page(Page.PUBLICATION) == Page.CI
 
 
 def test_next_page_includes_ci_when_gitlab_checked(dialog):
-    """_next_page_index goes to page_ci (5) when GitLab CI is selected."""
+    """_next_page goes to the CI page when GitLab CI is selected."""
     dialog.gitlab_ci_cb.setChecked(True)
-    assert dialog._next_page_index(4) == 5
+    assert dialog._next_page(Page.PUBLICATION) == Page.CI
 
 
 def test_next_page_sequential_elsewhere(dialog):
-    """_next_page_index increments by 1 on all other pages."""
-    for i in (0, 1, 2, 3, 5):
-        assert dialog._next_page_index(i) == i + 1
+    """_next_page moves forward one page from all other pages."""
+    pages = list(Page)
+    for page in (
+        Page.REQUIRED_INFO,
+        Page.ABOUT,
+        Page.TEMPLATE,
+        Page.HELPERS,
+        Page.CI,
+    ):
+        assert dialog._next_page(page) == pages[pages.index(page) + 1]
 
 
 def test_next_page_returns_none_at_last_page(dialog):
-    """_next_page_index returns None on the last page to trigger accept()."""
-    assert dialog._next_page_index(6) is None
+    """_next_page returns None on the last page to trigger accept()."""
+    assert dialog._next_page(Page.OUTPUT) is None
 
 
 def test_prev_page_skips_ci_when_unchecked(dialog):
-    """_prev_page_index skips back over page_ci (5)
+    """_prev_page skips back over the CI page
     when neither CI option is selected."""
     dialog.qgis_plugin_ci_cb.setChecked(False)
     dialog.gitlab_ci_cb.setChecked(False)
-    assert dialog._prev_page_index(6) == 4
+    assert dialog._prev_page(Page.OUTPUT) == Page.PUBLICATION
 
 
 def test_prev_page_includes_ci_when_checked(dialog):
-    """_prev_page_index goes to page_ci (5) when GitHub CI is selected."""
+    """_prev_page goes to the CI page when GitHub CI is selected."""
     dialog.qgis_plugin_ci_cb.setChecked(True)
-    assert dialog._prev_page_index(6) == 5
+    assert dialog._prev_page(Page.OUTPUT) == Page.CI
 
 
 def test_prev_page_includes_ci_when_gitlab_checked(dialog):
-    """_prev_page_index goes to page_ci (5) when GitLab CI is selected."""
+    """_prev_page goes to the CI page when GitLab CI is selected."""
     dialog.gitlab_ci_cb.setChecked(True)
-    assert dialog._prev_page_index(6) == 5
+    assert dialog._prev_page(Page.OUTPUT) == Page.CI
+
+
+@pytest.mark.parametrize(
+    ("ci_checked", "expected"),
+    [
+        (False, [p for p in Page if p != Page.CI]),
+        (True, list(Page)),
+    ],
+)
+def test_next_and_prev_buttons_walk_the_wizard(dialog, ci_checked, expected):
+    """Next visits each page in order, then accepts; Prev retraces the steps."""
+    dialog.qgis_plugin_ci_cb.setChecked(ci_checked)
+    always_valid = lambda self: True  # noqa: E731
+    with (
+        patch.object(PluginBuilderDialog, "validate_entries", always_valid),
+        patch.object(PluginBuilderDialog, "validate_about", always_valid),
+        patch.object(PluginBuilderDialog, "validate_publication", always_valid),
+        patch.object(PluginBuilderDialog, "validate_ci_page", always_valid),
+        patch.object(PluginBuilderDialog, "validate_output_directory", always_valid),
+        patch.object(PluginBuilderDialog, "accept") as accept,
+    ):
+        visited = [dialog._current_page()]
+        for _ in expected[1:]:
+            dialog.next_button.click()
+            visited.append(dialog._current_page())
+        assert visited == expected
+        assert dialog.next_button.text() == "Generate"
+        dialog.next_button.click()
+        accept.assert_called_once()
+
+        for page in reversed(expected[:-1]):
+            dialog.prev_button.click()
+            assert dialog._current_page() == page
+        assert dialog.next_button.text() == "Next>"
+        assert not dialog.prev_button.isEnabled()
 
 
 def test_prev_page_sequential_elsewhere(dialog):
-    """_prev_page_index decrements by 1 on all other pages."""
-    for i in (1, 2, 3, 4, 5):
-        assert dialog._prev_page_index(i) == i - 1
+    """_prev_page moves back one page from all other pages."""
+    pages = list(Page)
+    for page in (
+        Page.ABOUT,
+        Page.TEMPLATE,
+        Page.HELPERS,
+        Page.PUBLICATION,
+        Page.CI,
+    ):
+        assert dialog._prev_page(page) == pages[pages.index(page) - 1]
 
 
 # ---------------------------------------------------------------------------

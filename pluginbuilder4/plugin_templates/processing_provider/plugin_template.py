@@ -51,8 +51,10 @@ class ProcessingProviderPluginTemplate(PluginTemplate):
         return {
             # Makefile
             "TemplateQGISDir": str(deployment_dir),
-            "TemplatePyFiles": "%s_algorithm.py %s_provider.py"
-            % (specification.module_name, specification.module_name),
+            "TemplatePyFiles": (
+                f"{specification.module_name}_algorithm.py "
+                f"{specification.module_name}_provider.py"
+            ),
             "TemplateExtraFiles": "icon.png",
             # Metadata
             "TemplateHasProcessingProvider": True,
@@ -76,8 +78,8 @@ class ProcessingProviderPluginTemplate(PluginTemplate):
 
     def template_files(self, specification: "PluginSpecification") -> dict[str, str]:
         files = {
-            "module_name_algorithm.tmpl": "%s_algorithm.py" % specification.module_name,
-            "module_name_provider.tmpl": "%s_provider.py" % specification.module_name,
+            "module_name_algorithm.tmpl": f"{specification.module_name}_algorithm.py",
+            "module_name_provider.tmpl": f"{specification.module_name}_provider.py",
         }
         if specification.gen_tests:
             files[str(Path("test") / "test_plugin_lifecycle.templ")] = str(

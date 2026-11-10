@@ -1,4 +1,3 @@
-# coding=utf-8
 """Make plugin_builder importable as part of a package during pytest runs.
 
 plugin_builder.py and its siblings use relative imports (from .foo import Bar)

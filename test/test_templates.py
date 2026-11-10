@@ -1,4 +1,3 @@
-# coding=utf-8
 """Tests for the three plugin template classes and the base PluginTemplate."""
 
 from pathlib import Path

@@ -1,4 +1,3 @@
-# coding=utf-8
 """
 /***************************************************************************
     PluginSpec
@@ -89,7 +88,7 @@ class PluginSpecification:
         # Add the date stuff to the template map
         now = datetime.date.today()
         self.build_year = now.year
-        self.build_date = "%i-%02i-%02i" % (now.year, now.month, now.day)
+        self.build_date = now.isoformat()
         # Git will replace this with the sha - I do it a funny way below so
         # that this line below does not itself get substituted by git!
         self.vcs_format = "$Format:" + "%H$"

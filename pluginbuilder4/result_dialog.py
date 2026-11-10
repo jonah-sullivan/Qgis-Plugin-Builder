@@ -1,4 +1,3 @@
-# coding=utf-8
 """
 /***************************************************************************
     ResultDialog
@@ -40,7 +39,7 @@ class ResultDialog(QtWidgets.QDialog, FORM_CLASS):
     web_view: QTextBrowser
 
     def __init__(self, parent: QWidget | None = None) -> None:
-        super(ResultDialog, self).__init__(parent)
+        super().__init__(parent)
         # Set up the user interface from Designer.
         self.setupUi(self)
 
