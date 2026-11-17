@@ -1,0 +1,5 @@
+blank_issues_enabled: true
+contact_links:
+  - name: Report a security vulnerability
+    url: https://github.com/jonah-sullivan/Qgis-Plugin-Builder/security/advisories/new
+    about: Please report security issues privately rather than in a public issue.

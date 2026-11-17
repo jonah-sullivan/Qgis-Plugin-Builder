@@ -1,0 +1,41 @@
+name: Bug report
+description: Something isn't working in Plugin Builder or a plugin it generated
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to report this! Fill in whatever you can.
+        Nothing here is required, and a rough report is better than none.
+
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened?
+      description: What did you do, what did you expect, and what happened instead? Paste any error messages or Python tracebacks here.
+
+  - type: dropdown
+    id: plugin
+    attributes:
+      label: Plugin Builder version
+      options:
+        - Plugin Builder 4 (QGIS 4)
+        - Plugin Builder 3 (QGIS 3)
+        - Not sure
+
+  - type: dropdown
+    id: template
+    attributes:
+      label: Which template did you use?
+      options:
+        - Tool button with dialog
+        - Tool button with dock widget
+        - Processing Provider
+        - Not relevant / not sure
+
+  - type: input
+    id: versions
+    attributes:
+      label: Versions and OS
+      description: Plugin Builder version (Plugins → Manage and Install Plugins), QGIS version (Help → About), and operating system.
+      placeholder: e.g. Plugin Builder 3.5.0, QGIS 4.0.1, Windows 11
