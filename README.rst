@@ -29,17 +29,13 @@ QGIS Plugin Builder
    :target: https://plugins.qgis.org/plugins/pluginbuilder4/
    :alt: QGIS Plugin Repository
 
-.. image:: https://img.shields.io/badge/code%20style-black-000000.svg
-   :target: https://github.com/psf/black
-   :alt: Code style: black
+.. image:: https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json
+   :target: https://github.com/astral-sh/ruff
+   :alt: Ruff
 
-.. image:: https://img.shields.io/badge/imports-isort-ef8336.svg
-   :target: https://pycqa.github.io/isort/
-   :alt: Imports: isort
-
-.. image:: https://img.shields.io/badge/linting-flake8-yellowgreen.svg
-   :target: https://flake8.pycqa.org/
-   :alt: Linting: flake8
+.. image:: https://www.mypy-lang.org/static/mypy_badge.svg
+   :target: https://mypy-lang.org/
+   :alt: Checked with mypy
 
 .. image:: https://img.shields.io/badge/Python-3.x-blue?logo=python
    :target: https://www.python.org/
