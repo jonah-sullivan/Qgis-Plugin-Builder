@@ -182,6 +182,31 @@ class PluginBuilder:
         """Copy the i18n folder."""
         copy(self.shared_dir / "i18n", self.plugin_path / "i18n")
 
+    def _prepare_mypy(self, specification: PluginSpecification) -> None:
+        """Copy the mypy repo into the pre-commit hook
+        and mypy.ini and requirements-dev.txt"""
+
+        # Render mypy.ini at plugin root
+        self.populate_template(
+            specification, self.shared_dir, "mypy.ini.tmpl", "mypy.ini"
+        )
+        # add mypy to pre-commit hook
+        mypy_hook = (self.shared_dir / "pre-commit-mypy.yaml").read_text(
+            encoding="utf-8"
+        )
+        with (self.plugin_path / ".pre-commit-config.yaml").open(
+            "a", encoding="utf-8"
+        ) as f:
+            f.write(mypy_hook)
+
+        # add mypy to requirements-dev.txt if tests are generated
+        if specification.gen_tests:
+            mypy_pkg = "mypy>=2.4\n"
+            with (self.plugin_path / "requirements-dev.txt").open(
+                "a", encoding="utf-8"
+            ) as f:
+                f.write(mypy_pkg)
+
     def _write_qgis_plugin_ci_config(self, specification: PluginSpecification) -> None:
         """Write .qgis-plugin-ci, including whichever platform slugs are enabled."""
         lines = [
@@ -255,11 +280,6 @@ class PluginBuilder:
             self.template_dir,
             "module_name.tmpl",
             f"{specification.module_name}.py",
-        )
-
-        # Render mypy.ini at plugin root
-        self.populate_template(
-            specification, self.shared_dir, "mypy.ini.tmpl", "mypy.ini"
         )
 
     def _prepare_specific_files(self, specification: PluginSpecification) -> None:
@@ -607,6 +627,9 @@ class PluginBuilder:
             self.shared_dir / "pre-commit-config.yaml",
             self.plugin_path / ".pre-commit-config.yaml",
         )
+
+        if specification.gen_mypy:
+            self._prepare_mypy(specification)
 
         if specification.gen_qgis_plugin_ci:
             self._prepare_qgis_plugin_ci(specification)

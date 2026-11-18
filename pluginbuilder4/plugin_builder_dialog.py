@@ -57,7 +57,7 @@ FORM_CLASS, _ = uic.loadUiType(
 
 
 class Page(IntEnum):
-    """Wizard pages, by their index in the .ui file's stackedWidget."""
+    """Wizard pages, by their index in the .ui file's stacked_widget."""
 
     REQUIRED_INFO = 0
     ABOUT = 1
@@ -91,6 +91,7 @@ class PluginBuilderDialog(QDialog, FORM_CLASS):
     gitlab_ci_cb: QCheckBox
     gitlab_namespace: QLineEdit
     help_cb: QCheckBox
+    mypy_cb: QCheckBox
     homepage: QLineEdit
     i18n_cb: QCheckBox
     lbl_full_output_path: QLabel
@@ -107,7 +108,7 @@ class PluginBuilderDialog(QDialog, FORM_CLASS):
     qgis_plugin_ci_cb: QCheckBox
     repository: QLineEdit
     select_tags: QToolButton
-    stackedWidget: QStackedWidget  # noqa: N815 - name set in the .ui file
+    stacked_widget: QStackedWidget
     tabify_dockwidget: QCheckBox
     tags: QLineEdit
     template_cbox: QComboBox
@@ -131,7 +132,7 @@ class PluginBuilderDialog(QDialog, FORM_CLASS):
             self.template_cbox.addItem(templ.descr())
         self.update_prev_next_buttons()
         self.update_template()
-        self.stackedWidget.currentChanged.connect(self.update_prev_next_buttons)
+        self.stacked_widget.currentChanged.connect(self.update_prev_next_buttons)
         self.next_button.clicked.connect(self.next_page)
         self.prev_button.clicked.connect(self.prev_page)
         self.template_cbox.currentIndexChanged.connect(self.update_template)
@@ -144,7 +145,7 @@ class PluginBuilderDialog(QDialog, FORM_CLASS):
         self.prev_button.setEnabled(self._current_page() != Page.REQUIRED_INFO)
 
     def _current_page(self) -> Page:
-        return Page(self.stackedWidget.currentIndex())
+        return Page(self.stacked_widget.currentIndex())
 
     def _any_ci_checked(self) -> bool:
         return self.qgis_plugin_ci_cb.isChecked() or self.gitlab_ci_cb.isChecked()
@@ -187,7 +188,7 @@ class PluginBuilderDialog(QDialog, FORM_CLASS):
             return
         if next_page == Page.CI:
             self._populate_ci_fields()
-        self.stackedWidget.setCurrentIndex(next_page)
+        self.stacked_widget.setCurrentIndex(next_page)
         if next_page == Page.OUTPUT:
             self.next_button.setText("Generate")
             if self.output_directory.text() != "":
@@ -195,7 +196,7 @@ class PluginBuilderDialog(QDialog, FORM_CLASS):
 
     def prev_page(self) -> None:
         prev_page = self._prev_page(self._current_page())
-        self.stackedWidget.setCurrentIndex(prev_page)
+        self.stacked_widget.setCurrentIndex(prev_page)
         if prev_page != Page.OUTPUT:
             self.next_button.setText("Next>")
 

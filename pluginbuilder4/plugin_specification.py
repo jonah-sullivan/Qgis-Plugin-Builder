@@ -70,6 +70,7 @@ class PluginSpecification:
         self.gen_i18n: bool = dialog.i18n_cb.isChecked()
         self.gen_help: bool = dialog.help_cb.isChecked()
         self.gen_tests: bool = dialog.tests_cb.isChecked()
+        self.gen_mypy: bool = dialog.mypy_cb.isChecked()
         self.gen_makefile: bool = dialog.makefile_cb.isChecked()
         self.gen_pb_tool: bool = dialog.pb_tool_cb.isChecked()
         self.gen_qgis_plugin_ci: bool = dialog.qgis_plugin_ci_cb.isChecked()

@@ -30,6 +30,19 @@ def test_specification_basic_fields(dialog, fill_dialog):
     assert spec.gen_qgis_plugin_ci is False
 
 
+def test_specification_mypy_on_by_default(dialog, fill_dialog):
+    """Type checking is ticked by default, so existing output is unchanged."""
+    fill_dialog(dialog)
+    assert PluginSpecification(dialog).gen_mypy is True
+
+
+def test_specification_mypy_off(dialog, fill_dialog):
+    """Unticking mypy_cb turns gen_mypy off."""
+    fill_dialog(dialog)
+    dialog.mypy_cb.setChecked(False)
+    assert PluginSpecification(dialog).gen_mypy is False
+
+
 def test_specification_qgis_plugin_ci_off(dialog, fill_dialog):
     """When qgis_plugin_ci_cb is unchecked, CI fields are empty strings."""
     fill_dialog(dialog)
@@ -60,8 +73,8 @@ def test_specification_qgis_plugin_ci_on(dialog, fill_dialog):
 
 
 def test_page_enum_matches_ui(dialog):
-    """Page has one member per stackedWidget page in the .ui file."""
-    assert dialog.stackedWidget.count() == len(Page)
+    """Page has one member per stacked_widget page in the .ui file."""
+    assert dialog.stacked_widget.count() == len(Page)
 
 
 def test_next_page_skips_ci_when_unchecked(dialog):

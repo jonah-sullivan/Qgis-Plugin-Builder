@@ -42,6 +42,7 @@ class FakePluginSpecification:
         self.gen_i18n = True
         self.gen_help = True
         self.gen_tests = True
+        self.gen_mypy = True
         self.gen_makefile = True
         self.gen_pb_tool = True
         self.gen_qgis_plugin_ci = False
@@ -387,9 +388,12 @@ _TEMPLATE_IDS = ["dialog", "dockwidget", "processing"]
 @pytest.fixture
 def generate_plugin(qgis_app, qgis_iface, fill_dialog, run_env, tmp_path, monkeypatch):
     """Return a function that runs the wizard for a template and returns the
-    generated plugin folder."""
+    generated plugin folder.
 
-    def generate(template_index):
+    Keyword arguments name dialog checkboxes to set, e.g. mypy_cb=False.
+    """
+
+    def generate(template_index, **checkboxes):
         def fake_exec(dlg):
             # Stand in for the user clicking through the wizard and pressing
             # Generate
@@ -397,6 +401,8 @@ def generate_plugin(qgis_app, qgis_iface, fill_dialog, run_env, tmp_path, monkey
             fill_dialog(dlg)
             for widget, text in _SUBFORMS[template_index].items():
                 getattr(dlg.template_subframe, widget).setText(text)
+            for checkbox, checked in checkboxes.items():
+                getattr(dlg, checkbox).setChecked(checked)
             dlg.output_directory.setText(str(tmp_path))
             return 1
 
@@ -437,6 +443,52 @@ def test_run_generates_plugin(generate_plugin, run_env, template_index, extra_fi
         assert leftover is None, f"{leftover.group()} not replaced in {path.name}"
         if path.suffix == ".py":
             compile(text, str(path), "exec")  # raises SyntaxError on bad output
+
+
+def _read_lines(path):
+    return path.read_text(encoding="utf-8").splitlines()
+
+
+def test_run_mypy_on_by_default(generate_plugin):
+    """With type checking ticked, mypy is set up in all three places."""
+    plugin_dir = generate_plugin(0)
+
+    assert (plugin_dir / "mypy.ini").exists()
+
+    precommit = (plugin_dir / ".pre-commit-config.yaml").read_text(encoding="utf-8")
+    assert "id: ruff" in precommit
+    assert "id: mypy" in precommit
+    # The hook is appended to the single repos list, not a second document
+    assert precommit.count("repos:") == 1
+    # Appending to a misspelt path would leave a stray file pre-commit ignores
+    assert not (plugin_dir / "pre-commit-config.yaml").exists()
+
+    assert "mypy>=2.4" in _read_lines(plugin_dir / "requirements-dev.txt")
+
+
+def test_run_without_mypy(generate_plugin):
+    """With type checking unticked, no mypy config, hook or requirement."""
+    plugin_dir = generate_plugin(0, mypy_cb=False)
+
+    assert not (plugin_dir / "mypy.ini").exists()
+
+    precommit = (plugin_dir / ".pre-commit-config.yaml").read_text(encoding="utf-8")
+    assert "id: ruff" in precommit
+    assert "mypy" not in precommit
+
+    requirements = _read_lines(plugin_dir / "requirements-dev.txt")
+    assert not any(line.startswith("mypy") for line in requirements)
+
+
+def test_run_mypy_without_tests(generate_plugin):
+    """mypy without unit tests doesn't create a requirements-dev.txt."""
+    plugin_dir = generate_plugin(0, tests_cb=False)
+
+    assert (plugin_dir / "mypy.ini").exists()
+    assert "id: mypy" in (plugin_dir / ".pre-commit-config.yaml").read_text(
+        encoding="utf-8"
+    )
+    assert not (plugin_dir / "requirements-dev.txt").exists()
 
 
 def test_run_processing_algorithm_is_usable(generate_plugin):

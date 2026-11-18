@@ -163,7 +163,7 @@ app.processEvents()
 next_label = dialog.next_button.text()
 
 for page, filename in PAGES:
-    dialog.stackedWidget.setCurrentIndex(page)
+    dialog.stacked_widget.setCurrentIndex(page)
     if page == Page.OUTPUT:
         dialog.next_button.setText("Generate")
         dialog.show_output_info(dialog._full_output_path())
