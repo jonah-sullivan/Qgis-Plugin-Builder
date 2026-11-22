@@ -92,11 +92,14 @@ class PluginSpecification:
         self.build_date = now.isoformat()
         # This builds git's export-subst placeholder for the commit hash: in
         # a file marked export-subst in .gitattributes, git archive replaces
-        # it with the commit's SHA1. Splitting it in two does NOT stop git:
-        # its pattern still matches across the quotes. So this file must not
-        # be marked export-subst, or generated plugins would get Plugin
-        # Builder's own commit hash instead of the placeholder.
-        self.vcs_format = "$Format:" + "%H$"
+        # it with the commit's SHA1. This file is marked export-subst for its
+        # header, so the placeholder is split right after the dollar sign.
+        # Git looks for the dollar sign and "Format:" together (even across
+        # quotes and lines), so splitting them stops it substituting this
+        # line, which would give generated plugins Plugin Builder's own
+        # commit hash. For the same reason, don't write the placeholder out
+        # in full anywhere in this file, comments included.
+        self.vcs_format = "$" + "Format:%H$"
         # Values for the $Placeholders in the template files: the key
         # "TemplateClass" fills in $TemplateClass, and so on. The chosen
         # template adds its own values later (PluginTemplate.template_map()).
