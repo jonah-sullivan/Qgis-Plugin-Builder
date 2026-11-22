@@ -61,7 +61,14 @@ class ${TemplateClass}Plugin:
             QCoreApplication.installTranslator(self.translator)
 
     def tr(self, message: str) -> str:
-        return QCoreApplication.translate("${TemplateClass}", message)
+        """Get the translation for a string using Qt translation API.
+
+        Wrap every user-visible string in self.tr(...). pylupdate6 scans the
+        code for these calls to build the .ts translation files, filing each
+        string under this class's name, so the context below must match the
+        class name exactly or the translations are never found.
+        """
+        return QCoreApplication.translate("${TemplateClass}Plugin", message)
 
     def initProcessing(self) -> None:
         """Register this plugin's Processing provider with QGIS.

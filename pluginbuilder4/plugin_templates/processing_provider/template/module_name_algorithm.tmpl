@@ -179,7 +179,14 @@ class ${TemplateClass}Algorithm(QgsProcessingAlgorithm):
         return '$TemplateAlgoGroup'
 
     def tr(self, string: str) -> str:
-        return QCoreApplication.translate('Processing', string)
+        """Get the translation for a string using Qt translation API.
+
+        Wrap every user-visible string in self.tr(...). pylupdate6 scans the
+        code for these calls to build the .ts translation files, filing each
+        string under this class's name, so the context below must match the
+        class name exactly or the translations are never found.
+        """
+        return QCoreApplication.translate('${TemplateClass}Algorithm', string)
 
     def createInstance(self) -> "${TemplateClass}Algorithm":
         """Return a new, independent copy of this algorithm.
