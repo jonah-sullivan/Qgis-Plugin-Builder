@@ -26,6 +26,12 @@ sys.modules[_PKG] = _pkg
 
 
 def _load_module(bare_name, filepath=None):
+    """Load pluginbuilder4/<bare_name>.py as _pluginbuilder.<bare_name>.
+
+    The module is registered under both names, so tests can import it by
+    its bare name while its own relative imports still resolve. Loading a
+    module twice returns the first copy.
+    """
     full = f"{_PKG}.{bare_name}"
     if full in sys.modules:
         return sys.modules[full]
@@ -40,6 +46,10 @@ def _load_module(bare_name, filepath=None):
 
 
 def _load_subpackage(bare_name, directory):
+    """Load a sub-folder package, such as plugin_templates, the same way.
+
+    Runs its __init__.py and lets its submodules be imported normally.
+    """
     full = f"{_PKG}.{bare_name}"
     pkg = types.ModuleType(full)
     pkg.__path__ = [str(directory)]

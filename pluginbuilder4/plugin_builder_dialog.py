@@ -120,7 +120,11 @@ class PluginBuilderDialog(QDialog, FORM_CLASS):
     def __init__(
         self, parent: QWidget | None = None, stored_output_path: str = ""
     ) -> None:
-        """Constructor."""
+        """Constructor.
+
+        :param stored_output_path: The output directory used last time,
+            pre-filled on the final page.
+        """
         super().__init__(parent)
         # Set up the user interface from Designer.
         self.setupUi(self)
@@ -142,12 +146,15 @@ class PluginBuilderDialog(QDialog, FORM_CLASS):
         self.last_path = stored_output_path
 
     def update_prev_next_buttons(self) -> None:
+        """Disable the Previous button on the first page."""
         self.prev_button.setEnabled(self._current_page() != Page.REQUIRED_INFO)
 
     def _current_page(self) -> Page:
+        """Return the wizard page currently shown."""
         return Page(self.stacked_widget.currentIndex())
 
     def _any_ci_checked(self) -> bool:
+        """Return True if GitHub or GitLab release automation is ticked."""
         return self.qgis_plugin_ci_cb.isChecked() or self.gitlab_ci_cb.isChecked()
 
     def _next_page(self, page: Page) -> Page | None:
@@ -178,6 +185,11 @@ class PluginBuilderDialog(QDialog, FORM_CLASS):
         }.get(page)
 
     def next_page(self) -> None:
+        """Handle the Next button: validate this page, then move on.
+
+        Stays on the page if its check fails. On the last page, the button
+        reads Generate and closes the wizard with Accepted instead.
+        """
         page = self._current_page()
         validate = self._validator(page)
         if validate is not None and not validate():
@@ -195,12 +207,17 @@ class PluginBuilderDialog(QDialog, FORM_CLASS):
                 self.show_output_info(self._full_output_path())
 
     def prev_page(self) -> None:
+        """Handle the Previous button. Going back needs no validation."""
         prev_page = self._prev_page(self._current_page())
         self.stacked_widget.setCurrentIndex(prev_page)
         if prev_page != Page.OUTPUT:
             self.next_button.setText("Next>")
 
     def validate_ci_page(self) -> bool:
+        """Check the fields that the ticked CI options need are filled in.
+
+        :returns: True if valid, otherwise False after showing a warning.
+        """
         if (
             self.qgis_plugin_ci_cb.isChecked()
             and not self.github_org_slug.text().strip()
@@ -228,6 +245,13 @@ class PluginBuilderDialog(QDialog, FORM_CLASS):
         return True
 
     def _populate_ci_fields(self) -> None:
+        """Pre-fill the CI page from the repository URL.
+
+        For example, https://gitlab.example.com/group/sub/repo.git gives the
+        GitLab namespace "group/sub" and the project slug "repo". Only fills
+        fields that are still empty, and only for github.com or hosts whose
+        name starts with "gitlab.".
+        """
         url = self.repository.text().strip()
         cleaned = url.replace("https://", "").replace("http://", "").rstrip("/")
         if cleaned.endswith(".git"):
@@ -249,9 +273,18 @@ class PluginBuilderDialog(QDialog, FORM_CLASS):
                     self.project_slug.setText(slug)
 
     def template(self) -> PluginTemplate:
+        """Return the plugin template chosen in the drop-down."""
         return self.templates[self.template_cbox.currentIndex()]
 
     def update_template(self) -> None:
+        """Show the chosen template's own options on the template page.
+
+        Each template has a wizard_form_base.ui with extra fields, such as
+        the menu text. Whenever the choice changes, the old sub-form is
+        removed and the new one is loaded into self.template_subframe. Its
+        widgets only exist at runtime, which is why template_subframe is
+        typed Any. The "tabify" checkbox is only shown for dock widgets.
+        """
         if self.template_subframe is not None:
             self.template_subframe.setParent(None)
         subframe = QFrame(self.template_frame)
@@ -294,10 +327,12 @@ class PluginBuilderDialog(QDialog, FORM_CLASS):
             message = "Some required fields are missing. Please complete the form.\n"
 
         def is_valid_version(v: str) -> bool:
+            """Return True for a dotted number with 2+ parts, like "4.0"."""
             parts = str(v).strip().split(".")
             return len(parts) >= 2 and all(p.isdigit() for p in parts)
 
         def version_tuple(v: str) -> tuple[int, ...]:
+            """Turn "4.10" into (4, 10), so that 4.10 compares above 4.9."""
             return tuple(int(p) for p in str(v).strip().split("."))
 
         min_ver = self.qgis_minimum_version.text()
@@ -352,6 +387,10 @@ class PluginBuilderDialog(QDialog, FORM_CLASS):
         return True
 
     def validate_about(self) -> bool:
+        """Check the About text is filled in.
+
+        :returns: True if valid, otherwise False after showing a warning.
+        """
         if len(self.about.toPlainText()) != 0:
             return True
         QMessageBox.warning(
@@ -365,6 +404,12 @@ class PluginBuilderDialog(QDialog, FORM_CLASS):
         return False
 
     def validate_publication(self) -> bool:
+        """Check the bug tracker and repository are full http(s) URLs.
+
+        Both are required by plugins.qgis.org.
+
+        :returns: True if valid, otherwise False after showing a warning.
+        """
         url_tracker = self.tracker.text()
         url_repo = self.repository.text()
         if not url_tracker or not url_repo:
@@ -390,6 +435,8 @@ class PluginBuilderDialog(QDialog, FORM_CLASS):
         return True
 
     def select_directory(self) -> None:
+        """Let the user browse for the output directory, then show where
+        the plugin folder will be created."""
         plugin_path = QFileDialog.getExistingDirectory(
             self, "Select the Directory for your Plugin", self.last_path
         )
@@ -403,6 +450,11 @@ class PluginBuilderDialog(QDialog, FORM_CLASS):
         return Path(self.output_directory.text()) / self.module_name.text().lower()
 
     def show_output_info(self, full_output: Path) -> None:
+        """Show the full plugin folder path on the last page.
+
+        Shown in bold red with a warning if the folder already exists, since
+        generation would then be refused.
+        """
         if QFileInfo(str(full_output)).exists():
             self.lbl_full_output_path.setText(
                 str(full_output) + "\nThis folder already exists. Choose another "
@@ -416,6 +468,13 @@ class PluginBuilderDialog(QDialog, FORM_CLASS):
             self.lbl_full_output_path.setStyleSheet("QLabel { color : black; }")
 
     def validate_output_directory(self) -> bool:
+        """Check the plugin can be generated in the chosen directory.
+
+        The directory must exist and be writable, and must not already
+        contain a folder with the plugin's module name.
+
+        :returns: True if valid, otherwise False after showing a warning.
+        """
         output_dir = self.output_directory.text()
         if not output_dir:
             msg = "Please select an output directory."

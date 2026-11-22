@@ -90,9 +90,15 @@ class PluginSpecification:
         now = datetime.date.today()
         self.build_year = now.year
         self.build_date = now.isoformat()
-        # Git will replace this with the sha - I do it a funny way below so
-        # that this line below does not itself get substituted by git!
+        # This builds git's export-subst placeholder for the commit hash: in
+        # a file marked export-subst in .gitattributes, git archive replaces
+        # it with the commit's SHA1. It is built from two pieces so that, if
+        # git substitutes this file, generated plugins still get the
+        # placeholder rather than Plugin Builder's own commit hash.
         self.vcs_format = "$Format:" + "%H$"
+        # Values for the $Placeholders in the template files: the key
+        # "TemplateClass" fills in $TemplateClass, and so on. The chosen
+        # template adds its own values later (PluginTemplate.template_map()).
         self.template_map: TemplateMap = {
             "TemplateClass": self.class_name,
             "TemplateTitle": self.title,

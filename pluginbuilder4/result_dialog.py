@@ -49,4 +49,9 @@ class ResultDialog(QtWidgets.QDialog, FORM_CLASS):
         self.web_view.anchorClicked.connect(self._open_url)
 
     def _open_url(self, url: QUrl) -> None:
+        """Open a clicked link in the operating system's default app.
+
+        For example, a file:// link to the new plugin folder opens it in the
+        file manager.
+        """
         QDesktopServices.openUrl(url)

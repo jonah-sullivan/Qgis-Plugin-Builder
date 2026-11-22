@@ -60,6 +60,14 @@ def should_skip(src: str) -> bool:
 
 
 def translate(text: str, target: str, retries: int = 3) -> str:
+    """Machine-translate English text into the target language.
+
+    Uses Google Translate's free, unofficial web endpoint, which needs no API
+    key but can rate-limit or change without notice.
+
+    :param target: A Google Translate language code, such as "fr" or "pt-BR".
+    :param retries: Attempts before giving up. The last failure is raised.
+    """
     params = urllib.parse.urlencode(
         {"client": "gtx", "sl": "en", "tl": target, "dt": "t", "q": text}
     )
@@ -81,6 +89,12 @@ def translate(text: str, target: str, retries: int = 3) -> str:
 
 
 def process_file(ts_path: Path, target: str) -> None:
+    """Fill in the untranslated messages of a Qt .ts file, in place.
+
+    Messages that are already translated are left alone, and strings that
+    must stay verbatim (see should_skip()) are copied unchanged. A string
+    that fails to translate is reported and left untranslated.
+    """
     print(f"  {ts_path.name} -> {target}", flush=True)
     tree = ET.parse(ts_path)
     root = tree.getroot()
@@ -129,6 +143,7 @@ def process_file(ts_path: Path, target: str) -> None:
 
 
 def main() -> None:
+    """Translate every <suffix>.ts file in this folder listed in LANG_MAP."""
     i18n_dir = Path(__file__).parent
 
     for suffix, target in LANG_MAP.items():

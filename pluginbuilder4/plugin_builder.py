@@ -59,6 +59,10 @@ class PluginBuilder:
     """A QGIS plugin that allows you to build QGIS plugins."""
 
     def tr(self, message: str) -> str:
+        """Get the translation for a string using Qt translation API.
+
+        We implement this ourselves since we do not inherit QObject.
+        """
         return QCoreApplication.translate("PluginBuilder", message)
 
     def __init__(self, iface: QgisInterface) -> None:
@@ -82,6 +86,9 @@ class PluginBuilder:
         locale = QLocale(QgsApplication.locale())
         locale_path = self.plugin_builder_path / "i18n" / f"{locale.name()[:2]}.qm"
         if locale_path.exists():
+            # Kept on self: installTranslator() doesn't keep the translator
+            # alive, so a local variable would be garbage collected and the
+            # translations would silently disappear
             self.translator = QTranslator()
             self.translator.load(str(locale_path))
             QCoreApplication.installTranslator(self.translator)
@@ -125,19 +132,32 @@ class PluginBuilder:
             self.iface.removeToolBarIcon(self.action)
 
     def _require_dialog(self) -> PluginBuilderDialog:
-        """Return the builder dialog, which run() creates."""
+        """Return the builder dialog, which run() creates.
+
+        Narrows self.dialog from "PluginBuilderDialog | None" for mypy. It
+        raises rather than using assert, because Bandit's B101 check flags
+        assert and blocks uploads to plugins.qgis.org.
+        """
         if self.dialog is None:
             raise RuntimeError("Plugin Builder dialog has not been created")
         return self.dialog
 
     def _require_template(self) -> PluginTemplate:
-        """Return the selected plugin template, which run() sets."""
+        """Return the selected plugin template, which run() sets.
+
+        Narrows self.template for mypy, like _require_dialog().
+        """
         if self.template is None:
             raise RuntimeError("No plugin template has been selected")
         return self.template
 
     def _prepare_tests(self, specification: PluginSpecification) -> None:
-        """Populate and write test files."""
+        """Write the new plugin's test suite and test tooling.
+
+        Copies the shared test/ folder and .gitattributes, renders the
+        lifecycle test (for plugins with a toolbar button) and pyproject.toml,
+        and copies requirements-dev.txt.
+        """
         test_source = self.shared_dir / "test"
         test_destination = self.plugin_path / "test"
         copy(test_source, test_destination)
@@ -230,7 +250,12 @@ class PluginBuilder:
         config_path.write_text("\n".join(lines) + "\n", encoding="utf-8")
 
     def _prepare_qgis_plugin_ci(self, specification: PluginSpecification) -> None:
-        """Generate .qgis-plugin-ci config and GitHub Actions release workflow."""
+        """Generate .qgis-plugin-ci config and GitHub Actions release workflow.
+
+        qgis-plugin-ci is a tool that packages a plugin and uploads releases
+        to plugins.qgis.org; the workflow runs it when a GitHub release is
+        created.
+        """
         self._write_qgis_plugin_ci_config(specification)
         copy(
             self.shared_dir / "github_release.yml",
@@ -239,7 +264,11 @@ class PluginBuilder:
         copy(self.shared_dir / "gitattributes", self.plugin_path / ".gitattributes")
 
     def _prepare_gitlab_ci(self, specification: PluginSpecification) -> None:
-        """Generate .qgis-plugin-ci config and GitLab CI release pipeline."""
+        """Generate .qgis-plugin-ci config and GitLab CI release pipeline.
+
+        Like _prepare_qgis_plugin_ci(), but the pipeline runs qgis-plugin-ci
+        when a git tag is pushed.
+        """
         if not specification.gen_qgis_plugin_ci:
             # Only write the config if GitHub CI hasn't already written it
             self._write_qgis_plugin_ci_config(specification)
@@ -260,7 +289,11 @@ class PluginBuilder:
         copy(self.shared_dir / "help" / "Makefile", help_dir / "Makefile")
 
     def _prepare_code(self, specification: PluginSpecification) -> None:
-        """Prepare the code turning templates into python.
+        """Write the files every plugin type has.
+
+        Renders __init__.py and <module_name>.py from the chosen template,
+        copies LICENSE, and renders the Makefile and pb_tool.cfg if the user
+        asked for them.
 
         :param specification: Specification instance containing template
             replacement keys/values.
@@ -290,7 +323,10 @@ class PluginBuilder:
         )
 
     def _prepare_specific_files(self, specification: PluginSpecification) -> None:
-        """Prepare specific templates and files.
+        """Write the files specific to the chosen plugin type.
+
+        Renders the files listed by the template's template_files() and copies
+        those listed by its copy_files().
 
         :param specification: Specification instance containing template
             replacement keys/values.
@@ -335,7 +371,10 @@ class PluginBuilder:
         (self.plugin_path / "README.txt").write_text(popped, encoding="utf-8")
 
     def _prepare_metadata(self, specification: PluginSpecification) -> None:
-        """Prepare metadata file.
+        """Write metadata.txt.
+
+        The QGIS Plugin Manager and plugins.qgis.org read this file for the
+        plugin's name, version, author, supported QGIS versions and so on.
 
         :param specification: Specification instance containing template
             replacement keys/values.
@@ -414,6 +453,9 @@ class PluginBuilder:
         :param specification: Specification instance containing template
             replacement keys/values.
         :type specification: PluginSpecification
+
+        :returns: A tuple of the results HTML, which run() also shows in the
+            results dialog, and the plugin's module name.
         """
         template_module_name = str(specification.template_map["TemplateModuleName"])
         content = (self.shared_dir / "results.tmpl").read_text(encoding="utf-8")
@@ -508,7 +550,11 @@ class PluginBuilder:
         QSettings().setValue("PluginBuilder/last_path", value)
 
     def _select_tags(self) -> None:
-        """Select tags for the new plugin from the tags dialog"""
+        """Let the user pick tags from a list, and put them in the tags field.
+
+        The list comes from taglist.txt, unless the user has their own list
+        in ~/.plugin_tags.txt (one tag per line).
+        """
         tag_dialog = SelectTagsDialog()
         # if the user has their own taglist, use it
         user_tag_list = Path.home() / ".plugin_tags.txt"
@@ -534,7 +580,12 @@ class PluginBuilder:
             self._require_dialog().tags.setText(taglist)
 
     def run(self) -> None:
-        """Run method that performs all the real work"""
+        """Run the wizard and generate the plugin the user describes.
+
+        QGIS calls this when the user clicks Plugin Builder's menu item or
+        toolbar button. It shows the wizard, creates the plugin folder,
+        writes the files (_generate_plugin()), then shows the results.
+        """
         # create and show the dialog
         dialog = PluginBuilderDialog(stored_output_path=self._last_used_path())
         self.dialog = dialog

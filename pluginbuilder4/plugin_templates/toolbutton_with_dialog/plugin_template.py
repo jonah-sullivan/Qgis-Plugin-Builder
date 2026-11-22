@@ -32,6 +32,8 @@ if TYPE_CHECKING:
 
 
 class ToolbuttonWithDialogPluginTemplate(PluginTemplate):
+    """A plugin with a toolbar button and menu entry that open a dialog."""
+
     def descr(self) -> str:
         return "Tool button with dialog"
 
@@ -44,7 +46,10 @@ class ToolbuttonWithDialogPluginTemplate(PluginTemplate):
         # template_subframe is built from this template's wizard_form_base.ui
         menu_text: str = dialog.template_subframe.menu_text.text()
         menu: str = dialog.template_subframe.menu_location.currentText()
-        # Munge the plugin menu function based on user choice
+        # QGIS has a separate add/remove method and getter for each menu,
+        # named after it: addPluginToVectorMenu, removePluginVectorMenu and
+        # vectorMenu for the Vector menu, and so on. The Plugins menu breaks
+        # the pattern, so it is handled separately.
         if menu == "Plugins":
             add_method = "addPluginToMenu"
             remove_method = "removePluginMenu"

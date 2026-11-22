@@ -37,6 +37,13 @@ TARGETS = [
 
 
 def build(target):
+    """Build the docs with Sphinx for one target, such as "html".
+
+    Output goes to build/<target>. As with the Makefile, extra sphinx-build
+    options can be passed in the SPHINXOPTS environment variable.
+
+    :returns: sphinx-build's exit code, 0 on success.
+    """
     out_dir = Path(BUILDDIR) / target
     doctrees_dir = Path(BUILDDIR) / "doctrees"
     argv = ["-b", target, "-d", str(doctrees_dir)]
@@ -51,6 +58,11 @@ def build(target):
 
 
 def main():
+    """Build the target named on the command line.
+
+    With no target, prints usage and exits successfully; with an unknown
+    target, prints usage and exits with an error.
+    """
     if len(sys.argv) != 2 or sys.argv[1] not in TARGETS:
         print("Usage: python make.py <target>")
         print("Targets:", ", ".join(TARGETS))

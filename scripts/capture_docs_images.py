@@ -48,6 +48,7 @@ sys.modules[_PKG] = _pkg
 
 
 def _load_module(bare_name, filepath=None):
+    """Load a plugin module; see the same function in conftest.py."""
     full = f"{_PKG}.{bare_name}"
     if full in sys.modules:
         return sys.modules[full]
@@ -62,6 +63,7 @@ def _load_module(bare_name, filepath=None):
 
 
 def _load_subpackage(bare_name, directory):
+    """Load a plugin sub-package; see the same function in conftest.py."""
     full = f"{_PKG}.{bare_name}"
     pkg = types.ModuleType(full)
     pkg.__path__ = [str(directory)]

@@ -32,6 +32,8 @@ if TYPE_CHECKING:
 
 
 class ProcessingProviderPluginTemplate(PluginTemplate):
+    """A plugin that adds algorithms to the Processing Toolbox."""
+
     def descr(self) -> str:
         return "Processing Provider"
 
