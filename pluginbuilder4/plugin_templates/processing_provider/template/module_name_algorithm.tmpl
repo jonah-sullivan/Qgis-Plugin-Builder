@@ -182,11 +182,20 @@ class ${TemplateClass}Algorithm(QgsProcessingAlgorithm):
         return QCoreApplication.translate('Processing', string)
 
     def createInstance(self) -> "${TemplateClass}Algorithm":
+        """Return a new, independent copy of this algorithm.
+
+        QGIS calls this each time the algorithm is run, including batch runs
+        and runs in background threads, so it must return a fresh object,
+        never self. Don't rely on values stored on the algorithm carrying
+        over from one run to the next.
+        """
         return ${TemplateClass}Algorithm()
 
     def helpUrl(self) -> str:
+        """Return the page that the Help button in the algorithm's dialog opens."""
         path = Path(__file__).parent / "help" / "index.html"
         return QUrl.fromLocalFile(str(path)).toString()
 
     def icon(self) -> QIcon:
+        """Return the icon shown next to this algorithm in the Processing Toolbox."""
         return QIcon(str(Path(__file__).parent / "icon.png"))

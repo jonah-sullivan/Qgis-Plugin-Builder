@@ -67,6 +67,10 @@ class ${TemplateClass}:
         """Get the translation for a string using Qt translation API.
         We implement this ourselves since we do not inherit QObject.
 
+        Wrap every user-visible string in self.tr(...). pylupdate6 scans the
+        code for these calls to build the .ts translation files, filing each
+        string under this class's name, the same context used below.
+
         :param message: String for translation.
         :returns: Translated version of message.
         """
@@ -139,7 +143,12 @@ class ${TemplateClass}:
         return action
 
     def initGui(self) -> None:
-        """Create the menu entries and toolbar icons inside the QGIS GUI."""
+        """Create the menu entries and toolbar icons inside the QGIS GUI.
+
+        QGIS calls this when the plugin is loaded: at QGIS startup, or when
+        the plugin is enabled in the Plugin Manager. Anything added here must
+        be removed again in unload().
+        """
 
         icon_path = str(Path(__file__).parent / 'icon.png')
         self.add_action(
@@ -149,7 +158,12 @@ class ${TemplateClass}:
             parent=self.iface.mainWindow())
 
     def unload(self) -> None:
-        """Removes the plugin menu item and icon from QGIS GUI."""
+        """Remove the plugin's menu items and toolbar icons from the QGIS GUI.
+
+        QGIS calls this when the plugin is disabled, uninstalled or reloaded.
+        It must undo everything initGui() did: anything left behind stays in
+        QGIS, and each reload would add another copy.
+        """
         for action in self.actions:
             self.iface.${TemplateMenuRemoveMethod}(
                 self.tr('&${TemplateTitle}'),
@@ -157,18 +171,22 @@ class ${TemplateClass}:
             self.iface.removeToolBarIcon(action)
 
     def run(self) -> None:
-        """Run method that performs all the real work"""
+        """Show the plugin's dialog and act on the result.
 
-        # Create the dialog with elements (after translation)
-        #     and keep the reference
-        # Only create GUI ONCE in callback,
-        #    so that it will only load when the plugin is started
+        QGIS calls this when the user clicks the plugin's menu item or
+        toolbar button (connected in initGui()). This is where your plugin's
+        own work goes.
+        """
+
+        # Create the dialog on first use only, and reuse it after that, so it
+        # isn't built until the user actually opens the plugin
         if self.dlg is None:
             self.dlg = ${TemplateClass}Dialog()
 
         # show the dialog
         self.dlg.show()
-        # Run the dialog event loop
+        # exec() blocks until the user closes the dialog, and returns a truthy
+        # value if they clicked OK
         result = self.dlg.exec()
         # See if OK was pressed
         if result:

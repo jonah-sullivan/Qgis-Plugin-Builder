@@ -75,6 +75,10 @@ class ${TemplateClass}:
         """Get the translation for a string using Qt translation API.
         We implement this ourselves since we do not inherit QObject.
 
+        Wrap every user-visible string in self.tr(...). pylupdate6 scans the
+        code for these calls to build the .ts translation files, filing each
+        string under this class's name, the same context used below.
+
         :param message: String for translation.
         :returns: Translated version of message.
         """
@@ -146,7 +150,12 @@ class ${TemplateClass}:
         return action
 
     def initGui(self) -> None:
-        """Create the menu entries and toolbar icons inside the QGIS GUI."""
+        """Create the menu entries and toolbar icons inside the QGIS GUI.
+
+        QGIS calls this when the plugin is loaded: at QGIS startup, or when
+        the plugin is enabled in the Plugin Manager. Anything added here must
+        be removed again in unload().
+        """
 
         icon_path = str(self.plugin_dir / 'icon.png')
         self.add_action(
@@ -156,7 +165,12 @@ class ${TemplateClass}:
             parent=self.iface.mainWindow())
 
     def onClosePlugin(self) -> None:
-        """Cleanup necessary items here when plugin dockwidget is closed"""
+        """Clean up when the user closes the dock widget.
+
+        Called through the dock's closingPlugin signal, which run() connects.
+        Disconnects that signal and resets self.pluginIsActive, so the next
+        click on the plugin's button opens the dock again.
+        """
 
         # disconnects
         if self.dockwidget is not None:
@@ -171,7 +185,12 @@ class ${TemplateClass}:
         self.pluginIsActive = False
 
     def unload(self) -> None:
-        """Removes the plugin menu item and icon from QGIS GUI."""
+        """Remove the plugin's menu items, toolbar icons and toolbar from QGIS.
+
+        QGIS calls this when the plugin is disabled, uninstalled or reloaded.
+        It must undo everything initGui() did: anything left behind stays in
+        QGIS, and each reload would add another copy.
+        """
 
         for action in self.actions:
             self.iface.${TemplateMenuRemoveMethod}(
@@ -186,7 +205,14 @@ class ${TemplateClass}:
         del self.toolbar
 
     def run(self) -> None:
-        """Run method that loads and starts the plugin"""
+        """Show the plugin's dock widget.
+
+        QGIS calls this when the user clicks the plugin's menu item or
+        toolbar button (connected in initGui()). While the dock is open,
+        further clicks do nothing: self.pluginIsActive stays True until
+        onClosePlugin() resets it. This stops the closingPlugin signal from
+        being connected twice.
+        """
 
         if not self.pluginIsActive:
             self.pluginIsActive = True

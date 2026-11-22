@@ -44,6 +44,11 @@ if cmd_folder not in sys.path:
 
 
 class ${TemplateClass}Plugin:
+    """QGIS Plugin Implementation: registers this plugin's Processing provider.
+
+    Unlike a tool-button plugin, this adds no buttons or menus of its own.
+    Its algorithms appear in the Processing Toolbox instead.
+    """
 
     def __init__(self) -> None:
         self.provider: ${TemplateClass}Provider | None = None
@@ -70,9 +75,19 @@ class ${TemplateClass}Plugin:
         registry.addProvider(self.provider)
 
     def initGui(self) -> None:
+        """Register the provider when the plugin is loaded.
+
+        QGIS calls this at QGIS startup, or when the plugin is enabled in the
+        Plugin Manager. A Processing plugin has no buttons or menus to add,
+        so this only registers the provider.
+        """
         self.initProcessing()
 
     def unload(self) -> None:
+        """Remove the provider, so its algorithms leave the Processing Toolbox.
+
+        QGIS calls this when the plugin is disabled, uninstalled or reloaded.
+        """
         registry = QgsApplication.processingRegistry()
         if registry is not None and self.provider is not None:
             registry.removeProvider(self.provider)
