@@ -265,7 +265,20 @@ class PluginBuilderDialog(QDialog, FORM_CLASS):
             self.tabify_dockwidget.setChecked(False)
 
     def validate_entries(self) -> bool:
-        """Check to see that all fields have been entered."""
+        """Check the required-information page before moving on.
+
+        Checks that all required fields are filled in, that the version
+        numbers are numeric, and that the minimum QGIS version is below the
+        maximum.
+
+        Note that this also edits the form: a class name with non-ASCII
+        characters or spaces, or a module name with characters other than
+        letters, numbers and underscores, is corrected in place. The check
+        still fails in that case, so the user sees the change before going on.
+
+        :returns: True if the page is valid. Otherwise False, after showing a
+            warning that lists the problems.
+        """
         message = ""
         if (
             self.class_name.text() == ""

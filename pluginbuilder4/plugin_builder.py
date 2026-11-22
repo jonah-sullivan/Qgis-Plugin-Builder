@@ -183,8 +183,15 @@ class PluginBuilder:
         copy(self.shared_dir / "i18n", self.plugin_path / "i18n")
 
     def _prepare_mypy(self, specification: PluginSpecification) -> None:
-        """Copy the mypy repo into the pre-commit hook
-        and mypy.ini and requirements-dev.txt"""
+        """Set up mypy type checking in the new plugin.
+
+        Writes mypy.ini, appends a mypy hook to .pre-commit-config.yaml, and
+        adds mypy to requirements-dev.txt.
+
+        Must run after .pre-commit-config.yaml has been copied, because the
+        hook is appended to it. requirements-dev.txt is only changed when
+        tests are generated, since only _prepare_tests() creates that file.
+        """
 
         # Render mypy.ini at plugin root
         self.populate_template(
@@ -465,7 +472,15 @@ class PluginBuilder:
         return results_popped, template_module_name
 
     def _create_plugin_directory(self) -> bool:
-        """Create the plugin directory using the module name."""
+        """Create the folder for the new plugin, named after its module name.
+
+        Note that this changes self.plugin_path: on entry it holds the output
+        directory the user chose, and the module name is appended to it, so
+        afterwards it points at the new plugin folder.
+
+        :returns: True if the folder was created. False if it couldn't be,
+            for example because it already exists, after showing an error.
+        """
         raw_name = self._require_dialog().module_name.text().lower()
         module_name = "".join(c for c in raw_name if c.isalnum() or c == "_")
         self.plugin_path = self.plugin_path / module_name
@@ -652,7 +667,15 @@ class PluginBuilder:
         template_name: str,
         output_name: str,
     ) -> None:
-        """Populate the template based on user data.
+        """Render a template file into the new plugin, filling in placeholders.
+
+        Templates use string.Template syntax: $Name or ${Name} is replaced
+        with specification.template_map["Name"].
+
+        safe_substitute() is used rather than substitute() so that anything
+        it can't fill in is left as it is instead of raising an error. That
+        covers Makefile syntax such as $(QGISDIR), which substitute() rejects
+        as an invalid placeholder, and any $Name with no value in the map.
 
         :param specification: Descriptive data that will be used to create
             the plugin.
@@ -664,7 +687,8 @@ class PluginBuilder:
         :param template_name: Name for the template.
         :type template_name: str
 
-        :param output_name:  Name of the output file to create.
+        :param output_name: Path of the output file to create, relative to
+            the new plugin's folder (self.plugin_path).
         :type output_name: str
         """
         template_file_path = template_dir / template_name
