@@ -4,4 +4,7 @@ pluginbuilder4/plugin_templates/plugin_template.py export-subst
 pluginbuilder4/plugin_templates/processing_provider/plugin_template.py export-subst
 pluginbuilder4/plugin_templates/toolbutton_with_dialog/plugin_template.py export-subst
 pluginbuilder4/plugin_templates/toolbutton_with_dockwidget/plugin_template.py export-subst
+pluginbuilder4/plugin_builder_dialog.py export-subst
+pluginbuilder4/result_dialog.py export-subst
+pluginbuilder4/select_tags_dialog.py export-subst
 pluginbuilder4/help/.nojekyll export-ignore
