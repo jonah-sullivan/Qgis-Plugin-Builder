@@ -59,7 +59,10 @@ class ${TemplateClass}Plugin:
         return QCoreApplication.translate("${TemplateClass}", message)
 
     def initProcessing(self) -> None:
-        """Init Processing provider for QGIS >= 3.8."""
+        """Register this plugin's Processing provider with QGIS.
+
+        This makes the provider's algorithms appear in the Processing Toolbox.
+        """
         registry = QgsApplication.processingRegistry()
         if registry is None:
             raise RuntimeError("Processing registry is not available")

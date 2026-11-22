@@ -61,7 +61,8 @@ class ${TemplateClass}:
         # Declare instance attributes
         self.actions: list[QAction] = []
         self.menu = self.tr('&${TemplateTitle}')
-        # TODO: We are going to let the user set this up in a future iteration
+        # Give the plugin its own toolbar. Setting an object name lets QGIS
+        # remember where the user placed the toolbar between sessions.
         toolbar = self.iface.addToolBar(u'${TemplateClass}')
         if toolbar is None:
             raise RuntimeError("Could not create toolbar")
@@ -91,7 +92,10 @@ class ${TemplateClass}:
         whats_this: str | None = None,
         parent: QWidget | None = None,
     ) -> QAction:
-        """Add a toolbar icon to the toolbar.
+        """Create a QAction and add it to the toolbar and/or the menu.
+
+        A QAction is the object behind one menu item or toolbar button: it
+        holds the icon, the label, and the function to run when clicked.
 
         :param icon_path: Path to the icon for this action. Can be a resource
             path (e.g. ':/plugins/foo/bar.png') or a normal file system path.
@@ -102,14 +106,14 @@ class ${TemplateClass}:
         :param add_to_menu: Flag indicating whether the action should also
             be added to the menu. Defaults to True.
         :param add_to_toolbar: Flag indicating whether the action should also
-            be added to the toolbar. Defaults to True.
-        :param status_tip: Optional text to show in a popup when mouse pointer
-            hovers over the action.
+            be added to this plugin's toolbar. Defaults to True.
+        :param status_tip: Optional short text shown in the QGIS status bar
+            (bottom of the window) while the mouse hovers over the action.
+        :param whats_this: Optional longer help text, shown when the user
+            picks Help > What's This? and then clicks the action.
         :param parent: Parent widget for the new action. Defaults None.
-        :param whats_this: Optional text to show in the status bar when the
-            mouse pointer hovers over the action.
-        :returns: The action that was created. Note that the action is also
-            added to self.actions list.
+        :returns: The action that was created. It is also added to the
+            self.actions list, so that unload() can remove it.
         """
 
         icon = QIcon(icon_path)
@@ -174,7 +178,11 @@ class ${TemplateClass}:
                 self.tr(u'&${TemplateTitle}'),
                 action)
             self.iface.removeToolBarIcon(action)
-        # remove the toolbar
+        # Remove the toolbar. Python owns the toolbar that iface.addToolBar()
+        # returned, so deleting our last reference deletes the toolbar and Qt
+        # removes it from the main window. If you store the toolbar anywhere
+        # else, clear that reference too, or an empty toolbar stays behind
+        # after the plugin is unloaded.
         del self.toolbar
 
     def run(self) -> None:

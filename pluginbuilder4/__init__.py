@@ -30,9 +30,13 @@ if TYPE_CHECKING:
 
 
 def classFactory(iface: "QgisInterface") -> "PluginBuilder":
-    """Load PluginBuilder class from file PluginBuilder.
+    """Entry point that QGIS calls to load this plugin.
 
-    :param iface: A QGIS interface instance.
+    QGIS looks for a function with exactly this name in the plugin's
+    __init__.py. It must return an object with initGui() and unload() methods.
+
+    :param iface: The QGIS interface: the plugin's handle on the main window,
+        map canvas, menus and toolbars.
     :type iface: QgisInterface
     """
     from .plugin_builder import PluginBuilder

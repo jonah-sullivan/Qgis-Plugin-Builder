@@ -41,11 +41,10 @@ class ${TemplateClass}DockWidget(QtWidgets.QDockWidget, FORM_CLASS):
     def __init__(self, parent: QtWidgets.QWidget | None = None) -> None:
         """Constructor."""
         super().__init__(parent)
-        # Set up the user interface from Designer.
-        # After setupUI you can access any designer object by doing
+        # Set up the user interface from Designer through FORM_CLASS.
+        # After self.setupUi() you can access any designer object by doing
         # self.<objectname>, and you can use autoconnect slots - see
-        # http://doc.qt.io/qt-5/designer-using-a-ui-file.html
-        # #widgets-and-dialogs-with-auto-connect
+        # https://doc.qt.io/qt-6/designer-using-a-ui-file.html#widgets-and-dialogs-with-auto-connect
         self.setupUi(self)
 
     def closeEvent(self, event: QtGui.QCloseEvent | None) -> None:
