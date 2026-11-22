@@ -34,6 +34,13 @@ FORM_CLASS, _ = uic.loadUiType(str(
 
 
 class ${TemplateClass}Dialog(QtWidgets.QDialog, FORM_CLASS):
+    """The plugin's dialog, laid out in the .ui file from Qt Designer.
+
+    It inherits from both QDialog and FORM_CLASS (the class generated from
+    the .ui file), so every widget from Designer is available directly as
+    self.<objectname>, and Qt's autoconnect slots work.
+    """
+
     def __init__(self, parent: QtWidgets.QWidget | None = None) -> None:
         """Constructor."""
         super().__init__(parent)

@@ -37,6 +37,10 @@ from qgis.PyQt.QtCore import QCoreApplication, QTranslator
 
 from .${TemplateModuleName}_provider import ${TemplateClass}Provider
 
+# Add this plugin's folder to Python's import path, so its modules can also
+# be imported by their bare names (e.g. "import my_plugin_provider").
+# The generated code doesn't rely on this: it uses relative imports
+# ("from .module import ...").
 cmd_folder = str(Path(__file__).parent)
 
 if cmd_folder not in sys.path:

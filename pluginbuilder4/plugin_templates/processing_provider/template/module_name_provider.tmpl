@@ -60,9 +60,14 @@ class ${TemplateClass}Provider(QgsProcessingProvider):
 
     def id(self) -> str:
         """
-        Returns the unique provider id, used for identifying the provider. This
-        string should be a unique, short, character only string, eg "qgis" or
-        "gdal". This string should not be localised.
+        Returns the unique provider id, used for identifying the provider.
+
+        QGIS refers to this provider's algorithms as "<id>:<algorithm name>"
+        (like "native:buffer") in saved models, Python scripts and the
+        Processing history, so changing the id after release breaks all of
+        those. Keep it short, lowercase and without spaces, and don't
+        translate it. This template uses the provider name entered in the
+        wizard.
         """
         return '$TemplateProviderName'
 

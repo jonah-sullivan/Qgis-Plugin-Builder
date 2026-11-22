@@ -35,7 +35,16 @@ FORM_CLASS, _ = uic.loadUiType(
 
 
 class ${TemplateClass}DockWidget(QtWidgets.QDockWidget, FORM_CLASS):
+    """The plugin's dock widget, laid out in the .ui file from Qt Designer.
 
+    It inherits from both QDockWidget and FORM_CLASS (the class generated
+    from the .ui file), so every widget from Designer is available directly
+    as self.<objectname>, and Qt's autoconnect slots work.
+    """
+
+    # A custom signal. The dock emits it when it is closed, so the main
+    # plugin class can clean up (see onClosePlugin()) without the dock
+    # needing to know anything about the plugin.
     closingPlugin = pyqtSignal()
 
     def __init__(self, parent: QtWidgets.QWidget | None = None) -> None:
@@ -48,6 +57,11 @@ class ${TemplateClass}DockWidget(QtWidgets.QDockWidget, FORM_CLASS):
         self.setupUi(self)
 
     def closeEvent(self, event: QtGui.QCloseEvent | None) -> None:
+        """Emit closingPlugin when the dock is closed.
+
+        Qt calls this when the dock is about to close, for example when the
+        user clicks its close button. Accepting the event lets it close.
+        """
         self.closingPlugin.emit()
         if event is not None:
             event.accept()
