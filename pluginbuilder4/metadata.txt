@@ -9,12 +9,20 @@
 name=Plugin Builder 4
 about=Create a template for a QGIS plugin
 description=Creates a QGIS plugin template for use as a starting point in plugin development
-version=3.5.0
+version=3.6.0
 qgisMinimumVersion=4.0
 qgisMaximumVersion=4.99
 license=GNU GPL v2
 
-changelog=3.5.0 2026-11-08
+changelog=3.6.0 2026-11-22
+      * Type checking with mypy is now optional in generated plugins (#173)
+      * Show an error if plugin generation fails partway, instead of leaving an incomplete plugin silently
+      * Clearer docstrings and comments throughout the generated plugin templates
+      * Generated plugins no longer include unused test helpers (utilities.py, qgis_interface.py)
+      * Bug: strings in the Processing provider template could never be translated
+      * Bug: fix "status tip" and "What's This" descriptions, which were swapped in the add_action() docstring
+      * Bug: git sha in some file headers was not filled in for release archives
+    3.5.0 2026-11-08
       * Generated plugins are fully type annotated and include a strict mypy.ini and a mypy pre-commit hook
       * Refuse to generate into an existing plugin folder instead of failing partway
       * Processing provider: ship an icon and a Help button that opens the plugin's built help
